@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://demo.gethugothemes.com/godocs/site/style-1/"
+baseURL = "https://rstreams.org/"
 title = "RStreams"
 theme = "godocs-1"
 # google analytics
