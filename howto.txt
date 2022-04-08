@@ -12,7 +12,8 @@
 
 
 
-
+-- github pages godaddy domain
+   https://jinnabalu.medium.com/godaddy-domain-with-github-pages-62aed906d4ef
 
 
 
