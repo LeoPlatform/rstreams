@@ -1,3 +1,9 @@
+-- running locally
+   npm run serve
+
+-- build static site locally
+   npm run build
+
 -- github deployment
    Just check into master and the website will be generated using a github action (see .github/workflows/gh-pages.yml).
    This will generate the hugo website as a side effect of checking into master using the above github action
@@ -10,6 +16,9 @@
    https://leoplatform.github.io/rstreams/ instead of rstreams.org.  Go here 
    https://github.com/LeoPlatform/rstreams/settings/pages and add rstreams.org back in the Custom 
    domain field and hit Save.  It will then auto deploy to that custom domain.
+
+   Go to actions after push new changes to master and you will see the automation do its thing
+   here: https://github.com/LeoPlatform/rstreams/actions
 
 -- godocs theme customizations
    overriding theme to make HTML changes by copying from themes/godocs-1/<some file> to layouts/<same path>/<same file name>
