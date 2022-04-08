@@ -1,0 +1,63 @@
+-- hugo content
+   -- markdown syntax
+      https://www.markdownguide.org/tools/hugo/
+
+   -- Main topic on home screen
+      Make a directory in content.
+
+  -- Link to another page, relative or absolute if start with a /, don't need the language or .md 
+     [Event Streaming Primer](event-streaming-primer)
+
+
+
+
+
+
+
+
+
+
+
+-- typedoc
+http://typedoc.org/guides/installation/
+https://typedoc.org/example/modules.html#EasyFormDialog
+
+
+-- tsdoc
+https://tsdoc.org/
+
+-- hugo
+builds static website with templates
+
+-- install hugo using npm: hugo + npm
+how to use npm to build hugo so can build the website as part of CI/CD pipeline
+https://www.blogtrack.io/blog/powerful-blog-setup-with-hugo-and-npm/
+
+-- install hugo bin
+   modify package.json to get extended version of hugo
+     "hugo-bin": {
+        "buildTags": "extended"
+     }
+
+   npm install --save-dev hugo-bin 
+
+
+-- create an initial website
+npx hugo new site . --force
+
+    Saw this after running the above command
+
+     1. Download a theme into the same-named folder.
+        Choose a theme from https://themes.gohugo.io/ or
+        create your own with the "hugo new theme <THEMENAME>" command.
+     2. Perhaps you want to add some content. You can add single files
+        with "hugo new <SECTIONNAME>/<FILENAME>.<FORMAT>".
+     3. Start the built-in live server via "hugo server".
+
+     Visit https://gohugo.io/ for quickstart guide and full documentation.
+
+-- theme used https://docs.gethugothemes.com/godocs/
+   purchased here https://gethugothemes.com/
+
+-- theme uses bootstrap https://getbootstrap.com/
+

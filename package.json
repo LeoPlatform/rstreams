@@ -1,0 +1,27 @@
+{
+  "name": "rstreams",
+  "version": "1.0.0",
+  "description": "rstreams hugo documentation website",
+  "main": "index.js",
+  "scripts": {
+    "build": "hugo",
+    "create": "hugo new",
+    "serve": "hugo server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeoPlatform/rstreams.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeoPlatform/rstreams/issues"
+  },
+  "homepage": "https://github.com/LeoPlatform/rstreams#readme",
+  "devDependencies": {
+    "hugo-bin": "^0.84.0"
+  },
+  "hugo-bin": {
+    "buildTags": "extended"
+  }
+}
