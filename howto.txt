@@ -1,3 +1,20 @@
+-- github deployment
+   Just check into master and the website will be generated using a github action (see .github/workflows/gh-pages.yml).
+   This will generate the hugo website as a side effect of checking into master using the above github action
+   and then it will push the website to the gh-pages branch and deploy to rstreams.org.
+
+   NOTE!!! Sometimes, github sucks and removes the rstreams.org domain when you check in.
+
+   You will know that happened because rstreams.org will give you a 404 and the 
+   "pages-build-deployment" action in the actions tab of github will say that it deployed to
+   https://leoplatform.github.io/rstreams/ instead of rstreams.org.  Go here 
+   https://github.com/LeoPlatform/rstreams/settings/pages and add rstreams.org back in the Custom 
+   domain field and hit Save.  It will then auto deploy to that custom domain.
+
+-- godocs theme customizations
+   overriding theme to make HTML changes by copying from themes/godocs-1/<some file> to layouts/<same path>/<same file name>
+   and then look for <!--CHANGE in the files to see what I changed. 
+
 -- hugo content
    -- markdown syntax
       https://www.markdownguide.org/tools/hugo/

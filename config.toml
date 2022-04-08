@@ -99,14 +99,14 @@ preloader = "" # use jpg, png, svg or gif format.
 
 # Navigation button
 [[params.nav_button]]
-style = "outline"   # available style: solid, outline
+style = "solid"   # available style: solid, outline
 label = "changelog"
 link = "changelog/"
 
-[[params.nav_button]]
-style = "solid"   # available style: solid, outline
-label = "Contact"
-link = "contact/"
+#[[params.nav_button]]
+#style = "solid"   # available style: solid, outline
+#label = "Get Started"
+#link = "rstreams-flow/"
 
 
 ############################# social site ########################
