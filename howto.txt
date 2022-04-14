@@ -24,6 +24,15 @@
    overriding theme to make HTML changes by copying from themes/godocs-1/<some file> to layouts/<same path>/<same file name>
    and then look for <!--CHANGE in the files to see what I changed. 
 
+   copied themes/godocs-1/assets/scss/templates/_main.scss to assets/scss/templates/_main.scss and added 
+   this to the very bottom of the file
+    /*CHANGE - added to grow width of site for larger screens */
+    @media (min-width: 1440px) {
+      .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 1440px;
+      }
+    }
+
 -- hugo content
    -- markdown syntax
       https://www.markdownguide.org/tools/hugo/

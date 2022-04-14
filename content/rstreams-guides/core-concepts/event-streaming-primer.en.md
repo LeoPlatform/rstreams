@@ -3,7 +3,7 @@ title: "Event Streaming Primer"
 date: 2022-04-04T11:02:05+06:00
 description: "In-depth guides and how-to's."
 draft: false
-weight: 1
+weight: 2
 ---
 
 ***One cannot understand the problems RStreams solves or reason about its implementation/usage without a fundamental understanding of event streaming compared to traditional microservices approaches.***

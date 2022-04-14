@@ -675,3 +675,8 @@ pre {
 .content code {
   margin-bottom: 0 !important;
   font-size: 100%; }
+
+/*CHANGE - added to grow width of site for larger screens */
+@media (min-width: 1440px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 1440px; } }
