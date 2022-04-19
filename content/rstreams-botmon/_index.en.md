@@ -7,4 +7,4 @@ type : "docs"
 weight: 6
 ---
 
-RStreams Flow is an opinionated framework that makes choices on how to build, test, deploy, monitor and maintain RStreams microservices.  Engineers don’t care about RStreams.  They care about creating reactive microservices that leverage AWS services at scale.  RStreams Flow helps engineers just do their work.
+RStreams includes a webapp called Botmon that provides real time monitoring, data visualization, tracing and debugging.

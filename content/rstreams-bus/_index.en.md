@@ -7,4 +7,4 @@ type : "docs"
 weight: 5
 ---
 
-RStreams Flow is an opinionated framework that makes choices on how to build, test, deploy, monitor and maintain RStreams microservices.  Engineers don’t care about RStreams.  They care about creating reactive microservices that leverage AWS services at scale.  RStreams Flow helps engineers just do their work.
+The RStreams Bus is a light-weight framework that uses AWS Kinesis, S3, Lambda and Dynamo DB to create an event-streaming and general purpose messaging platform. 

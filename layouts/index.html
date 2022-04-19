@@ -5,7 +5,7 @@
 <section class="section pb-0">
   <div class="container">
     <div class="row justify-content-between align-items-center">
-      <div class="col-lg-7 text-center text-lg-left">
+      <div class="col-lg-7 text-lg-left">
         {{ with .Site.Params.banner }}
         <h2 class="mb-4">{{ .title | markdownify }}</h2>
         <h5 class="mb-4">{{ .subtitle | markdownify }}</h5>
@@ -49,7 +49,7 @@
 <!-- /topics -->
 
 <!-- faq -->
-{{ with .Site.GetPage "/faq" }}
+<!-- {{ with .Site.GetPage "/faq" }}
 <section class="section pb-0">
   <div class="container">
     <h2 class="section-title">{{ .Title }}</h2>
@@ -58,7 +58,7 @@
     </div>
   </div>
 </section>
-{{ end }}
+{{ end }} -->
 <!-- /faq -->
 
 <!-- call to action -->
