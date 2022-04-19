@@ -64,6 +64,7 @@ border_color = "#E2E2E2"
 black = "#000"
 white = "white"
 light = "#FBFBFB"
+callout_color = "#f1f1ef"
 
 #primary_color = "#FF0043"
 #text_color = "#333"
@@ -76,10 +77,14 @@ light = "#FBFBFB"
 #light = "#FBFBFB"
 
 # Font Variables
-primary_font = "Montserrat:wght@300;400;500;600;700;800"
+
+#ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+
+#Montserrat
+primary_font = 'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";' # "ui-sans-serif:wght@300;400;500;600;700;800"
 primary_font_type = "sans-serif"                         # [serif/sans-serif]
-secondary_font = ""
-secondary_font_type = ""                                 # [serif/sans-serif]
+secondary_font = "-apple-system"
+secondary_font_type = "sans-serif"                                 # [serif/sans-serif]
 icon_font = "Font Awesome 5 Free"
 
 #################### default parameters ################################
@@ -158,6 +163,7 @@ content = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam <br
 enable = "true"
 label = "Submit a ticket"
 link = "contact/"
+
 
 
 ############## English navigation ###############

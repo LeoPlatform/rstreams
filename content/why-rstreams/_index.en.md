@@ -7,4 +7,9 @@ type : "docs"
 weight: 1
 ---
 
-RStreams Flow is an opinionated framework that makes choices on how to build, test, deploy, monitor and maintain RStreams microservices.  Engineers don’t care about RStreams.  They care about creating reactive microservices that leverage native AWS services at scale.  RStreams Flow helps engineers just do their work.
+# Why RStreams?  Why not just AWS services?
+
+Less Friction
+AWS services rock.  Each service started life to serve a specific purpose and then grew in size and scope, becoming 
+useful to more and more use cases.  Yet, each service was born and iterated from a starting foundation, giving each
+a sweet spot for where it excels and step outside this sweet spot and friction emerges.

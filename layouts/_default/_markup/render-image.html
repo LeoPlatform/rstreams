@@ -1,0 +1,6 @@
+<!-- Using Title to pass image width -->
+
+<p class="md-image">
+    <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} width="{{ . }}"{{ end }}
+    {{ with .Text}} title="{{ . }}"{{ end }} />
+</p>

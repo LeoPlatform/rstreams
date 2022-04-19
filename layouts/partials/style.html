@@ -1,0 +1,66 @@
+<!-- plugins + stylesheet -->
+{{ $styles := slice }}
+{{ range site.Params.plugins.css }}
+{{ if findRE "^http" .link }}
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="{{ .link | absURL }}" {{.attributes | safeHTMLAttr}} >
+{{ else }}
+{{ $styles = $styles | append (resources.Get .link) }}
+{{ end }}
+{{ end }}
+{{ $styles := $styles | append (resources.Get "scss/style.scss" | resources.ExecuteAsTemplate "style.scss" . | toCSS) }}
+{{ $styles := $styles | resources.Concat "/css/style.css" | minify  | fingerprint "sha512"}}
+<style crossorigin="anonymous" media="all" type="text/css" integrity="{{ $styles.Data.Integrity }}">{{$styles.Content | safeCSS}}</style>
+
+<style>
+  .notices p::before {
+    position: absolute;
+    top: 2px;
+    font-family: "{{ with site.Params.variables }} {{.icon_font}} {{ end }}";
+    font-weight: 900;
+    content: "\f05a";
+    left: 2px;
+    display: none;
+  }
+
+  .notices.note p::before {
+    content: "\f518";
+  }
+
+  .notices.tip p::before {
+    content: "\f0eb";
+  }
+
+  .notices.info p::before {
+    content: "\f05a";
+  }
+
+  .notices.warning p::before {
+    content: "\f071";
+  }
+
+  .notices p svg {
+    position: absolute;
+    top: 25px;
+    font-size: 22px;
+  }
+
+  .notices.note p svg {
+    color: rgba(240, 181, 4, 0.733);
+    left: 1.4rem;
+  }
+
+  .notices.tip p svg {
+    color: #efe403;
+    left: 1.6rem;
+  }
+
+  .notices.info p svg {
+    color: #6d8eab;
+    left: 1.6rem;
+  }
+
+  .notices.warning p svg {
+    color: #fb0509;
+    left: 1.4rem;
+  }
+</style>
