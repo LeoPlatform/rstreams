@@ -15,6 +15,9 @@ home = ["HTML", "JSON"]
 [markup.goldmark.renderer]
 unsafe = true
 
+[markup.highlight]
+style = 'monokailight'
+
 ############################# Plugins ##############################
 
 # CSS Plugins

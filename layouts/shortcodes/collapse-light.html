@@ -4,5 +4,5 @@
     <a class="collapse-light-button d-flex" data-bs-toggle="collapse" href="#{{ .Get 0 | urlize }}" role="button" aria-expanded="false">
             <i class="icon fas fa-play"></i> <span class="ps-2">{{ .Get 0 | markdownify }}</span>
     </a>      
-    <div class="collapse ml-3 mt-2" id="{{ .Get 0 | urlize }}">{{ .Inner | markdownify }}</div>
+    <div class="collapse mt-3 ps-4" id="{{ .Get 0 | urlize }}">{{ .Inner | markdownify }}</div>
 </div>

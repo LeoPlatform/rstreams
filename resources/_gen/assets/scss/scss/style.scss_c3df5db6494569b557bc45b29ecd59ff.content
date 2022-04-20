@@ -173,8 +173,8 @@ a:hover {
   outline: 0; }
 
 .section {
-  padding-top: 80px;
-  padding-bottom: 80px; }
+  padding-top: 40px;
+  padding-bottom: 40px; }
   .section-sm {
     padding-top: 50px;
     padding-bottom: 50px; }
@@ -773,3 +773,43 @@ pre code {
   margin: 0; }
 
 /* img shortcode */
+/* override border/bg color of chroma highlight shortcode using monokailight */
+div.highlight {
+  border: 1px solid #e8e8e8;
+  background-color: #fdfdfd;
+  border-radius: 5px;
+  margin-bottom: 20px; }
+
+div.highlight pre, div.highlight pre code {
+  background-color: #fdfdfd !important; }
+
+/* end */
+/* image alignment hack  */
+.md-image.center {
+  justify-content: center; }
+
+.md-image.right {
+  justify-content: left;
+  margin-right: 20px; }
+
+img[src$='#center'] {
+  display: block;
+  margin: 0.7rem auto;
+  /* you can replace the vertical '0.7rem' by
+                            whatever floats your boat, but keep the
+                            horizontal 'auto' for this to work */
+  /* whatever else styles you fancy here */ }
+
+img[src$='#left'] {
+  float: left;
+  margin: 0.7rem;
+  /* this margin is totally up to you */
+  /* whatever else styles you fancy here */ }
+
+img[src$='#right'] {
+  float: right;
+  margin: 0.7rem;
+  /* this margin is totally up to you */
+  /* whatever else styles you fancy here */ }
+
+/* end */

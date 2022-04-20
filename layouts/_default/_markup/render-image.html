@@ -1,6 +1,11 @@
 <!-- Using Title to pass image width -->
 
-<p class="md-image">
-    <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} width="{{ . }}"{{ end }}
+
+{{ $arr := split .Title "|" }}
+{{ $width := index $arr 0 }}
+{{ $class := index $arr 1 }}
+
+<p class="md-image d-flex {{if not (eq $class nil)}}{{$class}}{{end}}">
+    <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" style="width:{{$width}}"
     {{ with .Text}} title="{{ . }}"{{ end }} />
 </p>

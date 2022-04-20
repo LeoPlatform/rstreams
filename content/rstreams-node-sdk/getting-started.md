@@ -172,3 +172,94 @@ If you go to Botmon, you will see that the `rstreams-example.people` queue now h
 ## Write multiple objects to the bus
 So, instead of reading one person from the public API we used in the example above, let's say we get 100 people at a time
 from the public API and we want to write them to the bus.  Here's what that looks like.
+
+```typescript {linenos=inline,anchorlinenos=true,lineanchors=randompeopleloop}
+import { ConfigurationResources, RStreamsSdk } from "leo-sdk";
+import { PersonRawResults } from "../lib/types";
+import axios from "axios";
+
+async function main() {
+  const rsdk: RStreamsSdk  = new RStreamsSdk();
+  const people = await getRandomPeople();
+
+  //HINT: this will have very bad performance. This is just to illustrate a point.
+  //      Don't use putEvent in a loop this way in practice!
+  for (const person of people.results) {
+    await rsdk.putEvent('rstreams-example.load-people', 'rstreams-example.people', person);
+  }
+}
+
+async function getRandomPeople(): Promise<PersonRawResults> {
+  const NUM_EVENTS = 100;
+  const url = `https://randomuser.me/api/?results=${NUM_EVENTS}&` + 
+              `exc=login,registered,phone,cell,picture,id&noinfo`;
+  const {data, status} = await axios.get<PersonRawResults>(url);
+  
+  if (status !== 200) {
+    throw new Error('Unable to get randomPeople from https://randomuser.me API: ' + status);
+  }
+  
+  console.log('Person: ' + data.results[0].name.first + ' ' + data.results[0].name.last);
+
+  return data;
+}
+
+(async () => {
+  await main();
+})()
+```
+
+The only difference in this example is that we pass in 100 to the public API, getting back 100 objects as
+an array.  We then loop through them, making a connection to the RStreams Bus for each and every event.
+It's simple and it works but this is bad.  The `putEvent` API is really only meant for one or maybe a
+handful of events.  To understand why, consider what the RStreams SDK is doing when you call `putEvent`.
+
+1. It's opening a connection to AWS Kinesis
+1. It sending the single event on that connection each time to Kinesis
+1. The event flows through Kinesis until an RStreams Kinesis processor reads the single event and writes it to
+the RStreams Dynamo DB queue table, putting the event in the correct queue
+
+RStreams is designed to handle the continuos generation of data events that flow into a given queue, is read from
+that queue and mutated and then sent to other queues.  It is today doing this with very large amounts of 
+concurrently received events.  The RStreams SDK has a better way to work with sending larger amounts of data
+to the bus, meaning to an RStreams queue.
+
+## Stream multiple objects to the bus fast
+
+It's time to tackle the idea of streams.  If you aren't well versed on streams, jump over and read the [Streams Primer](xx).  It's 
+short and sweet and may well convert you to streams if you aren't already.
+
+```typescript {linenos=inline,anchorlinenos=true,lineanchors=randompeopleloop}
+import { RStreamsSdk } from "leo-sdk";
+import { PersonRawResults } from "../lib/types";
+import axios from "axios";
+
+async function main() {
+  const rsdk: RStreamsSdk  = new RStreamsSdk();
+  const es = rsdk.streams.eventstream;
+  const people = await getRandomPeople();
+
+  rsdk.streams.pipeAsync(
+    es.readArray(people.results),
+    rsdk.load('rstreams-example.load-people', 'rstreams-example.people', 
+              {records: 25, time: 5000, useS3: true})
+  );
+}
+
+async function getRandomPeople(): Promise<PersonRawResults> {
+  const NUM_EVENTS = 100;
+  const url = `https://randomuser.me/api/?results=${NUM_EVENTS}&` + 
+              `exc=login,registered,phone,cell,picture,id&noinfo`;
+  const {data, status} = await axios.get<PersonRawResults>(url);
+  
+  if (status !== 200) {
+    throw new Error('Unable to get randomPeople from https://randomuser.me API: ' + status);
+  }
+
+  return data;
+}
+
+(async () => {
+  await main();
+})()
+```
