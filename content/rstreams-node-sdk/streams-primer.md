@@ -25,8 +25,7 @@ to move through the pipe.  The last step is the `Sink`, whose job it is to do so
 The `Sink` is responsible for pulling data from the previous step, which causes data to flow in the pipe: no `Sink` step in the pipe means
 no data flows.  In between the source step and the sink step may optionally be any number of `Transform` steps that can modify
 data that flows through the pipe on its way to the sink.
-
-![Source Tranform Sink Stream](../images/source-transform-sink.png "450px|center" )
+![Source Tranform Sink Stream](../images/source-transform-sink.png "420px|center" )
 
 {{< collapse-light "Care to hear why some think streams are too hard?" >}}
 
@@ -56,9 +55,26 @@ and transforming them from one place to another.
 {{</ collapse-light >}}
 
 # Pipes and Streams
+{{< notice info >}}
+99% of the time, all you need to know is which RStreams SDK pipe step interface to use.
+This section helps you develop the mental model of a pipe so you can do that. Actually using 
+a pipe step is brain dead simple.  Don't get overwhelmed as you don't need to understand the actual functions of a 
+Node `Readable` or Node `Writable` or the intracies of pipes as the SDK abstracts all that complexity for you.
+Here's a [good article](https://www.freecodecamp.org/news/node-js-streams-everything-you-need-to-know-c9141306be93/#:~:text=A%20transform%20stream%20is%20basically,of%20that%20is%20the%20zlib.) if you want just a bit more detail but
+you you'll be fine without it if you read the section below.
+{{</ notice >}}
+
 As mentioned, a pipe is a set of steps that data flows through in sequence.  Each step in the pipe is itself called a stream because
 they are meant to read/write data sequentially one after the other.  Steps near the beginning of the pipe are upstream and the
 `Sink` downstream: data flows is the furthest step downstream. The pipe exists to daisy chain the stream steps together.
+
+If you want the super short version, everything in a pipe must be linked together where start with a `Readable` followed by a
+`Writable` followed by a `Readable`and eventually end with a `Writable` as the `Sink`.  Pipe step streams between the `Source`
+and the `Sink` have to be both a `Writable` and a `Readable` to allow the data to flow through the step: these in between steps
+are often called `Through` or `Transform` stream steps.
+![Pipe Readable to Writable](../images/pipe-readable-to-writable.png "700px|center" )
+
+{{< collapse "Here's just enough detail on pipes and streams" >}}
 
 ## Readable
 In node, a pipe is a function and each argument is a step, thus a stream, in the pipe.  The first step, the `Source`, must
@@ -85,7 +101,7 @@ database or Elastic Search, etc., a snap. These simplified RStreams SDK pipe ste
 ## Duplex
 A stream step that sits between the `Source` and the `Sink` is by definition a `Duplex` stream.  Think of a `Duplex` stream
 like its really two streams smashed together. The input to the `Duplex` stream is a `Writable` so it can consume the data from the
-`Readable in the step before it`.  The output from the `Duplex` stream is a `Readable` so the next step downstream can pull
+`Readable`  in the step before it.  The output from the `Duplex` stream is a `Readable` so the next step downstream can pull
 data from it.
 
 ***A `Duplex` stream is one that is both `Readable` and `Writeable` at the same time, e.g. a TCP socket.***
@@ -102,3 +118,9 @@ and then sends the data downstream.  A `Transform` stream is often called a `Thr
 The RStreams SDK provides extremely simple `Transform` interfaces to make moving data through a pipe easy. These simplified RStreams SDK pipe steps are of the RStreams SDK type [TransformStream](https://leoplatform.github.io/Nodejs/interfaces/lib_types.TransformStream.html) which inherits from the Node `Duplex`.
 
 ![Pipe Transform](../images/pipe-transform.png "600px|center" )
+
+{{</ collapse >}}
+
+# RStreams SDK Streams
+This section goes through the different RStreams SDK stream steps and what they do at a high level.
+

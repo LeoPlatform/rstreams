@@ -813,3 +813,25 @@ img[src$='#right'] {
   /* whatever else styles you fancy here */ }
 
 /* end */
+/* Left nav hide/show button */
+#leftNavHideShowBtn {
+  margin-top: -20px;
+  border: 0px; }
+  #leftNavHideShowBtn:hover {
+    color: #0059ff; }
+
+@media screen and (max-width: 766px) {
+  #leftNavHideShowBtn {
+    display: none !important;
+    color: red; } }
+
+#leftNavHideShowBtn[aria-expanded=true] .fa-chevron-left {
+  transition: .3s transform ease-in-out;
+  transform: rotate(0deg); }
+
+#leftNavHideShowBtn[aria-expanded=false] .fa-chevron-left {
+  transition: .3s transform ease-in-out;
+  transform: rotate(0deg);
+  transform: rotate(90deg); }
+
+/* end */

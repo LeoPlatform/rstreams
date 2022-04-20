@@ -1,8 +1,30 @@
 {{ "<!-- details page -->" | safeHTML }}
 <section>
+  <script type="text/javascript">
+      function toggleLeftNav() {
+          let btn = document.getElementById('leftNavHideShowBtn');
+          let navShowing = (btn.getAttribute('aria-expanded') == 'true') ? false : true;
+          let sideNavEl = document.getElementById('sideNavEl');
+          let contentEl = document.getElementById('contentEl');
+          
+          btn.setAttribute('aria-expanded', navShowing + '')
+
+          if (!navShowing) {
+            sideNavEl.classList.remove('d-md-block');
+            contentEl.classList.remove('col-md-9');
+            contentEl.classList.add('col-md-12');
+          } else {
+            sideNavEl.classList.add('d-md-block');
+            contentEl.classList.remove('col-md-12');
+            contentEl.classList.add('col-md-9');
+          }
+      }
+  </script>
   <div class="container shadow section-sm rounded">
+    <button id="leftNavHideShowBtn" aria-expanded="true" onclick="toggleLeftNav()"><i class="fas fa-chevron-left"></i></button>  
     <div class="row">
-      <div class="col-lg-3 col-md-4 d-none d-md-block">
+      <div id="sideNavEl" class="col-lg-3 col-md-3 d-none d-md-block">
+        
         <ul class="sidenav">
           {{ $currentNode := . }}
           {{range .Site.Home.Sections.ByWeight}}
@@ -17,7 +39,7 @@
         </ul>
       </div>
       <!-- CHANGE modified from col-md-8 to col-md-9 -->
-      <div class="col-md-9">
+      <div id="contentEl" class="col-md-9">
         <div class="px-lg-5 px-4">
           <!-- CHANGE modified from h2 to h1 -->  
           <h1 class="title">{{ .Title }}</h1>
