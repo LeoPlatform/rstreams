@@ -2,6 +2,5 @@
 Write a single object to the bus Write multiple objects to the bus Stream multiple objects to the bus fast
 Are you setup to run the examples? Expand this section if you&amp;rsquo;re not sure
 All examples in the SDK documentation assume that when these apps run, the RStreams SDK can discover the configuration it needs. The config it needs is the AWS resource IDs of the RStreams Bus instance deployed in your AWS account.</description></item><item><title>Streams Primer</title><link>https://rstreams.org/rstreams-node-sdk/streams-primer/</link><pubDate>Sat, 29 Dec 2018 11:02:05 +0600</pubDate><guid>https://rstreams.org/rstreams-node-sdk/streams-primer/</guid><description>ToC
-Readable Writeable Duplex Transform or Through
 This primer provides exactly enough knowledge of streaming concepts for a developer to successfully write streaming applications using the RStreams SDK and bus. It is not intended as an exhaustive treatise on the vagaries of Node streams. We all have work to do.
 Overview There truly is nothing new under the sun. Streaming is really nothing more than Unix pipes, albeit in a more distributed manner, invented more than 50 years ago.</description></item></channel></rss>
