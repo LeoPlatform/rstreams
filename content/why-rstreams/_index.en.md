@@ -13,3 +13,5 @@ weight: 1
 AWS services rock.  Each service started life to serve a specific purpose and then grew in size and scope, becoming 
 useful to more and more use cases.  Yet, each service was born and iterated from a starting foundation, giving each
 a sweet spot for where it excels and step outside this sweet spot and friction emerges.
+
+TODO: talk about why we'd use queues to solve problems and the reactive mindset

@@ -1,7 +1,7 @@
 ---
 title: "Streams Primer"
 date: 2018-12-29T11:02:05+06:00
-weight: 1
+weight: 2
 draft: false
 ---
 
@@ -74,8 +74,6 @@ and the `Sink` have to be both a `Writable` and a `Readable` to allow the data t
 are often called `Through` or `Transform` stream steps.
 ![Pipe Readable to Writable](../images/pipe-readable-to-writable.png "700px|center" )
 
-{{< collapse "Here's just enough detail on pipes and streams" >}}
-
 ## Readable
 In node, a pipe is a function and each argument is a step, thus a stream, in the pipe.  The first step, the `Source`, must
 get or create data somehow.  It might do this by continuosly querying a database and making the data available for the next
@@ -118,9 +116,3 @@ and then sends the data downstream.  A `Transform` stream is often called a `Thr
 The RStreams SDK provides extremely simple `Transform` interfaces to make moving data through a pipe easy. These simplified RStreams SDK pipe steps are of the RStreams SDK type [TransformStream](https://leoplatform.github.io/Nodejs/interfaces/lib_types.TransformStream.html) which inherits from the Node `Duplex`.
 
 ![Pipe Transform](../images/pipe-transform.png "600px|center" )
-
-{{</ collapse >}}
-
-# RStreams SDK Streams
-This section goes through the different RStreams SDK stream steps and what they do at a high level.
-
