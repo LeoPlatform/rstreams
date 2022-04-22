@@ -19,9 +19,17 @@
             contentEl.classList.add('col-md-9');
           }
       }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === '[' && e.ctrlKey) {
+            e.preventDefault();
+
+            toggleLeftNav();
+        }
+});
   </script>
   <div class="container shadow section-sm rounded">
-    <button id="leftNavHideShowBtn" aria-expanded="true" onclick="toggleLeftNav()"><i class="fas fa-chevron-left"></i></button>  
+    <button id="leftNavHideShowBtn" title="hide/show nav: CTRL+[ " aria-expanded="true" onclick="toggleLeftNav()"><i class="fas fa-chevron-left"></i></button>  
     <div class="row">
       <div id="sideNavEl" class="col-lg-3 col-md-3 d-none d-md-block">
         

@@ -12,7 +12,7 @@ draft: false
 {{< notice info >}}You need to understand what a [pipe and stream step](../streams-primer) in a pipe are.{{</ notice >}}
 
 # Overview
-The RStreams Node SDK includes a simple utility function to create to create pipes and nearly every kind of stream
+The RStreams Node SDK includes a simple utility function to create pipes and nearly every kind of stream
 you'd need to work with massive amounts of continuously generated data in an instance of the RStreams bus.  It
 also includes functions to allow you to skip the complexity of dealing with pipes and streams at all for the
 most common use cases: getting data from the bus and sending data to the bus.

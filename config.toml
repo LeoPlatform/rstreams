@@ -85,10 +85,10 @@ callout_color = "#f1f1ef"
 
 #'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";' # "ui-sans-serif:wght@300;400;500;600;700;800"
 
-#
-primary_font = "Montserrat"
+#Muli, Rubik
+primary_font = "Rubik"
 primary_font_type = "sans-serif"                         # [serif/sans-serif]
-secondary_font = "-apple-system"
+secondary_font = "arial"
 secondary_font_type = "sans-serif"                                 # [serif/sans-serif]
 icon_font = "Font Awesome 5 Free"
 
