@@ -1,8 +1,22 @@
 {{ $_hugo_config := `{ "version": 1 }` }}
 
-<div class="collapse-light-wrapper">
-    <a class="collapse-light-button d-flex" data-bs-toggle="collapse" href="#{{ .Get 0 | urlize }}" role="button" aria-expanded="false">
+{{ $n := .Get 0 | urlize }}
+{{ $rand := now.UnixNano }}
+
+<div id="{{ $n }}" onmouseover="toggleLink('{{ $n }}-{{ $rand }}-link', true)" 
+                   onmouseout="toggleLink('{{ $n }}-{{ $rand }}-link', false)" 
+                   class="collapse-light-wrapper">
+    <a id="{{ $n }}-{{ $rand }}-link" href="#{{ $n }}" class="anchor">
+        <i class="fas fa-link"></i>
+    </a>
+    <a class="collapse-light-button d-flex" data-bs-toggle="collapse" href="#{{ $n }}-{{ $rand }}-toggle" role="button" aria-expanded="false">
             <i class="icon fas fa-play"></i> <span class="ps-2">{{ .Get 0 | markdownify }}</span>
     </a>      
-    <div class="collapse mt-3 ps-4" id="{{ .Get 0 | urlize }}">{{ .Inner | markdownify }}</div>
+    <div class="collapse mt-3 ps-4" id="{{ $n }}-{{ $rand }}-toggle">{{ .Inner | markdownify }}</div>
 </div>
+
+
+
+
+</script>
+

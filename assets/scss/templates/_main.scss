@@ -406,9 +406,22 @@ pre {
 }
 
 //CHANGE add bottom margin
+
+
 .collapse-wrapper {
   padding: 5px 15px;
   margin-bottom: 20px;
+
+  .anchor {
+    visibility: hidden; 
+    color:silver;
+    float: left;
+    margin-left: -35px;
+  }
+
+  .anchor.show {
+      visibility: visible;
+  }
 
   .collapse-head {
     text-decoration: none;
@@ -426,6 +439,19 @@ pre {
 
 .collapse-light-wrapper {
     margin-bottom: 20px;
+
+    .anchor {
+        visibility: hidden; 
+        color:silver;
+        float: left;
+        margin-left: -15px;
+        margin-top: 4px;
+        font-size: 70%;
+      }
+    
+      .anchor.show {
+          visibility: visible;
+      }
   
     .collapse-light-button {
       text-decoration: none;
@@ -765,6 +791,16 @@ pre code { white-space: pre; }
 .md-image {
     padding: 0;
     margin: 0;
+
+    .anchor {
+        visibility: hidden; 
+        color:silver;
+        margin-right: 2px;
+      }
+    
+      .anchor.show {
+          visibility: visible;
+      }
 }
 
 /* img shortcode */
@@ -773,16 +809,16 @@ pre code { white-space: pre; }
 /* override border/bg color of chroma highlight shortcode using monokailight */
 
 
-div.highlight {
-    border: 1px solid #e8e8e8;
-    background-color: #fdfdfd;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
+// div.highlight {
+//     border: 1px solid #e8e8e8;
+//     background-color: #fdfdfd;
+//     border-radius: 5px;
+//     margin-bottom: 20px;
+// }
   
-div.highlight pre, div.highlight pre code {
-    background-color: #fdfdfd !important;
-}
+// div.highlight pre, div.highlight pre code {
+//     background-color: #fdfdfd !important;
+// }
 
 
 /* end */
@@ -851,5 +887,49 @@ img[src$='#right']
     transform: rotate(0deg);
     transform: rotate(90deg);
 }
+
+/* end */
+
+.heading-anchor { 
+    visibility: hidden; 
+    color:silver !important;
+    float: left;
+    line-height: 2;
+    font-size: 60%;
+    margin-left: -20px;
+    margin-top: 5px;
+}
+h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a { visibility: visible}
+
+h1 .heading-anchor {  
+    margin-left: -20px;
+    margin-top: 5px;
+}
+
+h2 .heading-anchor {  
+    margin-left: -16px;
+    margin-top: 2px;
+}
+
+h3 .heading-anchor {  
+    margin-left: -14px;
+    margin-top: 2px;
+}
+
+h4 .heading-anchor {  
+    margin-left: -13px;
+    margin-top: 1px;
+}
+
+h5 .heading-anchor {  
+    margin-left: -12px;
+    margin-top: 1px;
+}
+
+h6 .heading-anchor {  
+    margin-left: -10px;
+    margin-top: 0px;
+}
+
 
 /* end */

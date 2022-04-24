@@ -1,3 +1,6 @@
+TODO: inject data from file
+https://input.sh/hugo-data-into-content-with-a-shortcode/
+
 -- running locally
    npm run serve
 

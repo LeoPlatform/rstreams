@@ -16,7 +16,8 @@ home = ["HTML", "JSON"]
 unsafe = true
 
 [markup.highlight]
-style = 'monokailight'
+#monokailight autumn pygments vs
+style = 'vs'
 
 ############################# Plugins ##############################
 
@@ -97,8 +98,8 @@ icon_font = "Font Awesome 5 Free"
 logo = "images/rstreams-logo.png"
 favicon = "images/favicon.png"
 # Meta data
-description = "This is meta description"
-author = "Themefisher"
+description = "AWS-native event streaming and messaging platform"
+author = "RStreams"
 # contact form action
 contact_form_action = "#" # contact form works with https://formspree.io
 
@@ -120,25 +121,25 @@ preloader = "" # use jpg, png, svg or gif format.
 
 
 ############################# social site ########################
-[[params.social]]
-title = "facebook"
-icon = "fab fa-facebook" # fontawesome icon : https://fontawesome.com/icons
-link = "#"
+# [[params.social]]
+# title = "facebook"
+# icon = "fab fa-facebook" # fontawesome icon : https://fontawesome.com/icons
+# link = "#"
 
-[[params.social]]
-title = "twitter"
-icon = "fab fa-twitter" # fontawesome icon : https://fontawesome.com/icons
-link = "#"
+# [[params.social]]
+# title = "twitter"
+# icon = "fab fa-twitter" # fontawesome icon : https://fontawesome.com/icons
+# link = "#"
 
-[[params.social]]
-title = "github"
-icon = "fab fa-github" # fontawesome icon : https://fontawesome.com/icons
-link = "#"
+# [[params.social]]
+# title = "github"
+# icon = "fab fa-github" # fontawesome icon : https://fontawesome.com/icons
+# link = "#"
 
-[[params.social]]
-title = "linkedin"
-icon = "fab fa-linkedin" # fontawesome icon : https://fontawesome.com/icons
-link = "#"
+# [[params.social]]
+# title = "linkedin"
+# icon = "fab fa-linkedin" # fontawesome icon : https://fontawesome.com/icons
+# link = "#"
 
 
 ################################### English language #####################################

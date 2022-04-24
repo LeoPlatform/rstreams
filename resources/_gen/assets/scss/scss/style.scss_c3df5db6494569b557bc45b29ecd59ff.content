@@ -558,6 +558,13 @@ pre {
 .collapse-wrapper {
   padding: 5px 15px;
   margin-bottom: 20px; }
+  .collapse-wrapper .anchor {
+    visibility: hidden;
+    color: silver;
+    float: left;
+    margin-left: -35px; }
+  .collapse-wrapper .anchor.show {
+    visibility: visible; }
   .collapse-wrapper .collapse-head {
     text-decoration: none;
     color: #333;
@@ -570,6 +577,15 @@ pre {
 
 .collapse-light-wrapper {
   margin-bottom: 20px; }
+  .collapse-light-wrapper .anchor {
+    visibility: hidden;
+    color: silver;
+    float: left;
+    margin-left: -15px;
+    margin-top: 4px;
+    font-size: 70%; }
+  .collapse-light-wrapper .anchor.show {
+    visibility: visible; }
   .collapse-light-wrapper .collapse-light-button {
     text-decoration: none;
     color: #333;
@@ -771,18 +787,15 @@ pre code {
 .md-image {
   padding: 0;
   margin: 0; }
+  .md-image .anchor {
+    visibility: hidden;
+    color: silver;
+    margin-right: 2px; }
+  .md-image .anchor.show {
+    visibility: visible; }
 
 /* img shortcode */
 /* override border/bg color of chroma highlight shortcode using monokailight */
-div.highlight {
-  border: 1px solid #e8e8e8;
-  background-color: #fdfdfd;
-  border-radius: 5px;
-  margin-bottom: 20px; }
-
-div.highlight pre, div.highlight pre code {
-  background-color: #fdfdfd !important; }
-
 /* end */
 /* image alignment hack  */
 .md-image.center {
@@ -833,5 +846,42 @@ img[src$='#right'] {
   transition: .3s transform ease-in-out;
   transform: rotate(0deg);
   transform: rotate(90deg); }
+
+/* end */
+.heading-anchor {
+  visibility: hidden;
+  color: silver !important;
+  float: left;
+  line-height: 2;
+  font-size: 60%;
+  margin-left: -20px;
+  margin-top: 5px; }
+
+h1:hover a, h2:hover a, h3:hover a, h4:hover a, h5:hover a, h6:hover a {
+  visibility: visible; }
+
+h1 .heading-anchor {
+  margin-left: -20px;
+  margin-top: 5px; }
+
+h2 .heading-anchor {
+  margin-left: -16px;
+  margin-top: 2px; }
+
+h3 .heading-anchor {
+  margin-left: -14px;
+  margin-top: 2px; }
+
+h4 .heading-anchor {
+  margin-left: -13px;
+  margin-top: 1px; }
+
+h5 .heading-anchor {
+  margin-left: -12px;
+  margin-top: 1px; }
+
+h6 .heading-anchor {
+  margin-left: -10px;
+  margin-top: 0px; }
 
 /* end */

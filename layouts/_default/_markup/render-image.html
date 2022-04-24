@@ -1,11 +1,18 @@
 <!-- Using Title to pass image width -->
 
 
+{{ $n := .Text | urlize }}
+{{ $rand := now.UnixNano }}
 {{ $arr := split .Title "|" }}
 {{ $width := index $arr 0 }}
 {{ $class := index $arr 1 }}
 
-<p class="md-image d-flex {{if not (eq $class nil)}}{{$class}}{{end}}">
+<p id="{{ $n }}" onmouseover="toggleLink('{{ $n }}-{{ $rand }}-link', true)" 
+                 onmouseout="toggleLink('{{ $n }}-{{ $rand }}-link', false)" 
+                 class="md-image d-flex {{if not (eq $class nil)}}{{$class}}{{end}}">
+    <a id="{{ $n }}-{{ $rand }}-link" href="#{{ $n }}" class="anchor">
+        <i class="fas fa-link"></i>
+    </a>
     <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" style="width:{{$width}}"
     {{ with .Text}} title="{{ . }}"{{ end }} />
 </p>
