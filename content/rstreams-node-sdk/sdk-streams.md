@@ -25,9 +25,9 @@ most common use cases: getting data from the bus and sending data to the bus.
 These functions do some heavy lifting for you, hiding all the complexity behind a single function that
 doesn't require that you use pipes and streams at all.
 
-## enrichEvent Operation
+## enrich Operation
 API docs: [async version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrich) |
-[callback version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrichEvents)
+          [sync version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrich)
 
 A stand-alone function that asks for the source and destination queues and then reads events from the source queue
 and writes to the destination queue, allowing you to insert a function in-between to transform the data
@@ -41,23 +41,26 @@ and then writing one event to another queue that summarizes the 1 minute of sour
 ### Runnable Examples
 #### Example 1
 
-The first example illustrates code running as a bot with ID of `rstreams-example.people-to-peopleplus` and getting exactly two events from queue `rstreams-example.people`, starting at position `z/2022/04/20`, and then transforms each
-event's JSON by dropping unwanted attributes and simplifying the JSON structure.  It also calls a totally free, public API that given a country name returns the standard two-char country code which we tack on to the event after
+The first example illustrates code running as a bot with ID of `rstreams-example.people-to-peopleplus` and getting exactly two events
+from queue `rstreams-example.people`, starting at position `z/2022/04/20`, and then transforms each
+event's JSON by dropping unwanted attributes and simplifying the JSON structure.  It also calls a totally free, public API that given
+ a country name returns the standard two-char country code which we tack on to the event after
 which we return the modified event which tells the SDK to push it to the
 `rstreams-example.people-to-peopleplus` queue.
 
-Two things to note here.  First is that the transform function is documented for both the callback
+Two things to note here.  First is that the transform function is typed for both the callback
 and async variety but please only use the async version going forward - all new features
 are only being added to the async approach.
 
 Second, there are actually three arguments to the `transform` function, even though in our example we 
-are only using the first.  What is stored in an RStreams queue is an instance of a [ReadEvent](https://leoplatform.github.io/Nodejs/interfaces/lib_types.ReadEvent.html) where the `payload` attribute is the data the queue exists for. 
+are only using the first.  What is stored in an RStreams queue is an instance of a 
+[ReadEvent](https://leoplatform.github.io/Nodejs/interfaces/lib_types.ReadEvent.html) where the `payload` attribute is the data the queue exists for. 
 The first argument is just the payload pulled out since usually that's all you need.  The second argument
 is the full event from the queue with the event ID and other sometimes useful things.  The third argument
 is only used in the callback version where you call `done` exactly once to trigger the callback.  It's there
 for backwared compat.  Don't use it on new things.
 
-{{< collapse "Returning from an aync transform function" >}}
+{{< collapse "Returning from an enrich async transform function" >}}
 * throw Error  
   If you throw an error at anytime the pipe will error out and your upstream queue will not be checkpointed
 * return object  
@@ -74,7 +77,8 @@ for backwared compat.  Don't use it on new things.
   If you pass an empty array, that's the same thing as if you called `return true`.
 * `return true`  
   This means I don't want to emit an event with my return but I do want the SDK to checkpoint for me
-  in the upstream queue
+  in the upstream queue. If we're not batching, then
+  this checkpoints the one event.  If we're batching, this checkpoints up to the final event in the batch.
 * `return false`  
   This means I don't want to emint an event with my return AND I also don't want the SDK to checkpoint for me
 * `this.push`  
@@ -82,17 +86,7 @@ for backwared compat.  Don't use it on new things.
   *Advanced use cases* section* below.
 {{</ collapse >}}
 
-{{< collapse "Details on using the callback version if you still need them" >}}
-You can only call done once in your `transform` function and here's how:
-
-* `done(new Error('some err'))` means don't checkpoint this event and error out
-* `done(null, <object>)` means it worked, checkpoint in the source queue for me and send the object
-   on to the next queue
-* `done(null, true)` means it worked, please checkpoint for me in the source queue but I don't 
-   want to send a corresponding object on to the destination queue, skip this one
-{{</ collapse >}}
-
-{{< collapse "Advanced use cases" >}}
+{{< collapse "Enrich advanced use cases" >}}
 Let's say I want to turn one event read from the upstream queue into many events in the downstream
 queue.  Well, you can't return multiple times from the `transform` function.  There's another way.
 
@@ -110,7 +104,8 @@ you call `this.push` from the `transform` function the SDK checkpoints the upstr
 that this bot has gone past that event in the upstream queue. Well, if you are turning one upstream
 event into multiple downstream events, you are going to call `this.push` multiple times to emit your many
 events and you don't want to checkpoint the one upstream event until you've generated all the downstream events.
-You do this by calling the push method with the first arg as the event to emit and the [second arg options](https://leoplatform.github.io/Nodejs/interfaces/lib_streams.ProcessFunctionOptions.html) `partial` set to true indicating that
+You do this by calling the push method with the first arg as the event to emit and the 
+[second arg options](https://leoplatform.github.io/Nodejs/interfaces/lib_streams.ProcessFunctionOptions.html) `partial` set to true indicating that
 this event is one of many being emitted and it will send the `partial` event to the downstream queue
 but it won't checkpoint.  Then, when you're done you simply  `return true;` and
 it will checkpoint the event in the upstream queue.
@@ -119,7 +114,7 @@ See TypeScript [this param typing](https://www.logicbig.com/tutorials/misc/types
 
 {{</ collapse >}}
 
-{{< collapse-light "Example 1 Code" >}}
+{{< collapse-light "Enrich example 1 code" >}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex1}
 import { EnrichOptions, RStreamsSdk } from "leo-sdk";
 import { Person, PersonRaw } from "../lib/types";
@@ -153,7 +148,7 @@ async function main() {
 ```
 {{</ collapse-light >}}
 
-{{< collapse-light "Example 1 addCountryCode and translate functions" >}}
+{{< collapse-light "Enrich example 1 addCountryCode and translate functions" >}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex1addcountry}
 interface CountryCode {cca2: string;}
 
@@ -259,7 +254,7 @@ up if events are slamming into that upstream queue super fast.
 So, we're going to ask the SDK to micro-batch up events 10 at a time and then invoke our
 `transform` function with all ten at once and if it's waited more than one second for 10 
 to show up then our config tells the SDK to just go ahead and invoke `transform` with whatever it's 
-got so far. Then in the enrich function we're going to modify our `addCountryCode` function to make 
+got so far. Then in the enrich transform function we're going to modify our `addCountryCode` function to make 
 concurrent API requests for each person we are transforming, parallelizing the work and making it much 
 faster so we can keep up.  To make the example more interesting, we set `config.limit` now to 100 so we
 get a lot more events before we stop reading from the upstream queue.  The config in the `config` attribute is
@@ -283,12 +278,12 @@ and so you don't need the third arg.
 
 When we're done enriching the events, we simply return the array of the new events to send them on their
 way to the destination RStreams queue.  See 
-[Returning from an async transform function](#returning-from-an-aync-transform-function) above for 
+[Returning from an enrich async transform function](#returning-from-an-enrich-async-transform-function) above for 
 more details.
 
 Note: see the code above for the `Person` and `PersonRaw` types which didn't change.
 
-{{< collapse-light "Example 2 Code" >}}
+{{< collapse-light "Enrich example 2 code" >}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex2}
 import { EnrichBatchOptions, ReadEvent, RStreamsSdk } from "leo-sdk";
 import { Person, PersonRaw } from "../lib/types";
@@ -323,7 +318,7 @@ async function main() {
 })()
 ```
 {{</ collapse-light >}}
-{{< collapse-light "Example 2 addCountryCode and translate functions" >}}
+{{< collapse-light "Enrich example 2 addCountryCode and translate functions" >}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex2addcountrycode}
 interface CountryCode {cca2: string;}
 
@@ -374,11 +369,188 @@ async function addCountryCode(people: Person[]): Promise<void> {
 ![Pipe Readable to Writable Example 2](../images/botmon-example2-people-to-peopleplus.png "700px|center" )
 
 ## offload Operation
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#load
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#offloadEvents
+API docs: [async version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#offloadEvents) | 
+          [sync version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#offload)
 
-A function where you specify the source queue and give it a function and your function is called 
-with events from the source queue, allowing you to save them elsewhere or do other computation.
+A stand-alone function that reads events from the specified source RStreams queue and then calls your
+transform function allowing you to do anything you want to with the data.
+
+### When would I use this?
+* You want to read from a source queue and then write it to a resource or system that isn't another RStreams queue
+  
+  * Write to a database
+  * Send data to an API
+* You want to read from a source queue and perform aggregations/analytics on data before sending to another system
+
+### Runnable Examples
+{{< notice info >}}This expects you've run the examples in the [enrich Operation](#enrich-operation).{{</ notice >}}
+#### Example 1
+
+The first example illustrates code running as a bot with ID of `rstreams-example.offload-one-peopleplus` and getting exactly two 
+events from queue `rstreams-example.peopleplus`, starting at position `z/2022/04/20`, and then simply saves each event to another 
+system by calling that system's API.  The endpoint here is a free, public API that lets you mock out the response
+and just throws away your request, but works for our purposes.
+
+Two things to note here.  First is that the transform function is typed for both the callback
+and async variety but please only use the async version going forward - all new features
+are only being added to the async approach.
+
+Second, there are actually three arguments to the `transform` function, even though in our example we 
+are only using the first.  What is stored in an RStreams queue is an instance of a
+ [ReadEvent](https://leoplatform.github.io/Nodejs/interfaces/lib_types.ReadEvent.html) where the `payload` attribute is the data the queue exists for. 
+The first argument is just the payload pulled out since usually that's all you need.  The second argument
+is the full event from the queue with the event ID and other sometimes useful things.  The third argument
+is only used in the callback version where you call `done` exactly once to trigger the callback.  It's there
+for backwared compat.  Don't use it on new things.
+
+{{< collapse "Returning from an offload async transform function" >}}
+* throw Error  
+  If you throw an error at anytime the pipe will error out and your upstream queue will not be checkpointed
+* `return true`  
+  This tells the SDK to checkpoint for me in the upstream queue read from.  If we're not batching, then
+  this checkpoints the one event.  If we're batching, this checkpoints up to the final event in the batch
+* `return false`  
+  This tells the SDK **not** to checkpoint this event in the upstream queue read from
+{{</ collapse >}}
+
+{{< collapse-light "Offload example 1 code" >}}
+```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex1}
+import { OffloadOptions,  RStreamsSdk } from "leo-sdk";
+import { Person } from "../lib/types";
+import axios, { AxiosResponse } from "axios";
+
+async function main() {
+  const rsdk: RStreamsSdk  = new RStreamsSdk();
+  const opts: OffloadOptions<Person>  = {
+    id: 'rstreams-example.offload-one-peopleplus',
+    inQueue: 'rstreams-example.people',
+    start: 'z/2022/04/20',
+    limit: 2,
+    transform: async (person: Person) => {
+        await savePerson(person);
+        return true;        
+    }
+  };
+
+  await rsdk.offloadEvents<Person>(opts);
+}
+
+interface PostResponse {
+    success: boolean;
+}
+
+/**
+ * @param person Save the person to another system.
+ */
+async function savePerson(person: Person): Promise<void> {
+  const url = `https://run.mocky.io/v3/83997150-ab13-43da-9fb9-66051ba06c10?mocky-delay=500ms`;    
+  const resp: AxiosResponse<PostResponse, any> = await axios.post<PostResponse>(url, person);
+  if (!resp.data || resp.data.success !== true) {
+    throw new Error('Saving person to external system failed');
+  }
+}
+
+(async () => {
+  await main();
+})()
+```
+{{</ collapse-light >}}
+
+[Person interface referenced in the examples](#personraw-personrawresults-interfaces-referenced-in-the-examples)
+
+#### Example 2
+This example is nearly identical to Example 1 above except that this time we are are going to
+use config to tell the SDK to batch up events for us so we can be more efficient.  The calls out 
+to a public API to save the event elsewhere are intentionally delayed by 500ms each, a not uncommon
+API latency.  So, we're at risk of not being able to read and offload events from the upstream queue fast enough to keep
+up if events are slamming into that upstream queue super fast.
+
+So, we're going to ask the SDK to micro-batch up events 10 at a time and then invoke our
+`transform` function with all ten at once and if it's waited more than one second for 10 
+to show up then our config tells the SDK to just go ahead and invoke `transform` with whatever it's 
+got so far. Then in the offload transform function we're going to modify our `savePerson` function to make 
+concurrent POST API calls for each person we are saving, parallelizing the work and making it much 
+faster so we can keep up.  To make the example more interesting, we set `limit` now to 100 so we
+get a lot more events before we stop reading from the upstream queue.  The config that is inherited from the
+[ReadOptions](https://leoplatform.github.io/Nodejs/interfaces/index.ReadOptions.html) is
+important for specifying how long we're meant to read from the upstream queue before we stop
+reading and close down shop.  If you're running in a lambda function, you've only got 15 min
+before AWS shuts down your lambda and that may sound like a long time unless you are reading from a queue
+that is forever getting new events shoved into it, a pretty common case.  By default, if you don't set any
+config to tell the SDK when to stop reading from the upstream queue, the SDK will read for up to 80% of the
+total time remaining for your lambda, if you are in fact running as a lambda.  That then saves 20% of the time
+for you to finish processing.
+
+You'll notice that because we used the `OffloadBatchOptions` to batch things up that the `transform`
+function arguments change.  That's because the SDK isn't invoking `transform` with just one object
+but with the batch: an array of objects.
+
+The first argument is just the array of events direct from the upstream queue.  The second arg
+is an event wrapper around the whole array of events directly from the upstream queue - not
+really needed except in rare use cases.  The third argument is for backward compatability
+when using the `offload` as a callback instead of using async.  Please only use async going forward
+and so you don't need the third arg.
+
+When we're done offloading the events, we simply return true telling the SDK to checkpoint for us in the
+upstream queue.  See 
+[Returning from an offload async transform function](#returning-from-an-offload-async-transform-function) above for 
+more details.
+
+Note: [Person interface referenced in the examples](#personraw-personrawresults-interfaces-referenced-in-the-examples)
+
+{{< collapse-light "Offload example 2 code" >}}
+```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex2}
+import { OffloadBatchOptions, ReadEvent, RStreamsSdk } from "leo-sdk";
+import { Person } from "../lib/types";
+import axios, { AxiosResponse } from "axios";
+
+async function main() {
+  const rsdk: RStreamsSdk  = new RStreamsSdk();
+  const opts: OffloadBatchOptions<Person>  = {
+    id: 'rstreams-example.offload-one-peopleplus',
+    inQueue: 'rstreams-example.people',
+    batch: {
+        count: 10,
+        time: 1000
+    },
+    start: 'z/2022/04/20',
+    limit: 2,
+    transform: async (people: ReadEvent<Person>[]) => {
+        await savePeople(people);
+        return true;        
+    }
+  };
+
+  await rsdk.offloadEvents<Person>(opts);
+}
+
+interface PostResponse {
+    success: boolean;
+}
+
+/**
+ * @param person Save the person to another system.
+ */
+async function savePeople(people: ReadEvent<Person>[]): Promise<void> {
+  const url = `https://run.mocky.io/v3/83997150-ab13-43da-9fb9-66051ba06c10?mocky-delay=500ms`;    
+
+  const responses: PostResponse[] = (await Promise.all(
+    people.map((person) => axios.post<PostResponse>(url, person.payload)))).map((obj) => (obj.data));
+
+  responses.forEach((resp) => {
+  if (!resp || resp.success !== true) {
+    throw new Error('Saving person to external system failed');
+  }});
+}
+
+(async () => {
+  await main();
+})()
+
+
+
+```
+{{</ collapse-light >}}
 
 ## putEvent Operation
 https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#put

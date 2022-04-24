@@ -625,7 +625,8 @@ a[aria-expanded=true].collapse-head {
   #TableOfContents ul {
     display: list-item;
     padding-left: 0;
-    list-style: none; }
+    list-style: none;
+    padding-top: 10px; }
     #TableOfContents ul:not(:first-child) {
       display: list-item;
       padding-left: 0.9rem;

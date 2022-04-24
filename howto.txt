@@ -1,6 +1,11 @@
 TODO: inject data from file
 https://input.sh/hugo-data-into-content-with-a-shortcode/
 
+-- Used mocky.io to allow post to mock URL in some examples.  If this endpoint isn't called once a year
+   it will get deleted and will need to have to go back and make another.
+   
+   https://run.mocky.io/v3/83997150-ab13-43da-9fb9-66051ba06c10?mocky-delay=500ms
+
 -- running locally
    npm run serve
 

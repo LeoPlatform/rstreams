@@ -19,6 +19,10 @@ unsafe = true
 #monokailight autumn pygments vs
 style = 'vs'
 
+[markup.tableOfContents]
+startLevel = 1
+endLevel = 3
+
 ############################# Plugins ##############################
 
 # CSS Plugins

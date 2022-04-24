@@ -507,6 +507,7 @@ a[aria-expanded=true].collapse-head {
       display: list-item;
       padding-left: 0;
       list-style: none;
+      padding-top: 10px;
 
       &:not(:first-child) {
         display: list-item;
