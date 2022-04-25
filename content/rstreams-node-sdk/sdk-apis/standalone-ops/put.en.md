@@ -89,7 +89,7 @@ If you go to Botmon, you will see that the `rstreams-example.people` queue now h
 
 ### Example 2: Write multiple objects to the bus (slow performance)
 {{< notice info >}}This is an example of what not to do.  When you want to write many events to an RStreams queue, use
-the  [Load Stream](../../load-stream) pipe step.{{</ notice >}}
+the  [Load Stream](../../sink-streams/load) pipe step.{{</ notice >}}
 
 So, instead of reading one person from the public API we used in the example above, let's say we get 100 people at a time
 from the public API and we want to write them to the bus.
@@ -107,7 +107,7 @@ the RStreams Dynamo DB queue table, putting the event in the correct queue
 RStreams is designed to handle the continuos generation of data events that flow into a given queue, is read from
 that queue and mutated and then sent to other queues.  It is today doing this with very large amounts of 
 concurrently received events and has optimizations for sending lots of data.
-The [Load Stream](../../load-stream) pipe step is a much better way to send large amounts of data
+The [Load Stream](../../sink-streams/load) pipe step is a much better way to send large amounts of data
 to the bus, meaning to an RStreams queue.
 
 Note: [Person types referenced in the examples](../../#person-types-referenced-in-the-examples)

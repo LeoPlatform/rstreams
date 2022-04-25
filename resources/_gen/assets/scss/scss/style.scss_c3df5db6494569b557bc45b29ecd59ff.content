@@ -386,8 +386,7 @@ a:hover {
     display: none; }
   .sidenav .parent > a {
     color: #00539F !important;
-    position: relative;
-    margin-left: 10px; }
+    position: relative; }
     .sidenav .parent > a:hover {
       color: #0059ff !important; }
     .sidenav .parent > a::before {

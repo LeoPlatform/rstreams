@@ -1,7 +1,7 @@
 ---
 title: "Load Stream"
 date: 2018-12-29T11:02:05+06:00
-weight: 4
+weight: 1
 draft: false
 ---
 
@@ -9,10 +9,10 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-{{< notice info >}}You need to understand what a [pipe and stream step in that pipe](../../streams-primer) is AND 
+{{< notice info >}}You need to understand what a [pipe and stream step in that pipe](../../../streams-primer) is AND 
 nothing comes for free.  The cost of working with large amounts of data in near real-time environments
 with RStreams is you have to think about what you are doing and what it means with respect to
-reading and writing.  It is strongly recommended you read the [Read/Write at Scale](../../read-write-scale) 
+reading and writing.  It is strongly recommended you read the [Read/Write at Scale](../../../read-write-scale) 
 article at some point.{{</ notice >}}
 
 API docs: [async version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrich) |
