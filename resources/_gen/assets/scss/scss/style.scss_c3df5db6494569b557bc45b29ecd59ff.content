@@ -370,6 +370,8 @@ a:hover {
 .sidenav {
   border-right: 1px solid #E2E2E2;
   padding-right: 20px; }
+  .sidenav a:hover {
+    color: #0059ff !important; }
   .sidenav ul {
     padding-left: 10px; }
   .sidenav > li a {
@@ -386,6 +388,8 @@ a:hover {
     color: #00539F !important;
     position: relative;
     margin-left: 10px; }
+    .sidenav .parent > a:hover {
+      color: #0059ff !important; }
     .sidenav .parent > a::before {
       position: absolute;
       content: "";
@@ -403,12 +407,15 @@ a:hover {
       font-weight: 400;
       color: #222; }
     .sidenav .parent ul li.active > a {
-      margin-left: 10px; }
+      margin-left: 0px;
+      font-weight: bold; }
+      .sidenav .parent ul li.active > a:hover {
+        color: #00539F !important; }
       .sidenav .parent ul li.active > a::before {
         height: 5px;
         width: 5px;
         border-radius: 50%;
-        display: block;
+        display: none;
         top: 13px; }
 
 /* /sidenav */

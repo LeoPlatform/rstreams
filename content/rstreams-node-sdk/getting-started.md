@@ -68,6 +68,8 @@ You're going to want to read from the bus, change the data somehow or cause a si
 and then write the changed data to a different queue.
 
 # Write to the bus
+You want to write data to an RStreams qeuue.
+
 TODO: include link to git project so can checkout and run
 
 ## Write a single object to the bus

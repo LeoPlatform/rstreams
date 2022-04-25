@@ -111,6 +111,10 @@
   border-right: 1px solid $border-color;
   padding-right: 20px;
 
+  a:hover {
+    color: $hover-color !important;
+  }
+
   ul {
     padding-left: 10px;
   }
@@ -141,6 +145,10 @@
       position: relative;
       margin-left: 10px;
 
+      &:hover {
+        color: $hover-color !important;
+      }
+
       &::before {
         position: absolute;
         content: "";
@@ -164,13 +172,18 @@
       }
 
       li.active>a {
-        margin-left: 10px;
+        margin-left: 0px;
+        font-weight: bold;
+
+        &:hover {
+            color: $primary-color !important;
+        }
 
         &::before {
           height: 5px;
           width: 5px;
           border-radius: 50%;
-          display: block;
+          display: none;
           top: 13px;
         }
       }
