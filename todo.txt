@@ -1,0 +1,14 @@
+- split2.split : to turn a JSONL file into json objects
+- streams.stringify : jsonlinify something
+
+- streams.eventstream.writearray
+  search in unit tests of node sdk itself for this
+  util.eventstream.writeArray((err, results) => {
+						err ? reject(err) : resolve(results);
+					}),
+
+- sdk doc for https://leoplatform.github.io/Nodejs/modules/index.html#CreateSourceFunction
+  is not great
+
+- sdk doc for https://leoplatform.github.io/Nodejs/interfaces/index.CreateSourceOptions.html
+  is not great

@@ -241,7 +241,7 @@ async function main() {
   const es = rsdk.streams.eventstream;
   const people = await getRandomPeople();
 
-  rsdk.streams.pipeAsync(
+  await rsdk.streams.pipeAsync(
     es.readArray(people.results),
     rsdk.load('rstreams-example.load-people', 'rstreams-example.people', 
               {records: 25, time: 5000, useS3: true})

@@ -68,3 +68,10 @@ TODO: how do they know how to access botmon?
 
 
 {{</ collapse >}}
+
+The examples in this section are geared toward creating apps that use the RStreams SDK to interact with an RStreams bus instance 
+regardless of how those apps are written.  As such, the examples are simply standalone runnables node applications.  The
+examples highlight the config that are available to control reading and writing in such apps.
+
+The [RStreams Flow](../rstreams-flow) section focuses on apps written specifically as bots that are deployed as lambda
+functions and go into great detail on the specific use cases applicable to serverless applications.

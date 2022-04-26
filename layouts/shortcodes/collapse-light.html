@@ -3,20 +3,24 @@
 {{ $n := .Get 0 | urlize }}
 {{ $rand := now.UnixNano }}
 
+{{ $expand := (cond (eq (.Get 1) true) "true" "false" ) }}
+{{ $show := (cond (eq (.Get 1) true) "show" "" ) }}
+
 <div id="{{ $n }}" onmouseover="toggleLink('{{ $n }}-{{ $rand }}-link', true)" 
                    onmouseout="toggleLink('{{ $n }}-{{ $rand }}-link', false)" 
                    class="collapse-light-wrapper">
     <a id="{{ $n }}-{{ $rand }}-link" href="#{{ $n }}" class="anchor">
         <i class="fas fa-link"></i>
     </a>
-    <a class="collapse-light-button d-flex" data-bs-toggle="collapse" href="#{{ $n }}-{{ $rand }}-toggle" role="button" aria-expanded="false">
+    <a class="collapse-light-button d-flex" data-bs-toggle="collapse" href="#{{ $n }}-{{ $rand }}-toggle" 
+       role="button" aria-expanded="true" aria-controls="#{{ $n }}-{{ $rand }}-toggle">
             <i class="icon fas fa-play"></i> <span class="ps-2">{{ .Get 0 | markdownify }}</span>
     </a>      
-    <div class="collapse mt-3 ps-4" id="{{ $n }}-{{ $rand }}-toggle">{{ .Inner | markdownify }}</div>
+    <div class="collapse mt-3 ps-4 {{$show}}" id="{{ $n }}-{{ $rand }}-toggle">{{ .Inner | markdownify }}</div>
 </div>
 
 
 
 
-</script>
+<!-- </script> -->
 
