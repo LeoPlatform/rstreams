@@ -29,7 +29,7 @@ to act as the first step in a pipe.
 ## Runnable Examples
 ### Example 1
 
-There's a fair bit going on here so stay with me.  Here's what we're doing.  We read events from
+There's a fair bit going on here so stay with me.  We read events from
 from a public free API that generates random people, seeding a pipe by creating a source stream
 using the `createSource` API and then write them to the bus landing in the `rstreams-example.people`
 queue.

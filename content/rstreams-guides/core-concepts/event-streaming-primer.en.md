@@ -5,6 +5,9 @@ description: "In-depth guides and how-to's."
 draft: false
 weight: 2
 ---
+{{< collapse-light "ToC" >}}
+{{< toc  >}}
+{{</ collapse-light >}}
 
 ***One cannot understand the problems RStreams solves or reason about its implementation/usage without a fundamental understanding of event streaming compared to traditional microservices approaches.***
 
