@@ -4,9 +4,12 @@ date: 2018-12-29T11:02:05+06:00
 weight: 2
 draft: false
 ---
+{{< collapse-light "ToC" >}}
+{{< toc  >}}
+{{</ collapse-light >}}
 
 # Summary
-A checkpoint is a saved position in a stream.  The Node SDK maintains the read checkpoint for all bots that read from a given
+A checkpoint is a saved position in an RStreams queue.  The Node SDK maintains the read checkpoint for all bots that read from a given
 queue.  The Node SDK maintains a write checkpoing for all bots that write to a given queue.  When a bot is restarted and
 starts reading from a queue, it will by default begin reading from its checkpoint (think position) in the queue.
 
@@ -16,7 +19,7 @@ for the stream it is reading from or writing to.
 {{< notice info >}}Most of the time, the SDK automatically checkpoints for you and you don't need to care.  However,
 you need to understand generally what it is so you don't get in trouble.{{</ notice >}}
 
-## Checkpointing and Correlation
+# Checkpointing and Correlation
 **IF YOU HAVE AN EVENT THAT DOESN'T INCLUDE A VALID CORRELATION_ID THEN THE SDK CANNOT CHECKPOINT FOR YOU.**
 
 *If the above sentence is all you remember from this article, then victory is assured :)*
@@ -28,7 +31,7 @@ The SDK will checkpoint for you if your event has a `correlation_id` and without
 how the SDK works.  The correlation information tells the SDK the source queue and exact event that an event came from and
 without this it simply can't save your bot's read or write position in a queue.
 
-## Read Checkpoints
+# Read Checkpoints
 When your bot reads an event from an RStreams queue, you are going to do something with that event and then want to read
 the next event in the queue.  What if you read event A and before you process the event your bot crashes and shuts down.
 
@@ -43,7 +46,7 @@ maybe gets you close to where you were reading.  Here's an event Id that will st
 
 But, that's not great.  So, the SDK keeps track of this for you.  Here's how?
 
-## Read Checkpointing for Offload and Enrich
+# Read Checkpointing for Offload and Enrich
 
 When you have an operation that reads from a queue, such as [offload](../rstreams-node-sdk/sdk-apis/standalone-ops/offload) or
 [enrich](../rstreams-node-sdk/sdk-apis/standalone-ops/offload), the SDK will checkpoint events read from the source queue
@@ -59,13 +62,13 @@ So, each time your bot starts up it will automatically call out to the `RStreams
 the checkpoint, in the given queue it's reading from and will continue pulling events from that position forward in time through
 the queue.
 
-## Read Checkpointing for a Pipe
+# Read Checkpointing for a Pipe
 If your last pipe stream step, your sink, writes to a queue using a `load` stream, then periodically as the SDK writes the
 events to the desination queue it will also updatethis bot's checkpoint in the queue that you read from in your source stream.
 
-## Read Checkpoint Examples
+# Read Checkpoint Examples
 
-### Example 1
+## Example 1
 Here we are creating a source stream that goes out and gets data not yet in a queue of the `RStreams Bus`and we
 write it to the RStreams queue named `my-destination-queue` acting as a bot named `my-cool-bot`.
 The SDK will not checkpoint what you are reading from since your source isn't an RStreams queue.
@@ -116,7 +119,7 @@ async function main() {
 ```
 {{</ collapse-light >}}
 
-### Example 3
+## Example 3
 Here we are reading events as a bot named `my-cool-bot` from a queue named `my-source-queue`, translating them from a `PersonRaw` to 
 a `Person` object and then writing them a queue named `my-dest-queue`.  You'll notice that on line 15 we are returning the newly
 translated person to be sent to the `my-dest-queue` queue.  The SDK will checkpoint the original event from `my-source-queue`
@@ -152,7 +155,7 @@ async function main() {
 ```
 {{</ collapse-light >}}
 
-### Example 4
+## Example 4
 Here we are reading events from queue `my-source-queue` as a bot named `my-cool-bot` and then
 transforming the event from a `PersonRaw` to a `Person` object and then sending the new `Person`
 object to the queue named `my-dest-queue` doing so as a bot named `my-cool-bot`.
