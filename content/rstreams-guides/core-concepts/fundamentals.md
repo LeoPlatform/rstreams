@@ -6,24 +6,56 @@ draft: false
 weight: 2
 ---
 
-### Events
+### Event
+All data that is sent to an RStreams queue is an [event](https://leoplatform.github.io/Nodejs/interfaces/lib_types.BaseEvent.html).
+Each event exists to wrap the data contained in the `payload` attribute.  Queues hold events of a consistent type, such as 
+all Employee objects or all Change Order request objects for example.
+
+### Queue
+RStreams is factored around queues.  A queue is a named set of events in time sequence order, ordered by their event ID.
+An event in a queue is persisted by virtue of being in a queue.  Bots register themselves to be invoked when events arrive in a queue.
+Bots read data from queues and send new data to other queues.
+
+### The Bus
+A term used to mean a single instance of RStreams with its associated queues and the bots that react to and populate them.
+
+### Bot
+A bot as a logical wrapper around a unit of work that will read data from an RStreams queue or write data to an RStreams
+queue or both.  Bots may be registered to be invoked when new events show up in a given queue.  Bots may be scheduled
+to run periodically using standard cron syntax.
 
 #### Event ID
-TODO
+Every event in a queue has an event ID, which uniquely identifies it in the queue.  The event ID is also its position
+in the queue because event IDs are actually a form of date/time (UTC) value.
+Here's one: `z/2021/06/14/17/19/1623691151425-0000013`
+
+* **z/** : all event IDs start with this to identify them as event IDs
+* **2021** : the year of the event
+* **06** : the month of the event
+* **14** : the day of the event
+* **17** : the hour of the event
+* **19** : the minute of the event
+* **1623691151425** : the millisecond of the event
+* **0000013** : the sequence number in that millisecond, so this is the 13 event in this one millisecond that came into the queue
 
 #### Pipe
-TODO
+A function that takes as its arguments a set of stream steps where the pipe begins with a source stream that produces data to
+seed the pipe with, an optional set of transform streams that take in data, do something with it and send it to the next stream
+in the pipe and the sink stream that ends the pipe.
 
 #### Pipe Stream Step
-TODO
+A single stream in a pipe.  It's called a step because each stream in a pipe receives data from the previous step in the pipe and
+sends data to the next step in the pipe.
 
 #### Stream
-Pipe Step or Bots/Queues.
-TODO
+A set of RStreams queues and bots that chain together to create a directed graph of moving data with upstream queues 
+visualized as the sources that initially receive events, think leftmost if visualizing, and downstream queues getting
+data from the previous stream step, think rightmost if visualizing.
 
 #### Checkpoint
-Writing last read event ID back to queue.
-TODO
+A checkpoint is a saved position in a stream.  The Node SDK maintains the read checkpoint for all bots that read from a given
+queue.  The Node SDK maintains a write checkpoing for all bots that write to a given queue.  When a bot is restarted and
+starts reading from a queue, it will by default begin reading from its checkpoint (think position) in the queue.
 
 #### Event source timestamp
 Every [event](https://leoplatform.github.io/Nodejs/interfaces/lib_types.BaseEvent.html)
@@ -35,12 +67,6 @@ idea but very important.  It requires that when engineers manually craft their o
 through the bus that they simply take the effort to copy the parent event's `event_source_timestamp` 
 onto their new derived event and put it in the new event's `event_source_timestamp` so the value propagates
 through.
-
-#### Started timestamp (bot)
-TODO
-
-#### Ended timestamp (bot)
-TODO
 
 #### Correlation ID
 Every [event](https://leoplatform.github.io/Nodejs/interfaces/lib_types.BaseEvent.html)
@@ -84,12 +110,7 @@ the number of events between `start` and `end`
  in RStreams that this bookkeeping may point to the database table as the source as the start/end may be where in the
  database it came from.
 
-#### Units (bot)
-TODO
-
-#### Checkpoint
-TODO
-
 #### System
-TODO
+A resource external to RStreams, such as a database, that has been registered in RStreams so it may be visualized as
+botmon as a queue of data and optionally used to designate correlation information specific to that external system.
 
