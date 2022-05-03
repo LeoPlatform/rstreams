@@ -3,7 +3,7 @@ title: "Fundamentals"
 date: 2022-04-04T11:02:05+06:00
 description: "Fundamental concepts."
 draft: false
-weight: 1
+weight: 2
 ---
 
 ### Events

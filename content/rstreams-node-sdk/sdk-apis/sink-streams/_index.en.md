@@ -1,7 +1,7 @@
 ---
 title: "Sink Streams"
 date: 2018-12-29T11:02:05+06:00
-weight: 3
+weight: 4
 draft: false
 ---
 
@@ -9,15 +9,11 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These are source streams that will be the final step in your pipe, consuming the events and doing something with them such as
-write them to Dynamo DB.
+These function create a sink for you, the last step in a pipe.
 
-<!-- [put Operation](./put)
-: A function that lets you write a single event to the specified RStreams queue
+[Load Function](./load)
+: A function that creates a sink that takes in an upstream event and pushes it to an RStreams queue on the bus
 
-[enrich Operation](./enrich)
-: A function that reads from the specified source RStreams queue, lets you transform the events and then sends the 
-modified events to the specified destination RStreams queue
-
-[offload Operation](./offload)
-: A function that reads from the specified RStreams queue and lets you do something with the events retrieved, perhaps save them in a DB -->
+[Devnull Function](./devnull)
+: A function that creates a sink stream that takes in un upstream event and does absolutely nothing with it,
+except log it if you ask it to

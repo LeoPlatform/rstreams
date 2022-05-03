@@ -9,15 +9,11 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These are source streams meant to be the first step in a pipe that gets events to feed into the pipe, flowing
-from the source out to the next step in the pipe.
+These functions create a source stream for you, acting as the first stream in a pipe.  Each source stream feeds a pipe with data that 
+you specify, allowing it to flow through to the next stream step in your pipe.
 
-<!-- [put Operation](./put)
-: A function that lets you write a single event to the specified RStreams queue
+[Read Function](./read)
+: A function that creates a source stream that gets events from the specified queue and feeds them into the pipe.
 
-[enrich Operation](./enrich)
-: A function that reads from the specified source RStreams queue, lets you transform the events and then sends the 
-modified events to the specified destination RStreams queue
-
-[offload Operation](./offload)
-: A function that reads from the specified RStreams queue and lets you do something with the events retrieved, perhaps save them in a DB -->
+[Create Source Function](./createsource)
+: A function that creates a source stream that gets events from the specified queue and feeds them into the pipe.

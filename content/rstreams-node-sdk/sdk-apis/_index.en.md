@@ -101,50 +101,39 @@ modified events to the specified destination RStreams queue
 [offload Operation](./standalone-ops/offload)
 : A function that reads from the specified RStreams queue and lets you do something with the events retrieved, perhaps save them in a DB
 
-# Functions to Create SDK Streams
-The following lists each SDK function that creates an instance of an SDK stream for you.  If you need to do 
-something with a pipe and its streams, there's almost certainly a helper function to create the exact
-pipe step you need with the config you need to make it work in your use case.
+# Source Stream Functions
+These functions create a source stream for you, acting as the first stream in a pipe.  Each source stream feeds a pipe with data that 
+you specify, allowing it to flow through to the next stream step in your pipe.
 
-## checkpoint : WritableStream
-TODO
-A function that creates a `Writable` stream.
-TODO: link to checkpointing
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#checkpoint
+[Read Function](./source-streams/read)
+: A function that creates a source stream that gets events from the specified queue and feeds them into the pipe.
 
-## read : ReadableStream
+[Create Source Function](./source-streams/createsource)
+: A function that creates a source stream that gets events from the specified queue and feeds them into the pipe.
 
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#read
+# Transform Stream Functions
+These functions create a transform stream for you, acting as a pipe step sitting between a source and sink.  Each transform
+stream feeds accepts data from the previous pipe stream step, does something with it and then sends the resulting data
+on to the next pipe stream step.
 
-A function that lets you create a `source` stream that is backed by events you specify from an RStreams
-queue, with additional config to make it flexible, intelligent and performant.
+[Stringify Function](./transform-streams/stringify)
+: A function that creates a transform stream that takes in an upstream event, turns it into a string and tacks on a newline
+character to help in creating [JSON lines files](https://jsonlines.org/)
 
-## createSource : ReadableStream
-TODO
+[Through Function](./transform-streams/through)
+: A function that creates a transform stream that takes in un upstream event and allows the developer to modiy/enrich/aggregate/reduce
+events and then send them on to the next stream step in the pipe
 
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#createSource
+[ToCSV Function](./transform-streams/tocsv)
+: A function that creates a transform stream that helps build a csv file by taking each upstream event that comes in and
+formatting it as a line to put in a CSV file which it outputs to the next pipe stream step
 
-A function that creates a source stream that you can use to generate continuously generated, arbitrary 
-content whether from a database, an API, a file or anything.
+# Sink Stream Functions
+These function create a sink for you, the last step in a pipe.
 
-## write : TransformStream
+[Load Function](./sink-streams/load)
+: A function that creates a sink that takes in an upstream event and pushes it to an RStreams queue on the bus
 
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#write
-
-A function that creates a pipe stream step that can sit somewhere between a `source` and `sink` stream
-and write the data that passes through the stream step to an RStreams queue while still allowing the
-data to pass through the step stream to the next downstream step in the pipe.  This is useful if you 
-want to siphon off some data to go to a given queue mid-pipe while you also want to send it
-on to do some other work.
-
-## load : WritableStream
-TODO
-
-A function that creates a `sink` step stream that takes the data flowing through the pipe
-and sends it to an RStreams queue in an intelligent manner.
-
-https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#load
-
-
-
-# Utility Functions
+[Devnull Function](./sink-streams/devnull)
+: A function that creates a sink stream that takes in un upstream event and does absolutely nothing with it,
+except log it if you ask it to

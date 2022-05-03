@@ -3,7 +3,7 @@ title: "Event Handling Semantics"
 date: 2022-04-04T11:02:05+06:00
 description: "How event handling works in RStreams"
 draft: false
-weight: 1
+weight: 3
 ---
 
 {{< collapse-light "ToC" >}}

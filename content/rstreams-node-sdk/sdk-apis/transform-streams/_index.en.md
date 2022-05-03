@@ -1,7 +1,7 @@
 ---
 title: "Transform Streams"
 date: 2018-12-29T11:02:05+06:00
-weight: 4
+weight: 3
 draft: false
 ---
 
@@ -9,15 +9,18 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These are streams that sit between the source and sink, consuming events from the upstream stream, doing something
-with the events, perhaps changing them, and then sending the events on to the next downstream pipe step.
+These functions create a transform stream for you, acting as a pipe step sitting between a source and sink.  Each transform
+stream feeds accepts data from the previous pipe stream step, does something with it and then sends the resulting data
+on to the next pipe stream step.
 
-<!-- [put Operation](./put)
-: A function that lets you write a single event to the specified RStreams queue
+[Stringify Function](./stringify)
+: A function that creates a transform stream that takes in an upstream event, turns it into a string and tacks on a newline
+character to help in creating [JSON lines files](https://jsonlines.org/)
 
-[enrich Operation](./enrich)
-: A function that reads from the specified source RStreams queue, lets you transform the events and then sends the 
-modified events to the specified destination RStreams queue
+[Through Function](./through)
+: A function that creates a transform stream that takes in un upstream event and allows the developer to modiy/enrich/aggregate/reduce
+events and then send them on to the next stream step in the pipe
 
-[offload Operation](./offload)
-: A function that reads from the specified RStreams queue and lets you do something with the events retrieved, perhaps save them in a DB -->
+[ToCSV Function](./tocsv)
+: A function that creates a transform stream that helps build a csv file by taking each upstream event that comes in and
+formatting it as a line to put in a CSV file which it outputs to the next pipe stream step
