@@ -15,11 +15,10 @@ with RStreams is you have to think about what you are doing and what it means wi
 reading and writing.  It is strongly recommended you read the [Read/Write at Scale](../../read-write-scale) 
 article at some point.{{</ notice >}}
 
-API docs: [async version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#offloadEvents) | 
-          [sync version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#offload)
+[API Doc](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#offloadEvents)
 
 A standalone function, meaning one that doesn't use pipes and streams, that reads events from the specified source
- RStreams queue and then calls your transform function allowing you to do anything you want to with the data.
+RStreams queue and then calls your transform function allowing you to do anything you want to with the data.
 
 ## When would I use this?
 * You want to read from a source queue and then write it to a resource or system that isn't another RStreams queue
@@ -60,7 +59,7 @@ for backwared compat.  Don't use it on new things.
   This tells the SDK **not** to checkpoint this event in the upstream queue read from
 {{</ collapse >}}
 
-{{< collapse-light "Example 1 code" >}}
+{{< collapse-light "Example 1 code" true>}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex1}
 import { OffloadOptions,  RStreamsSdk } from "leo-sdk";
 import { Person } from "../lib/types";
@@ -145,7 +144,7 @@ more details.
 
 Note: [Person types referenced in the examples](../../#person-types-referenced-in-the-examples)
 
-{{< collapse-light "Example 2 code" >}}
+{{< collapse-light "Example 2 code" true>}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex2}
 import { OffloadBatchOptions, ReadEvent, RStreamsSdk } from "leo-sdk";
 import { Person } from "../lib/types";

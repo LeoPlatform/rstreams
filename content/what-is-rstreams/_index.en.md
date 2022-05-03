@@ -40,6 +40,10 @@ Automatic Persistence
 Stateful Queues
 : I want queues to remember where I last read events from when my program restarts and let me safely keep reading in the queue
 
+Ordered Queues and Ordered Processing
+: I want events in my queues to enter in time-sequence order and I want event handlers to be able to read events exactly once in either
+total order or partial order; partial order to ensure I can read from a queue in parallel but not get events that matter out of order
+
 Event Playback
 : I want to be able to replay events or rewind back to a moment in time and play from there for failure recovery scenarios
 

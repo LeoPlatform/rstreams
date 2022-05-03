@@ -51,7 +51,7 @@ for backwared compat.  Don't use it on new things.
 The `devnull` at the end just acts as a sink and passing in true tells it to log.  That's all it's for, to act as a sink.
 See the doc on [Devnull](../devnull) for more details.
 
-{{< collapse-light "Example 1 code" >}}
+{{< collapse-light "Example 1 code" true>}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=ex1}
 import { ReadOptions, RStreamsSdk } from "leo-sdk";
 import { Person } from "../lib/types";
@@ -82,7 +82,7 @@ async function main() {
 ```
 {{</ collapse-light >}}
 
-{{< collapse-light "Example 1 console output" >}}
+{{< collapse-light "Example 1 console output" true>}}
 ```bash {linenos=inline,anchorlinenos=true,lineanchors=ex1results}
 ➜  rstreams-runnable-examples ts-node apps/read-events-simple.ts
 Reading event from z/2022/04/20 

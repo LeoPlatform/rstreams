@@ -15,8 +15,7 @@ with RStreams is you have to think about what you are doing and what it means wi
 reading and writing.  It is strongly recommended you read the [Read/Write at Scale](../../../read-write-scale) 
 article at some point.{{</ notice >}}
 
-API docs: [async version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrich) |
-          [sync version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrich)
+[API Doc](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#enrichEvents)
 
 A standalone function, meaning one that doesn't use pipes and streams, 
 that asks for the source and destination queues and then reads events from the source queue
@@ -104,7 +103,7 @@ See TypeScript [this param typing](https://www.logicbig.com/tutorials/misc/types
 
 {{</ collapse >}}
 
-{{< collapse-light "Example 1 code" >}}
+{{< collapse-light "Example 1 code" true>}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex1}
 import { EnrichOptions, RStreamsSdk } from "leo-sdk";
 import { Person, PersonRaw } from "../../lib/types";
@@ -232,7 +231,7 @@ way to the destination RStreams queue.  See
 [Returning from an enrich async transform function](#returning-from-an-enrich-async-transform-function) above for 
 more details.
 
-{{< collapse-light "Example 2 code" >}}
+{{< collapse-light "Example 2 code" true>}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=enrichex2}
 import { EnrichBatchOptions, ReadEvent, RStreamsSdk } from "leo-sdk";
 import { Person, PersonRaw } from "../../lib/types";

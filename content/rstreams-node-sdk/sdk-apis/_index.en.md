@@ -15,6 +15,10 @@ with RStreams is you have to think about what you are doing and what it means wi
 reading and writing.  It is strongly recommended you read the [Read/Write at Scale](../read-write-scale) 
 article at some point.{{</ notice >}}
 
+{{< notice info >}}A note on typescript types in pipe stream steps.  Great effort was made so that pipe steps
+can infer types based on what's been defined in previous pipe steps.  Follow the examples closely
+to understand the minimum types necessary to keep `unknown` types from cropping up.{{</ notice >}}
+
 {{< collapse-light "Person types referenced in the examples" >}}
 ```typescript {linenos=inline}
 export interface Person {

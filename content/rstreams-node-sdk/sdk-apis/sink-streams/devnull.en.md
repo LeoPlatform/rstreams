@@ -40,7 +40,7 @@ the SDK to log events and starts each event in the console output with the strin
 word "devnull" which is the default behavior.
 
 
-{{< collapse-light "Example 1 code" >}}
+{{< collapse-light "Example 1 code" true>}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=ex1}
 import { RStreamsSdk } from "leo-sdk";
 
@@ -77,7 +77,7 @@ interface SoftDrink {
 ```
 {{</ collapse-light >}}
 
-{{< collapse-light "Example 1 console output" >}}
+{{< collapse-light "Example 1 console output" true>}}
 ```bash {linenos=inline,anchorlinenos=true,lineanchors=ex1results}
 ➜  rstreams-runnable-examples ts-node apps/devnull-stream.ts 
 devnull {

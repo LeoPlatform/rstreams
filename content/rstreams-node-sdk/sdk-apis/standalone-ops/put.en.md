@@ -15,8 +15,7 @@ with RStreams is you have to think about what you are doing and what it means wi
 reading and writing.  It is strongly recommended you read the [Read/Write at Scale](../../read-write-scale) 
 article at some point.{{</ notice >}}
 
-API docs: [async version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#put) | 
-          [sync version](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#putEvent)
+[API Doc](https://leoplatform.github.io/Nodejs/classes/index.RStreamsSdk.html#putEvent)
 
 A stand-alone function, meaning one that doesn't use pipes and streams, that reads events from the specified source RStreams
 queue and then calls your transform function allowing you to do anything you want to with the data.

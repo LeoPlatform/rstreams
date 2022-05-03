@@ -6,14 +6,24 @@ description: "The smart SDK for Node/Typescript."
 type : "docs"
 weight: 4
 ---
+{{< collapse-light "ToC" >}}
+{{< toc  >}}
+{{</ collapse-light >}}
 
-This is the RStreams Node SDK, a client-side library designed to interact with instances of an [RStreams Bus](/rstreams-bus).
-
-
-
-{{< notice info >}}This assumes you've got an [RStreams Bus](/rstreams-bus) instance running to connect to.  If you don't, head on over to
-the [RStreams Bus](/rstreams-bus) section first.  <br/><br /> Also, the [RStreams Bus](/rstreams-flow) gets your Node/Typescript project setup in a jiffy with the right SDK config, ready to run local, debug and deploy if you haven't already done that.
+{{< notice info >}}Many SDK operations provide both a callback and async/await friendly version.  All callback-based operations
+are to be considered deprecated.  RStreams will continue supporting them for backward compatibility but all new features
+and capabilities will only be added to the async operation flavor.
 {{</ notice >}}
+
+This is the RStreams Node SDK, a client-side library designed to push data to and pull data from queues of an [RStreams Bus](/rstreams-bus) instance.
+
+# Prerequisites
+## RStreams Bus
+You will need an [RStreams Bus](/rstreams-bus) instance running to connect to.  If you don't, head on over to
+the [RStreams Bus](/rstreams-bus) section first.  This should only take about 10 minutes.
+
+## RStreams Flow
+Get a sample [RStreams Flow](/rstreams-flow) project running that can connect to your RStreams Bus with the right config to verify you are up and running.  It should take you less than 5 minutes.
 
 # Are you setup to run the examples?
 {{< collapse "Expand this section if you're not sure" >}}
@@ -69,9 +79,13 @@ TODO: how do they know how to access botmon?
 
 {{</ collapse >}}
 
+# Sample Apps
+
 The examples in this section are geared toward creating apps that use the RStreams SDK to interact with an RStreams bus instance 
-regardless of how those apps are written.  As such, the examples are simply standalone runnables node applications.  The
-examples highlight the config that are available to control reading and writing in such apps.
+regardless of how those apps are written - standalone app or lambda function.  For simplicity, the examples are simply 
+standalone runnables node applications.  All examples are applicable whether running as a standalone node app or as a registered
+queue event handler bot (lambda function).  See the [Event Handling Semantics](../rstreams-guides/core-concepts/event-handling-semantics) 
+article for more.
 
 The [RStreams Flow](../rstreams-flow) section focuses on apps written specifically as bots that are deployed as lambda
 functions and go into great detail on the specific use cases applicable to serverless applications.
