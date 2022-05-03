@@ -73,7 +73,8 @@ Every [event](https://leoplatform.github.io/Nodejs/interfaces/lib_types.BaseEven
 that hits a queue came from somewhere originally and we want to be able to trace the movement
 of an event through the various queues of the bus, knowing the parent queue and the exact event in the parent
 queue that a given event was derived from.  We accomplish this by keeping track of what parent
-queue/event ID an event was derived from in a bookkeeping object on the event named the `correlation_id`.
+queue/event ID an event was derived from in a bookkeeping object on the event named the `correlation_id`.  Also,
+the SDK cannot checkpoint for you if your events don't have a valid `correldation_id`.
 
 This is so important that when developers need to craft an
  [event](https://leoplatform.github.io/Nodejs/interfaces/lib_types.BaseEvent.html) by hand that they should simply use the 
