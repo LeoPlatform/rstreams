@@ -42,7 +42,8 @@ Correlation ID</h4><p>Every <a href=https://leoplatform.github.io/Nodejs/interfa
 that hits a queue came from somewhere originally and we want to be able to trace the movement
 of an event through the various queues of the bus, knowing the parent queue and the exact event in the parent
 queue that a given event was derived from. We accomplish this by keeping track of what parent
-queue/event ID an event was derived from in a bookkeeping object on the event named the <code>correlation_id</code>.</p><p>This is so important that when developers need to craft an
+queue/event ID an event was derived from in a bookkeeping object on the event named the <code>correlation_id</code>. Also,
+the SDK cannot checkpoint for you if your events don&rsquo;t have a valid <code>correldation_id</code>.</p><p>This is so important that when developers need to craft an
 <a href=https://leoplatform.github.io/Nodejs/interfaces/lib_types.BaseEvent.html>event</a> by hand that they should simply use the
 <a href=https://leoplatform.github.io/Nodejs/modules/index.StreamUtil.html#createCorrelation>rsdk.streams.createCorrelation</a>
 helper API from the SDK to create this object for them by passing in the parent event to the <code>createCorrelation</code>
