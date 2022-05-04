@@ -23,7 +23,7 @@ terminate your lambda - not good.
 By default, the source stream that pulls data from a queue for you to process or handle in your lambda
 will only do so for 80% of the time that your bot has to live if it's a lambda, expecting that your bot
 can finish processing and flush the queue of already received events within the remaining 20% of the time.  Of
-course, there's config on the source stream allowing you to fine tune this, though in almost experience has shown
+course, there's config on the source stream allowing you to fine tune this, though experience has shown
 that this default works most of the time.
 
 When your bot stops reading/processing data from a queue and shuts itself down, immediately the RStreams Bus
