@@ -5,6 +5,10 @@ weight: 1
 draft: false
 ---
 
+{{< collapse-light "ToC" >}}
+{{< toc  >}}
+{{</ collapse-light >}}
+
 {{< notice info >}}RStreams flow is powered by the popular [Serverless Framework](https://www.serverless.com/).  It has a very large
 community and many plugins that provide a scaffold for RStreams Flow to build on.  The Serverless Framework does have some
 deficiencies, however, it is believed that it is extensible enough that these can be improved or worked around.
