@@ -187,3 +187,30 @@ a:hover {
 .top-0 {
   top: 0 !important;
 }
+
+/** TABLE **/
+
+.content table {
+	font-family: rubik,sans-serif;
+}
+
+.content tbody tr:nth-child(odd) {
+	background-color: #fdfdfd;
+}
+
+.content table>:not(caption)>*>* {
+    border-width: 0 1px;
+}
+
+.content thead {
+	background-color: #f5f6f6 !important;
+}
+
+.content thead tr {
+    border-bottom: 1px solid rgb(223, 222, 222) !important;
+	font-weight: 800;
+}
+
+.content tbody {
+	color: rgb(94, 94, 94);
+}

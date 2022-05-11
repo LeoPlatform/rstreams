@@ -15,16 +15,28 @@ Thus, RStreams Flow prjoects include the RStreams Flow opinionated development d
 test, deploy, monitor and maintain RStreams microservices.  Engineers don’t care about RStreams.  They care about creating 
 reactive microservices that leverage native AWS services at scale.  RStreams Flow helps engineers just do their work.
 
-In order to make things just work, RStreams Flow projects have an opinion on the following:
+In order to make things just work, RStreams Flow projects have an opinion on:
 
 * Running locally
+* Configuration management
+* Building, deploying an CI/CD
+* Project organization
+
+### Released or enhanced 05/09/2022
+* Full type support in VS Code
+* Invoke a bot locally
+* Invoke a series of bots/queues locally
+* Invoke a bot locally hitting queues in the cloud
+* Invoke a bot pulling mock data from a file acting as a queue
 * Unit testing
 * Debugging locally
 * Project organization
-* Project configuration
-* Building / bundling artifacts
-* Deploying
-* Monitoring
+
+### Coming in the next 60 days (end of June 2022)
+* Project configuration : Coming Early June 2022
+* Building / bundling artifacts : Coming Early June 2022
+* Deploying : Coming June 2022
+* Monitoring : Coming June 2022
 
 RStreams Flow will include a tool to help an RStreams Flow project migrate from one version to a newer version in order
 to keep getting new capabilities and features.

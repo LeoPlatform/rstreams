@@ -664,12 +664,17 @@ a[aria-expanded=true].collapse-head {
     overflow: hidden;
     background-color: $callout-color;
     border-radius: 8px;
+	border: 1px solid #eaeaea;
   }
 
   .notices p {
     padding: 20px;
     margin-bottom: 0;
     padding-left: 4rem;
+  }
+
+  .notices p svg {
+	  top: 21px;
   }
 
 //   .notices.note p {

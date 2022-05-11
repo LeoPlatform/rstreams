@@ -9,6 +9,16 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
+{{< notice info >}}
+This primer provides exactly enough knowledge of streaming concepts for a developer to successfully
+{{</ notice >}}
+
+{{< notice info >}}
+This primer provides exactly enough knowledge of streaming concepts for a developer to successfully 
+write streaming applications using the RStreams SDK and bus.  It is not intended as an exhaustive 
+treatise on the vagaries of Node streams.  We all have work to do.
+{{</ notice >}}
+
 # Are you setup to run the examples?
 {{< collapse "Expand this section if you're not sure" >}}
 

@@ -265,6 +265,26 @@ a:hover {
 .top-0 {
   top: 0 !important; }
 
+/** TABLE **/
+.content table {
+  font-family: rubik,sans-serif; }
+
+.content tbody tr:nth-child(odd) {
+  background-color: #fdfdfd; }
+
+.content table > :not(caption) > * > * {
+  border-width: 0 1px; }
+
+.content thead {
+  background-color: #f5f6f6 !important; }
+
+.content thead tr {
+  border-bottom: 1px solid #dfdede !important;
+  font-weight: 800; }
+
+.content tbody {
+  color: #5e5e5e; }
+
 .navigation {
   transition: .2s ease; }
   .navigation.nav-bg {
@@ -721,13 +741,17 @@ a[aria-expanded=true].collapse-head {
   margin-bottom: 1rem;
   position: relative;
   overflow: hidden;
-  background-color: #f1f1ef;
-  border-radius: 8px; }
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #eaeaea; }
 
 .content .notices p {
   padding: 20px;
   margin-bottom: 0;
   padding-left: 4rem; }
+
+.content .notices p svg {
+  top: 21px; }
 
 .content blockquote {
   font-size: 20px !important;

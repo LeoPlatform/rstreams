@@ -72,7 +72,7 @@ border_color = "#E2E2E2"
 black = "#000"
 white = "white"
 light = "#FBFBFB"
-callout_color = "#f1f1ef"
+callout_color = "#FFFFFF"
 
 #primary_color = "#FF0043"
 #text_color = "#333"

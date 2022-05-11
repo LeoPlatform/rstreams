@@ -10,14 +10,16 @@ draft: false
 {{</ collapse-light >}}
 
 # Summary
-This doc explains how to invoke bots running locally that hit actual queues in a deployed RStreams Bus as well as how to mock out
-a queue and invoke a bot with that mock data.  It also explains how to set breakpoints in your code.
+This doc explains how projects are organized and what all the files are and what they mean, using the example project from
+the [Getting Started Guide](../getting-started).
 
-# Prerequisites
-* This assumes you are using [Visual Studio Code](https://code.visualstudio.com/) as your IDE, however 
-everything should be possible in your favorite IDE such as IntelliJ or whatever it may be
-* You will need the [Serverless Framework](../getting-started/#install-the-serverless-framework) installed as a global package.
-* If you want to follow along, you should go through the [Getting Started Guide](../getting-started)
+# Root-level Files and Directories
+
+| Animal  | Sounds |
+|---------|--------|
+| this     | doc   |
+| Dog     | Woof   |
+| Cricket | Chirp  |
 
 # Project Serverless File
 Each project has a root-level `serverless.yml` file.  Here's an abbreviated version of the one from the RStreams Flow Example project 
@@ -27,6 +29,7 @@ highlighting a few points of interest.
 ```yaml {linenos=inline,anchorlinenos=true,lineanchors=projserverless}
 service: rstreams-example
 
+frameworkVersion: '3'
 useDotenv: true
 
 plugins:
@@ -95,12 +98,6 @@ provider:
   deploymentBucket: ${self:custom.${opt:region, 'no-region'}.deploymentBucket}
   stage: ${opt:stage, 'dev'}
   
-  environment:
-    # stuff: ${cf:TestBus.LeoStream}
-    # stuff2: '{{resolve:secretsmanager:rstreams-TestBus:SecretString:::}}'
-    # RSTREAMS_CONFIG_SECRET: 
-    #   Fn::Sub: rstreams-${RStreamsBus}
-
   stackParameters: ${self:custom.${self:provider.stage}.stackParameters}
 
 functions:
@@ -108,8 +105,6 @@ functions:
 
 resources:
   - ${self:custom.included.resources} # Auto-include resources using serverless-convention
-
-
 ```
 {{</ collapse-light >}}
 
