@@ -1,0 +1,190 @@
+---
+title: "Project Configuration"
+date: 2018-12-29T11:02:05+06:00
+weight: 3
+draft: false
+unlisted: true
+---
+{{< collapse-light "ToC" >}}
+{{< toc  >}}
+{{</ collapse-light >}}
+
+# Summary
+There are literally a million different ways to get config into your code.  There are numerable libraries to help you and to allow you to trick 
+out config when you are running locally versus running in an a given stage (environment).  RStreams Flow projects are expected to use the
+RStreams Flow Config approach, outlined below.
+
+# Guiding Principles
+
+## BAD: No Hardcoding in Code
+Obviously, you don't want usernames or passwords hardcoded into your code that is checked into a repo.
+
+## BAD: No Hardcoding Values or by Stage
+This may be less obvious to some, but it's just as important as not hardcoding passwords in your code.  Here's a sample JSON config file you
+might find saved in the root directory of a node project somewhere.
+
+{{< collapse-light "Typical Node JSON Config File" true >}}
+```json {linenos=inline,anchorlinenos=true,lineanchors=jsonconfigfile}
+{
+	"general: {
+		"numRetryAttempts": 10,
+		"db": {
+        	"dbName": "customer",
+			"username": "cust2020"
+		}
+	},
+    "prod": {
+		"db": {
+			"password": "pass-for-prod",
+			"awsArnToDb": "arn:aws:rds:eu-east-1:123456789012:db:mysql-db"
+		}
+	},
+	"staging": {
+		"db": {
+			"password": "pass-for-staging",
+			"awsArnToDb": "arn:aws:rds:eu-east-2:999956789012:db:mysql-db"
+		}
+	},
+	"test": {
+		"db": {
+			"password": "pass-for-test",
+			"awsArnToDb": "arn:aws:rds:eu-west-1:1234567891111:db:mysql-db"
+		}
+	}
+}
+```
+{{</ collapse-light >}}
+
+So, config that is applicable no matter the environment is in the `general` section and the environment-specific `password` and
+`arn` are in sections named for the environment.  Then, when your app or lambda runs, an environment variable would be set specifying
+your environment, say it's set to `prod`, and so the `general` and `prod` settings would be merged and made available to your code.
+
+It's not just that the password is hard coded in this JSON file checked into source code, that's just the start of what's wrong
+with this approach.
+
+What if we want to build a single packaged artifact for our microservice that we push to `test`, verify it's good and then push
+the exact same built and tested artifact without modification to `staging` and then later push the same artifact to `prod`?
+Won't work.
+
+Here's another issue.  All settings are present in this file for all three environments.  Wait, what if someday we make a 
+new environment?  Now what? Also, what if someday we want to deploy `prod`, `staging` and `test` environments in another AWS region.
+How would you differentiate the regions since the ARN for one region may well differ from another.
+
+The answer here is don't segment your config by its environment and don't put actual values directly in your config in your project.
+
+## GOOD: Use Named References
+Config values should be a reference to where the actual value can be retrieved not at build time but at deploy time or, if 
+needed, at runtime.  Here's an example.
+
+{{< collapse-light "Reference-base Sample JSON Config File" true >}}
+```json {linenos=inline,anchorlinenos=true,lineanchors=jsonrefconfigfile}
+{
+	"numRetryAttempts": 10,
+	"db": {
+		"dbName": "customer-db-name",
+		"password": "customer-db-password-${stage}",
+		"username": "customer-db-username-${stage}",
+		"awsArnToDb": "customer-db-arn-${stage}"
+	}
+}
+```
+{{</ collapse-light >}}
+
+Above is the ideal.  Yes, you can have hardcoded values in the config file if they don't change no matter where the code is deployed: environment
+or region.  `numRetryAttempts` is an innocuous piece of config that you can hardcode since it's the same no matter where the code
+is deployed. The engineer who wrote the RStreams Flow Config library was concerned that if we left the ability to
+hardcode values in config that the principles would be ignored and badness would result.  However, after thought and discussion
+he convinced himself that you can't legislate good behavior.  Engineers need flexibility so they can
+be productive and have things be easy and convenient and that means there are times when a hardcoded value like `numRetryAttempts`
+makes sense.  But, here are some examples of things that should never be hardcoded in your config or some day you will have pain.
+
+* Table names
+* URLs of any kind
+* Usernames
+* Passwords
+* Direct referneces to any resources, even those in your own stack, such as a lambda function ARN
+* Ports
+
+Basically, anything that could conceivably change between one deployment of your project/code/stack and another deployment
+in a different envrionment or region.  That means pretty much everything except things like `numRetryAttempts`.
+
+So, how does your running code get something like `config.db.password` to give you the password you need given that
+the config value of `db.password` is just a name `customer-db-password-${stage}` that clearly references the real password somewhere?
+The answer is that some code either at deploy time or runtime must know what stage your code is running in - let's say we're running in the `prod` stage -
+and know how to turn `customer-db-password-prod` into the actual password.  That some code somewhere is RStreams Flow Config.
+
+# RStreams Flow Config
+
+## Overview
+You define a standard JSON file with config.  RStreams Flow has a command-line tool you can run to turn that JSON file into
+both a typescript interface so you get typed config in your code and also the implementation that the RStreams Flow Config
+library can use as deploy time or runtime to actually resolve your config values, which themselves are just named references
+to where the real valus are stored.
+
+## Where are the real values stored?
+The real values may be stored in:
+
+* SECRET: A named secret in AWS secrets manager as either a single discrete value or as a JSON blob
+* CLOUD_FORMATION: An AWS stack as an 
+[exported cloud formation stack variable](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/outputs-section-structure.html)
+ that you reference by its name
+* STACK: A named variable in your own [deployed AWS stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html)
+
+## When are the real values retrieved?
+
+There are two ways to do this.  One that resolves and binds the values when you deploy your app as an AWS stack and the other
+that binds values at runtime when your code runs, caching the values at that point.  If your code is a lambda that run, shuts down
+and restarts periodically then each time it restarts, it will reach out and get the config if you choose the runtime approach.
+
+### Deploy Time Resolution
+TODO: how do we designate this
+
+### Runtime Resolution
+TODO: how do we designate this
+
+## Real Sample Project Config file
+This is a file named `project-config.def.json` that is in the root of your RStreams Flow project.  By default, RStreams Flow
+will look for a file named this unless you designate a different named file to be used.
+
+{{< collapse-light "Sample RStreams Flow Project Config JSON" true >}}
+```json {linenos=inline,anchorlinenos=true,lineanchors=jsonrflowconfigfile}
+{
+	"item": {
+		"endpoint": "cf::item-${stage}-apigateway-endpoint::string"
+	},
+	"mysqlPort": "secret::${stage}_mysql_dw_read_only.port::int",
+	"mysqlPassword": "secret::${stage}_mysql_dw_read_only.password::string",
+	"defaultNumRetries": 22,
+	"weather": {
+		"externalApiPass": {
+			"service": "secret",
+			"key": "${stage}_weather_api.password",
+			"type": "string",
+			"resolve": "runtime|deploy"
+		},
+		"selfHostedApiPass": {
+			"password": "stack::self-hosted-api-password"
+		}
+	}
+}
+```
+{{</ collapse-light >}}
+
+### Write Your project-config.def.json File
+TODO
+
+### Build the Config file
+todo
+### Use the Config File in Your Code
+todo
+
+# RSTreams Flow Config Lookup Tool
+TODO
+# Advanced Usage
+TODO
+## I don't want anything generated for me.
+TODO
+## configBuilderOptions
+TODO
+## Types referenced in config
+These are expected to be defined in types.d.ts.
