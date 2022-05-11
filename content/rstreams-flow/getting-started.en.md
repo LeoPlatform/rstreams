@@ -76,17 +76,65 @@ For now, let's just checkout the sample project and customize it.{{</ notice >}}
 ```json
 git clone https://github.com/LeoPlatform/rstreams-flow-example.git
 ```
- # Intro to the Project & Rename Bots/Queues
-You are going to be creating two queues in your RStreams Bus instance.  You will also be running a `bot` locally, which is just a 
-logical wrapper around code that interacts with an RStreams Bus.  Usually, a `bot` is a lambda function.  However, when running
-locally it's just a Node JS function.  Regardless, your `bot` running locally will register its existence with the bus and we
-don't want folks stepping on each other when running this sample app in your RStreams Bus instance.  So, let's rename a few things
-and learn a bit about the project's organization and the sample project as we go.
 
-First, pick a shortish name (one word, no punctuation just to keep it simple for now) that will likely be unique to you such 
-as: janedoe12382 or whatever.  Then, we're going to prepend that name to all the bots and queues we define/use. It will just take a sec.
+# Project Commands using NPM
 
-Queue `rstreams-example.weather` should be renamed `{your-prepended-name}-example.weather`.
-Queue `rstreams-example.weather-transformed` should be renamed `{your-prepended-name}-example.weather-transformed`
+#### Check code coverage on all files in the project
+Run code coverage for all files.  More info [here](https://github.com/istanbuljs/nyc#selecting-files-for-coverage).
+```bash
+npm run coverage-all
+```
 
-# Create a .env.dev file
+#### Check code coverage on only source files visited during a test
+Run code coverage for only select files.  More info [here](https://github.com/istanbuljs/nyc#selecting-files-for-coverage).
+```bash
+npm run coverage
+```
+
+#### Run project unit tests using Mocha
+More info [here](https://mochajs.org/).
+```bash
+npm run utest
+```
+#### Package your bots into artifacts ready to be pushed to CI/CD or directly released
+More info [here](https://www.serverless.com/framework/docs/providers/aws/guide/packaging).
+```bash
+npm run package
+```
+
+#### Deploy directly to your dev environment using serverless deploy
+More info [here](https://www.serverless.com/framework/docs/providers/aws/guide/deploying).
+```bash
+npm run deploy-dev
+```
+
+#### Use the Serverless RSF plugin to run locally
+You will need to provide the name of your bot to run - see [Running Locally](../running-locally) for a lot more detail.
+```bash
+npm run test-sls
+npm run test
+```
+
+#### Automatically re-compile typescript to javascript as source files change
+More info [here](https://www.typescriptlang.org/docs/handbook/compiler-options.html).
+```bash
+npm run watch
+```
+
+#### Automatically re-compile project config JSON into typescript interface when it changes
+This is being released as a preview.  The feature will be released officially soon.
+```bash
+npm run watch-config
+```
+
+#### Bundle the project with webpack
+More info [here](https://webpack.js.org/).
+```bash
+npm run webpack
+```
+
+#### Lint the project
+More info [here](https://eslint.org/).
+```bash
+npm run lint
+```

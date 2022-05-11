@@ -285,6 +285,9 @@ a:hover {
 .content tbody {
   color: #5e5e5e; }
 
+.content * {
+  word-break: initial !important; }
+
 .navigation {
   transition: .2s ease; }
   .navigation.nav-bg {

@@ -214,3 +214,7 @@ a:hover {
 .content tbody {
 	color: rgb(94, 94, 94);
 }
+
+.content * {
+	word-break: initial !important;
+}
