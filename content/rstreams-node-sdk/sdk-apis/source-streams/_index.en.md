@@ -9,7 +9,7 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These functions create a source stream for you, acting as the first stream in a pipe.  Each source stream feeds a pipe with data that 
+RStreams Node SDK functions that create a source stream for you, acting as the first stream in a pipe.  Each source stream feeds a pipe with data that 
 you specify, allowing it to flow through to the next stream step in your pipe.
 
 [Read Function](./read)

@@ -46,12 +46,12 @@ Node SDK dramatically simplifies it for you.
 {{</ collapse-light >}}
 
 {{< collapse-light "Care to read why streams might be worth it for you?" >}}
-Why code in a series of chained steps?  Sounds complicated.  The answer is you turn to streaming when you are working with systems 
-where you need to process data as it is coming in because so much data needs to flow in that you can't wait to start sending it out.
+Why code in a series of chained steps?  Sounds complicated.  You turn to streaming when you are working with systems 
+that need to process data as soon as it is received because so much data needs to flow in that you can't wait to start sending it out.
 
-It's also applicable when you need to minimize the delay in processing lots of data.  Finally, it's a great way to creat a 
-reactive system, where the data that flows are events that cause distributed event handlers to wake up and process them, moving
-and transforming them from one place to another.
+Streaming is also applicable when you need to minimize the delay in processing lots of data.  It's a great way to create a 
+[reactive system](https://www.reactivemanifesto.org/), where the data that flows are events that cause distributed event
+handlers to wake up and process them, movingand transforming them from one place to another.
 {{</ collapse-light >}}
 
 # Pipes and Streams
@@ -68,9 +68,9 @@ As mentioned, a pipe is a set of steps that data flows through in sequence.  Eac
 they are meant to read/write data sequentially one after the other.  Steps near the beginning of the pipe are upstream and the
 `Sink` downstream: data flows is the furthest step downstream. The pipe exists to daisy chain the stream steps together.
 
-If you want the super short version, everything in a pipe must be linked together where start with a `Readable` followed by a
-`Writable` followed by a `Readable`and eventually end with a `Writable` as the `Sink`.  Pipe step streams between the `Source`
-and the `Sink` have to be both a `Writable` and a `Readable` to allow the data to flow through the step: these in between steps
+Everything in a pipe must be linked together.  A pipe starts with a `Readable`(the source) ad infinitum, eventually ending with
+a Writable we call the `Sink`.  Pipe step streams between the `Source`
+and the `Sink` must be both a `Writable` and a `Readable` to allow the data to flow through the step: these in between steps
 are often called `Through` or `Transform` stream steps.
 ![Pipe Readable to Writable](../images/pipe-readable-to-writable.png "700px|center" )
 
@@ -97,8 +97,8 @@ The RStreams SDK provides extremely simple `Writable` interfaces to make sending
 database or Elastic Search, etc., a snap. These simplified RStreams SDK pipe steps are of the RStreams SDK type [WritableStream](https://leoplatform.github.io/Nodejs/interfaces/lib_types.WritableStream.html) which inherits from the Node `Writable`.  That's all you need to know.
 
 ## Duplex
-A stream step that sits between the `Source` and the `Sink` is by definition a `Duplex` stream.  Think of a `Duplex` stream
-like its really two streams smashed together. The input to the `Duplex` stream is a `Writable` so it can consume the data from the
+A stream step that sits between the `Source` and the `Sink` is a `Duplex` stream.  A `Duplex` stream
+is a single step that contains both a Writable and Readable stream. The input to the `Duplex` stream is a `Writable` so it can consume the data from the
 `Readable`  in the step before it.  The output from the `Duplex` stream is a `Readable` so the next step downstream can pull
 data from it.
 
@@ -108,8 +108,9 @@ data from it.
 
 ## Transform or Through
 
-A `Transform` stream is just a `Duplex` stream with a function that modifies the data or perhaps causes some other side effect 
-and then sends the data downstream.  A `Transform` stream is often called a `Through` stream.
+A `Transform` stream is a `Duplex` stream with a function that modifies the data or perhaps causes some other side effect 
+and then sends the data downstream such as a stream that takes in a JSON object and outputs a JSON lines ready-version of that object.
+A `Transform` stream is often called a `Through` stream.
  
 ***A `Transform` stream is a duplex stream that allows you to transform the data in between when it is written to the stream and later read from the stream.***
 

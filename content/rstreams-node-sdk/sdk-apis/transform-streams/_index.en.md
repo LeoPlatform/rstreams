@@ -9,7 +9,7 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These functions create a transform stream for you, acting as a pipe step sitting between a source and sink.  Each transform
+RStreams Node SDK functions that create a transform stream for you, acting as a pipe step sitting between a source and sink.  Each transform
 stream feeds accepts data from the previous pipe stream step, does something with it and then sends the resulting data
 on to the next pipe stream step.
 

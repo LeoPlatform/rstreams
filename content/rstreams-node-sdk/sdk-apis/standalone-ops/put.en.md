@@ -33,9 +33,11 @@ The first example is a naive example that sends data to an RStreams queue one at
 API that returns random people, gets a single person back and then on line 6 uses `putEvent` to send that person to the 
 `rstreams-example.people` queue, doing so as a bot with ID of `rstreams-example.load-people`.
 
-Two things to note here.  First is that the transform function is typed for both the callback
+{{< notice info >}}
+Note that the transform function is typed for both the callback
 and async variety but please only use the async version going forward - all new features
 are only being added to the async approach.
+{{</ notice >}}
 
 {{< collapse-light "Example 1 code" >}}
 ```typescript {linenos=inline,anchorlinenos=true,lineanchors=putex1}
@@ -99,7 +101,7 @@ It's simple and it works but this is **bad**.  The `putEvent` API is really only
 handful of events.  To understand why, consider what the RStreams SDK is doing when you call `putEvent`.
 
 1. It's opening a connection to AWS Kinesis
-1. It sending the single event on that connection each time to Kinesis
+1. It sending the single event on that connection each time to Kinesis (the Kinesis connection will be closed automatically when no longer needed)
 1. The event flows through Kinesis until an RStreams Kinesis processor reads the single event and writes it to
 the RStreams Dynamo DB queue table, putting the event in the correct queue
 

@@ -9,8 +9,8 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These powerful standalone operations, meaning without needing to use pipes and streams, do some heavy lifting for you to 
-hide all the complexity of sending events to and getting events from the RStreams bus.
+RStreams Node SDK functions that allow you to send and receive events to and from the RStreams bus without the need to
+implement pipes and streams.
 
 [put Operation](./put)
 : A function that lets you write a single event to the specified RStreams queue

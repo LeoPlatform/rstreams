@@ -9,7 +9,7 @@ draft: false
 {{< toc  >}}
 {{</ collapse-light >}}
 
-These function create a sink for you, the last step in a pipe.
+RStreams Node SDK functions that create a sink for you, the last step in a pipe.
 
 [Load Function](./load)
 : A function that creates a sink that takes in an upstream event and pushes it to an RStreams queue on the bus

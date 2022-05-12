@@ -82,14 +82,13 @@ export interface PersonRawResults {
 {{</ collapse-light >}}
 
 # Overview
-The RStreams Node SDK includes a simple utility function to create to create pipes and nearly every kind of stream
-you'd need to work with massive amounts of continuously generated data in an instance of the RStreams bus.  It
-also includes functions to allow you to skip the complexity of dealing with pipes and streams at all for the
-most common use cases: getting data from the bus and sending data to the bus.
+The RStreams Node SDK includes a simple utility function to create pipes and nearly every kind of stream
+you will need to handle the massive amounts of continuously generated data in an instance of the RStreams bus.  The RStreams Node SDK
+also includes functions that allow you to send and retrieve data to and from the RStreams Bus without dealing with pipes or streams.
 
 # Standalone Operations
-These powerful standalone operations, meaning without needing to use pipes and streams, do some heavy lifting for you to 
-hide all the complexity of sending events to and getting events from the RStreams bus.
+RStreams Node SDK functions that allow you to send and receive events to and from the RStreams bus without the need to
+implement pipes and streams.
 
 [put Operation](./standalone-ops/put)
 : A function that lets you write a single event to the specified RStreams queue
@@ -112,7 +111,7 @@ you specify, allowing it to flow through to the next stream step in your pipe.
 : A function that creates a source stream that gets events from the specified queue and feeds them into the pipe.
 
 # Transform Stream Functions
-These functions create a transform stream for you, acting as a pipe step sitting between a source and sink.  Each transform
+RStreams Node SDK functions that create a transform stream for you, acting as a pipe step sitting between a source and sink.  Each transform
 stream feeds accepts data from the previous pipe stream step, does something with it and then sends the resulting data
 on to the next pipe stream step.
 
@@ -129,7 +128,7 @@ events and then send them on to the next stream step in the pipe
 formatting it as a line to put in a CSV file which it outputs to the next pipe stream step
 
 # Sink Stream Functions
-These function create a sink for you, the last step in a pipe.
+RStreams Node SDK functions that create a sink for you, the last step in a pipe.
 
 [Load Function](./sink-streams/load)
 : A function that creates a sink that takes in an upstream event and pushes it to an RStreams queue on the bus

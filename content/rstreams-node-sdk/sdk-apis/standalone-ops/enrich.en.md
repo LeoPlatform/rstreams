@@ -36,7 +36,7 @@ event's JSON by dropping unwanted attributes and simplifying the JSON structure.
  a country name returns the standard two-char country code which we tack on to the event after
 which we return the modified event which tells the SDK to push it to the
 `rstreams-example.people-to-peopleplus` queue.
-
+{{< notice info >}}
 Two things to note here.  First is that the transform function is typed for both the callback
 and async variety but please only use the async version going forward - all new features
 are only being added to the async approach.
@@ -45,9 +45,10 @@ Second, there are actually three arguments to the `transform` function, even tho
 are only using the first.  What is stored in an RStreams queue is an instance of a 
 [ReadEvent](https://leoplatform.github.io/Nodejs/interfaces/lib_types.ReadEvent.html) where the `payload` attribute is the data the queue exists for. 
 The first argument is just the payload pulled out since usually that's all you need.  The second argument
-is the full event from the queue with the event ID and other sometimes useful things.  The third argument
-is only used in the callback version where you call `done` exactly once to trigger the callback.  It's there
-for backwared compat.  Don't use it on new things.
+is the full [ReadEvent](https://leoplatform.github.io/Nodejs/interfaces/lib_types.ReadEvent.html)
+from the queue which includes the event ID and other useful event meta data.  The third argument
+is deprecated and remains only for backwards compatability. Don't use it on new things.
+{{</ notice >}}
 
 {{< collapse "Returning from an enrich async transform function" >}}
 * throw Error  
@@ -193,38 +194,40 @@ modified event appeared in the new queue.
 ![Pipe Readable to Writable Events](../../../images/botmon-example1-people-to-peopleplus-events.png "700px|center" )
 
 ### Example 2
-This example is nearly identical to Example 1 above except that this time we are are going to
-use config to tell the SDK to batch up events for us so we can be more efficient.  The calls out 
+Example 2 expand Example 1 to
+use config to tell the SDK to batch up events for us so we can be more efficient.  The code calls out 
 to a public API to enrich each event with the country code based on the country name.  The free
-API we are using requires a separate API request for each country.  Sure, we could try to make 
-some kind of cache but there's lots of cases where you can't do this.  So, we're at risk
-of not being able to read and enrich events from the upstream queue fast enough to keep
-up if events are slamming into that upstream queue super fast.
+API we are using requires a separate API request for each country.  We risk creating backpressure
+if we cannot enrich (transform or write) our ReadEvents as fast as the ReadEvents are received.
 
-So, we're going to ask the SDK to micro-batch up events 10 at a time and then invoke our
-`transform` function with all ten at once and if it's waited more than one second for 10 
-to show up then our config tells the SDK to just go ahead and invoke `transform` with whatever it's 
-got so far. Then in the enrich transform function we're going to modify our `addCountryCode` function to make 
+We're going to ask the SDK to micro-batch up events 10 at a time and then invoke our
+`transform` function with all ten at once and if it's waited more than `batch.time` (1000ms or one second 
+in our example) for `batch.count` events (10 per our example)
+to show up then our config tells the SDK to just go ahead and invoke `transform` with all received events at that point.
+In the enrich transform function we're going to modify our `addCountryCode` function to make 
 concurrent API requests for each person we are transforming, parallelizing the work and making it much 
 faster so we can keep up.  To make the example more interesting, we set `config.limit` now to 100 so we
 get a lot more events before we stop reading from the upstream queue.  The config in the `config` attribute is
 important for specifying how long we're meant to read from the upstream queue before we stop
-reading and close down shop.  If you're running in a lambda function, you've only got 15 min
-before AWS shuts down your lambda and that may sound like a long time unless you are reading from a queue
-that is forever getting new events shoved into it, a pretty common case.  By default, if you don't set any
+reading and close down shop.
+
+If you're running in a Lambda function, the maximum timeout 
+before AWS shuts down your lambda is 15 minutes. That may sound like a long time unless you are reading from a queue
+that is forever getting new events shoved into it, a common case in streaming
+applications.  If your code is running as an AWS Lambda, by default, if you don't set any
 config to tell the SDK when to stop reading from the upstream queue, the SDK will read for up to 80% of the
-total time remaining for your lambda, if you are in fact running as a lambda.  That then saves 20% of the time
+total time remaining timeout parameter of your Lambda.  That then saves 20% of the time
 for you to finish processing.
 
 You'll notice that because we used the `EnrichBatchOptions` to batch things up that the `transform`
 function arguments change.  That's because the SDK isn't invoking `transform` with just one object
 but with the batch: an array of objects.
 
-The first argument is just the array of events direct from the upstream queue.  The second arg
-is an event wrapper around the whole array of events directly from the upstream queue - not
-really needed except in rare use cases.  The third argument is for backward compatability
-when using the `enrich` as a callback instead of using async.  Please only use async going forward
-and so you don't need the third arg.
+The first argument is just the array of events direct from the upstream queue.  The second argument
+is an event wrapper around the entire array of events directly from the upstream queue - not
+really needed except in rare use cases.  The third argument is deprecated and remains only for backwards
+compatability when using the `enrich` function as a callback instead of using async.  It should be 
+omitted in lieu of the async pattern going forward.
 
 When we're done enriching the events, we simply return the array of the new events to send them on their
 way to the destination RStreams queue.  See 
