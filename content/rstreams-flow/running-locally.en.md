@@ -106,7 +106,7 @@ queue of data to send to any subsequent bot that reads from that queue:
 
 RStreams Flow supports the following use cases when running locally.
 
-## Set a breakpoint in any bot invoked
+* Set a breakpoint in any bot invoked
 Use your IDE's method for debugging a Node process and set a breakpoint in your bot and it will stop on your breakpoint.  In
 Visual Studio Code, the easiest way to debug is to simply issue the command to invoke the bot in a Javascript debug terminal and
 then you don't have to do anything else and your breakpoints will work.
