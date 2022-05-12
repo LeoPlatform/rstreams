@@ -34,6 +34,13 @@ You must have an RStreams Bus instance to access.  Each bus instance installs a 
 If you go to AWS secrets manager and search on `rstreams`, you can see if one is installed.  All you need is the name of this
 secret that points to a non-production instance of an RStreams bus that you can work with safely.
 
+The project has been setup such that the `dev` environment
+is meant for running locally.  You should open up the `.env.dev` file and change the `RSTREAMS_CONFIG_SECRET` value to
+be the name of the AWS Secrets Manager secret that was created when your RStreams Bus instance was installed.  It will
+be named like this: `rstreams-{busName}` where `{busName}` is the name of your bus.  So, if you have a bus instanced
+named `PlaygroundBus` your secret would be named `rstreams-PlaygroundBus`.  
+[Jump here](../../rstreams-bus/getting-started/#how-do-you-access-the-new-rstreams-bus-instance) for lots more on this if you care.
+
 Many companies will install a bus in their dev or test environments.  If 
 you're unsure, reach out to IT/Devops in your company. You can also [standup your own bus instance](../../rstreams-bus/getting-started) but be warned this
 creates some AWS resources: Kinesis, S3, a few DynamoDB tables, a secret in Secrets Manager.  It's not much money to just
@@ -81,8 +88,16 @@ For now, let's just checkout the sample project and customize it.{{</ notice >}}
 git clone https://github.com/LeoPlatform/rstreams-flow-example.git
 ```
 
-# Project Commands using NPM
+# Run locally
+This command will run the weather loader bot which goes out and retrieves weather events from a free 3rd party
+API and then pushes them into an RStreams queue.
 
+```bash
+npm run test weather-loader
+```
+
+# Project Commands using NPM
+{{< collapse "Expand me to view all NPM commands included in the project">}}
 #### Check code coverage on all files in the project
 Run code coverage for all files.  More info [here](https://github.com/istanbuljs/nyc#selecting-files-for-coverage).
 ```bash
@@ -142,3 +157,4 @@ More info [here](https://eslint.org/).
 ```bash
 npm run lint
 ```
+{{</ collapse >}}

@@ -288,6 +288,9 @@ a:hover {
 .content * {
   word-break: initial !important; }
 
+.content p code {
+  font-size: 14px !important; }
+
 .navigation {
   transition: .2s ease; }
   .navigation.nav-bg {

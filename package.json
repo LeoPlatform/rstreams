@@ -6,7 +6,7 @@
   "scripts": {
     "build": "hugo",
     "create": "hugo new",
-    "serve": "hugo server --cleanDestinationDir --forceSyncStatic"
+    "serve": "hugo server --cleanDestinationDir "
   },
   "repository": {
     "type": "git",

@@ -48,8 +48,6 @@ https://leo-cli-publishbucket-abb4i613j9y9.s3.amazonaws.com/leo/2.0.0/cloudforma
 ```
 
 {{< collapse "Click here for the long version with all the gory details">}}
-{{</ collapse >}}
-
 1. Go to CloudFormation in the [AWS Console](https://console.aws.amazon.com/console/home) and be sure you're in the region
 you want to create the RStreams Bus in.
 1. Click the `Create stack` button
@@ -72,7 +70,8 @@ of the form and click the Next button.
 Review everything and then scroll to the bottom.  You will have to acknowledge that clicking the Create Stack button will possibly do some the 
 things listed by checking the two checkboxes.  If you agree, check them and click Create Stack.  Then wait 10 - 20 minutes, refreshing as you
 go to see the proress.
-![Create Stack Step 4](../images/create-bus-cf-4.png "420px|center" ) 
+![Create Stack Step 4](../images/create-bus-cf-4.png "420px|center" )
+{{</ collapse >}}
 
 # How do you access the new RStreams Bus instance?
 If you are on a new version of the RStreams Bus, then creating the RStreams Stack will have published a new Secrets Manager secret that contains all the 

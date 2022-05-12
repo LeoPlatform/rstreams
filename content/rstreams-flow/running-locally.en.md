@@ -19,109 +19,22 @@ everything should be possible in your favorite IDE such as IntelliJ or whatever 
 * You will need the [Serverless Framework](../getting-started/#install-the-serverless-framework) installed as a global package.
 * If you want to follow along, you should go through the [Getting Started Guide](../getting-started)
 
-# Project Serverless File
-Each project has a root-level `serverless.yml` file.  Here's an abbreviated version of the one from the RStreams Flow Example project 
-highlighting a few points of interest.
 
-{{< collapse-light "Example Project Serverless File" true >}}
-```yaml {linenos=inline,anchorlinenos=true,lineanchors=projserverless}
+# Things you need to know
+
+#### Microservice Name / Service Name
+Your project's microservice name, also just called the Service Name, is used in many places.  It's located in
+`<project-root>/serverless.yml` near the top in the `service` attribute. Here, the project's service name is `rstreams-example`.
+```yaml
 service: rstreams-example
-
-useDotenv: true
-
-plugins:
-  - serverless-leo
-  - serverless-webpack
-
-package:
-  individually: true
-#  artifact: ${opt:artifact, ""}
-
-custom:
-  leo:
-    botIdExcludeStage: true
-    configurationPath: project-config-new.def.json
-
-    rsfConfigResolutionType: secretsmanager
-    _rsfConfigResolutionType: secretsmanager|env
-    replicationRegions: 
-      - us-east-1 => us-west-2
-      - us-west-2 => us-east-1 
-      - europe-west-2
-
-  convention:
-    functions:
-      folders:
-        - api
-        - bots
-      pattern:
-        - '*.yml'
-        - '*.yaml'
-    resources:
-      folders:
-        - cloudformation
-      pattern:
-        - '*.yml'
-        - '*.yaml'
-        - '*.js'
-        - '*.json'
-        - '*.ts'
-  included: ${file(./node_modules/serverless-convention/index.js)}
-  
-  leoStack: ${RStreamsBus}
-  dev:
-    stackParameters:
-      - ParameterKey: RStreamsBus
-        ParameterValue: ClintTestBus-Bus
-      - ParameterKey: MyStage2
-        ParameterValue: Prod
-  test:
-    # stackParameters:
-  staging:
-    # stackParameters:
-  prod:
-    # stackParameters:
-  us-east-1:
-    deploymentBucket: leo-cli-publishbucket-19e80lsbylz0f
-  us-west-2:
-    deploymentBucket: leo-cli-publishbucket-13ickrmrh6vyd
-  no-region:
-    deploymentBucket: leo-cli-publishbucket-13ickrmrh6vyd
-
-provider:
-  name: aws
-  runtime: nodejs14.x
-  versionFunctions: false
-  deploymentBucket: ${self:custom.${opt:region, 'no-region'}.deploymentBucket}
-  stage: ${opt:stage, 'dev'}
-  
-  environment:
-    # stuff: ${cf:TestBus.LeoStream}
-    # stuff2: '{{resolve:secretsmanager:rstreams-TestBus:SecretString:::}}'
-    # RSTREAMS_CONFIG_SECRET: 
-    #   Fn::Sub: rstreams-${RStreamsBus}
-
-  stackParameters: ${self:custom.${self:provider.stage}.stackParameters}
-
-functions:
-  - ${self:custom.included.functions} # Auto-include functions using serverless-convention
-
-resources:
-  - ${self:custom.included.resources} # Auto-include resources using serverless-convention
-
-
 ```
-{{</ collapse-light >}}
 
-* [Line 1](#projserverless-1) : this is the name of your microservice, it is referenced in various places including bot-specific yml files
-* [Line 3](#projserverless-3) : tells serverless to use the popular [dotenv project](https://www.serverless.com/framework/docs/environment-variables)
-
-**Bot**
+#### Bot
 A bot is logical wrapper around code that executes to interact with an RStreams queue.  Bots are found in the `{project_dir}/bots/{bot_dir}`.  Each
 bot has its own `serverless.yml` file.  Here's an example from the `weather-loader` bot of the RStreams Flow Example project.
 
 {{< collapse-light "Example 1 code" true >}}
-```yaml {linenos=inline,anchorlinenos=true,lineanchors=weatherloaderserverless}
+```yaml {linenos=inline,anchorlinenos=true,lineanchors=wlserverless}
 weather-loader:
   name: ${self:service}-weather-loader
   handler: bots/weather-loader/index.handler
@@ -137,10 +50,23 @@ weather-loader:
 ```
 {{</ collapse-light >}}
 
-**Stage**
+#### Bot ID
+Bots are referenced in config via their ID.  The ID is the first attribute in the bot's `serverless.yml` file that all other 
+config is a child of.  In the above example it's on [Line 1](#wlserverless-1) and is named `weather-loader`.
+
+#### Stage
 Each RStreams Flow bot executes in the context of an environment, called a `stage`, such as dev/test/staging/prod.
 The RStreams Flow example template project expects that your stage, the environment, is `dev` and that a file named `.env.dev` exists
 that contains the name of the AWS secrets manager secret that contains the RStreams bus instance config to connect to.
+
+#### RStreams Config
+Each running RStreams SDK needs to know what resources to access that comprise the RStreams Bus instance you intend for it 
+to read and write from/to.  This is called the RStreams Config.  The project has been setup such that the `dev` environment
+is meant for running locally.  You should open up the `.env.dev` file and change the `RSTREAMS_CONFIG_SECRET` value to
+be the name of the AWS Secrets Manager secret that was created when your RStreams Bus instance was installed.  It will
+be named like this: `rstreams-{busName}` where `{busName}` is the name of your bus.  So, if you have a bus instanced
+named `PlaygroundBus` your secret would be named `rstreams-PlaygroundBus`.  
+[Jump here](../../rstreams-bus/getting-started/#how-do-you-access-the-new-rstreams-bus-instance) for lots more on this if you care.
 
 
 
