@@ -19,21 +19,21 @@ This is the RStreams Node SDK, a client-side library designed to push data to an
 
 # Prerequisites
 ## RStreams Bus
-You will need an [RStreams Bus](/rstreams-bus) instance running to connect to.  If you don't, head on over to
-the [RStreams Bus](/rstreams-bus) section first.  This should only take about 10 minutes.
+You will need an [RStreams Bus](/rstreams-bus/getting-started) instance running to connect to.  If you don't, head on over to
+the [RStreams Bus](/rstreams-bus/getting-started) section first.  This should only take 10 - 30 minutes.
 
 ## RStreams Flow
-Get a sample [RStreams Flow](/rstreams-flow) project running that can connect to your RStreams Bus with the right config to verify you are up and running.  It should take you less than 5 minutes.
+Get a sample [RStreams Flow](/rstreams-flow/getting-started) project running that can connect to your RStreams Bus with the right config to verify you are up and running.  It should take you less than 5 - 30 minutes depending on whether your Bus is installed already or not.
 
 # Are you setup to run the examples?
 {{< collapse "Expand this section if you're not sure" >}}
 
 All examples in the SDK documentation assume that when these apps run, the RStreams SDK can discover the configuration 
-it needs.  The config it needs is the AWS resource IDs of the RStreams Bus instance deployed in your AWS account.  Things
+it needs.  The config it needs is the AWS resource IDs of the RStreams Bus instance deployed in your AWS account, things
 like the ID of the kinesis stream used by the bus and so on.
 
 Of course, in a production environment the SDK will get the config in an intelligent and safe manner, say from 
-AWS Secrets Manager. See the [RStreams Flow Configuring RStreams](/rstreams-flow/configuring-rstreams) doc.
+AWS Secrets Manager. Please See the [RStreams Flow Configuring RStreams](/rstreams-flow/configuring-rstreams) doc.
 
 Here's the [typescript type](https://leoplatform.github.io/Nodejs/interfaces/index.ConfigurationResources.html) of the config.
 

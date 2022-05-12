@@ -178,15 +178,15 @@ link = "contact/"
 
 ############## English navigation ###############
 # main menu
-[[Languages.en.menu.main]]
-name = "Home"
-url = ""
-weight = 1
+# [[Languages.en.menu.main]]
+# name = "Home"
+# url = ""
+# weight = 1
 
-[[Languages.en.menu.main]]
-name = "Github"
-url = "https://github.com/LeoPlatform/rstreams"
-weight = 2
+# [[Languages.en.menu.main]]
+# name = "Github"
+# url = "https://github.com/LeoPlatform/rstreams"
+# weight = 2
 
 
 # footer menu
@@ -200,10 +200,10 @@ name = "Contact"
 url = "contact/"
 weight = 2
 
-[[Languages.en.menu.footer]]
-name = "Github"
-url = "https://github.com/LeoPlatform/rstreams"
-weight = 3
+# [[Languages.en.menu.footer]]
+# name = "Github"
+# url = "https://github.com/LeoPlatform/rstreams"
+# weight = 3
 
 [minify]
   disableCSS = true
