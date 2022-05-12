@@ -14,6 +14,11 @@ community and many plugins that provide a scaffold for RStreams Flow to build on
 deficiencies, however, it is believed that it is extensible enough that these can be improved or worked around.
 {{</ notice >}}
 
+{{< notice info >}}RStreams Flow has been tested in the latest Visual Studio Code version and the examples demonstrate using VSCode.
+It is known to work with other IDEs such as IntelliJ and there's nothing specific to VSCode except documentation geared toward
+using VSCode.
+{{</ notice >}}
+
 # Summary
 Get up an running to develop with RStreams with the sample app in less than 30 minutes.
 
@@ -29,7 +34,7 @@ Install the [Serverless Framework](https://www.serverless.com/framework/docs/get
 npm install -g serverless
 ```
 
-# Get RStreams Bus Config Secret
+# Get RStreams Bus Config Secret Name
 You must have an RStreams Bus instance to access.  Each bus instance installs a secret in AWS secrets manager named `rstreams-{busName}`.
 If you go to AWS secrets manager and search on `rstreams`, you can see if one is installed.  All you need is the name of this
 secret that points to a non-production instance of an RStreams bus that you can work with safely.
@@ -63,7 +68,6 @@ on creating IAM policies.  Here are the contents of `rstreams-TestBus` that migh
   "LeoSettings":"TestBus-LeoSettings-1234567",
   "LeoEvent":"TestBus-LeoEvent-1234567",
   "LeoSystem":"TestBus-LeoSystem-1234567",
-  "LeoArchive":"TestBus-LeoArchive-1234567",
 
   // A Kinesis stream
   "LeoKinesisStream":"TestBus-LeoKinesisStream-1234567",
@@ -80,21 +84,41 @@ on creating IAM policies.  Here are the contents of `rstreams-TestBus` that migh
 ```
 {{</ collapse-light >}}
 
-# Checkout the RStreams Flow Example Project
-{{< notice info >}}RStreams Flow will provide a command line tool for generating a sample project from a template by June 30, 2022.
-For now, let's just checkout the sample project and customize it.{{</ notice >}}
-[Here's the git project](https://github.com/LeoPlatform/rstreams-flow-example) or just check it out:
-```json
-git clone https://github.com/LeoPlatform/rstreams-flow-example.git
-```
+# Create a new project from an RStreams Flow Template
 
-# Run locally
-This command will run the weather loader bot which goes out and retrieves weather events from a free 3rd party
-API and then pushes them into an RStreams queue.
-
+## Step 1 - Create the project from the template
+1. Drop to the command line and CD to where you will want your new project to be
+1. Think of a name for your project: lowercase and separate words with dashes, no spaces and no other punctuation.  If this is just a test 
+project for you, name it something like `test-123131`.  If this will be the basis of a real project, name it for the 
+microservice you are creating. What matters is that the name is unique at your company.  The reason for this is that by 
+convention, this sample project will name bots and queues prepended with your project name, which is used as your service
+name.  Of course, you can change this later as you understand how things work more. 
+1. Run this command to create a new project, replace `{your-project-name}` with the name you thought of in the previous step.
 ```bash
-npm run test weather-loader
+serverless create --template-url https://github.com/LeoPlatform/rstreams-flow-example/tree/master -p {your-project-name}
 ```
+
+## Step 2 - Initialize everything
+1. CD to the root of your project
+1. run `npm install`
+1. run this to initialize everything using your project's name as the service name for bots/queues
+   ```bash
+   serverless init-template
+   ```
+1. You will be prompted for both the region your RStreams Bus is installed within and the
+[RStreams Config secret name](#get-rstreams-bus-config-secret) of your bus, provide them - here's what the output looked like
+![serverless init-template output](../images/serverless-init-template-output.png)
+1. Open up `.env.dev` and verify that the input you provided correctly went into the `AWS_REGION` and `RSTREAMS_CONFIG_SECRET` properties
+1. If they didn't, add them there manually (shouldn't be necessary, but we've had reports)
+
+## Step 3 - Compile and Run
+1. Run `tsc` from the command line to compile TS to JS (execute npm run watch to have a watcher compile TS to JS when files change)
+1. Run the weather-loader bot locally
+```bash
+npm test weather-loader
+```
+
+YOU ARE UP AND RUNNING!
 
 # Project Commands using NPM
 {{< collapse "Expand me to view all NPM commands included in the project">}}
