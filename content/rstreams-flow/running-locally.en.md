@@ -50,10 +50,14 @@ weather-loader:
 {{</ collapse-light >}}
 
 #### Bot ID
+Needed when invoking a bot.
+
 Bots are referenced in config via their ID.  The ID is the first attribute in the bot's `serverless.yml` file that all other 
 config is a child of.  In the above example it's on [Line 1](#wlserverless-1) and is named `weather-loader`.
 
 #### Stage
+Needed when invoking a bot.
+
 Each RStreams Flow bot executes in the context of an environment, called a `stage`, such as dev/test/staging/prod.
 The RStreams Flow example template project expects that your stage, the environment, is `dev` and that a file named `.env.dev` exists
 that contains the name of the AWS secrets manager secret that contains the RStreams bus instance config to connect to.
@@ -63,32 +67,77 @@ Each running RStreams SDK needs to know what resources to access that comprise t
 to read and write from/to.  This is called the RStreams Config.  The project has been setup such that the `dev` environment
 is meant for running locally.  You should open up the `.env.dev` file and change the `RSTREAMS_CONFIG_SECRET` value to
 be the name of the AWS Secrets Manager secret that was created when your RStreams Bus instance was installed.  It will
-be named like this: `rstreams-{busName}` where `{busName}` is the name of your bus.  So, if you have a bus instanced
-named `PlaygroundBus` your secret would be named `rstreams-PlaygroundBus`.  
+be named like this: `rstreams-{busStackName}` where `{busStackName}` is the 
+[name of your bus stack](../getting-started/#get-bus-stack-name).  So, if you have a bus stack named
+named `PlaygroundBus-Bus-1JX7JSIIUQRAO` your secret would be named `rstreams-PlaygroundBus-Bus-1JX7JSIIUQRAO`.  
 [Jump here](../../rstreams-bus/getting-started/#how-do-you-access-the-new-rstreams-bus-instance) for lots more on this if you care.
 
+#### Workflow
+A flag that may provided to run a chained set of bots locally with the `serverless invoke-bot` command (see below).
+The first bot in the chain is the one that is specified to be invoked on the command line.  It can work in one of two modes.
+Either the first bot pulls actual data using the `-actualSource` flag and then writes to a queue that is really a file and then the
+next bot reads from the file instead of a real queue and so on.  Or, without that flag the very first bot will read from a queue
+that is really a [hard-coded mock file](#mock) you created.
 
+#### Mock
+A flag that may be provided when running bots locally to have a bot read from a file of mock data instead of an actual queue and
+optionally write to a file instead of writing to an actual queue.
 
-```json
-serverless invoke-bot --stage {environment} --function {bot-name}
+Mock data is located in the RStreams Flow project's `<project-root>/.mock-data` directory.
+If you want to provide a mock file to be read by the SDK when running locally instead of
+hitting an actual queue, create a file named `{queueName}.jsonl` and put each JSON event
+object on a separate line, following the [JSON Lines](https://jsonlines.org/) convention.
+So, if your code reads from a queue named `rstreams-example.weather` then you would create this
+file and run the invoke command with the mock flag: 
+`<project-root>/.mock-data/rstreams-example.weather.jsonl`.
+
+If you are running locally with the workflow flag on, then the SDK will write to an output
+file named for the queue instead of writing to an actual RStreams Bus queue.  The output
+files will be in the `<project-root>/.mock-data/output` directory.  They will be named
+`queueName.jsonl`.  So, if your code writes to a queue named 
+`rstreams-example.weather-transformed` then the SDK would create this file and use it as the 
+queue of data to send to any subsequent bot that reads from that queue:
+`<project-root>/.mock-data/output-data/rstreams-example.weather-transformed.jsonl`.
+
+# Invoke Bots Locally
+
+{{< notice info >}}In all of the following commands, you may either use `serverless invoke-bot <remaining args>` or if more convenient
+`npm test {functionName} -- {remainingArgs}` to invoke bots locally.{{</ notice >}}
+
+RStreams Flow supports the following use cases when running locally.
+
+## Set a breakpoint in any bot invoked
+Use your IDE's method for debugging a Node process and set a breakpoint in your bot and it will stop on your breakpoint.  In
+Visual Studio Code, the easiest way to debug is to simply issue the command to invoke the bot in a Javascript debug terminal and
+then you don't have to do anything else and your breakpoints will work.
+
+![VSCode JS Debug Terminal](../images/vscode-js-terminal.png)
+
+* Run just one bot locally and pull in data from a real RStreams Bus queue
+{{< collapse-light "Run one bot local hitting real queue" true >}}
+```bash
+npm invoke-bot --stage {environment} --function {bot ID}
 ```
+{{</ collapse-light >}}
 
-RSTREAMS_CONFIG_SECRET="rstreams-us-west-2-clint-bus"
-
-# Invoke a bot locally hitting an actual RStreams queue
-{{< notice info >}}The invoke-bot startup performance was significantly improved in May 2022.{{</ notice >}}
-
-```json
-serverless invoke-bot --stage {environment} --function {bot-name}
+* Run just one bot locally and pull in data from a [mock RStreams Bus queue](#mock) using a file
+{{< collapse-light "Run one bot local hitting mock queue" true >}}
+```bash
+npm invoke-bot --stage {environment} --function {bot ID} -m
 ```
+{{</ collapse-light >}}
 
-* `serverless invoke-bot` : an RStreams plugin to serverless
-* `--stage {environment}` : specifies the environment to run the bot within which will change the configuration used
-* `--function {bot-name}` : the bot to invoke
+* Run a [chain of bots locally](#workflow) where all data is [mocked](#mock) using files instead of queues
+{{< collapse-light "Run one bot local hitting mock queues with workflow" true >}}
+```bash
+npm invoke-bot --stage {environment} --function {bot ID} -m -w
+```
+{{</ collapse-light >}}
 
-
-
-
-
-
-serverless invoke-bot --stage dev --function weather-loader
+* Run a [chain of bots locally](#workflow) where the first bot reads data from an actual queue, writes the results to a file instead of a real
+queue an then all data is [mocked](#mock) using files instead of queues from that point.
+{{< collapse-light "Run one bot seeded by a queue but mock queues with workflow" true >}}
+```bash
+npm invoke-bot --stage {environment} --function {bot ID} -m -w -actualSource
+```
+{{</ collapse-light >}}

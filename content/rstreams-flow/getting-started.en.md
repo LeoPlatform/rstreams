@@ -34,23 +34,20 @@ Install the [Serverless Framework](https://www.serverless.com/framework/docs/get
 npm install -g serverless
 ```
 
-# Get RStreams Bus Config Secret Name
+# Get bus stack name
 You must have an RStreams Bus instance to access.  Each bus instance installs a secret in AWS secrets manager named `rstreams-{busName}`.
-If you go to AWS secrets manager and search on `rstreams`, you can see if one is installed.  All you need is the name of this
-secret that points to a non-production instance of an RStreams bus that you can work with safely.
+The bus name is something very specific.  The RStreams Bus stack itself installs four child stacks.  One of those child
+stacks is the actual bus.  So, if I have a bus installation named `PlaygroundBus` then there will be a stack named
+`PlaygroundBus-Bus-<random-characters-AWS-puts-on>`.  You need this name.  Go to AWS CloudFormation and click on Stacks and
+then in the search field search on the name of your bus.  In my case, I searched on the word `playground` and the five stacks
+showed up the main stack and the five child stacks.  I found the exact name of the bus stack which was 
+`PlaygroundBus-Bus-1JX7JSIIUQRAO`.
 
-The project has been setup such that the `dev` environment
-is meant for running locally.  You should open up the `.env.dev` file and change the `RSTREAMS_CONFIG_SECRET` value to
-be the name of the AWS Secrets Manager secret that was created when your RStreams Bus instance was installed.  It will
-be named like this: `rstreams-{busName}` where `{busName}` is the name of your bus.  So, if you have a bus instanced
-named `PlaygroundBus` your secret would be named `rstreams-PlaygroundBus`.  
-[Jump here](../../rstreams-bus/getting-started/#how-do-you-access-the-new-rstreams-bus-instance) for lots more on this if you care.
-
-Many companies will install a bus in their dev or test environments.  If 
+Be sure you are using a test bus instance.  Many companies will install a bus in their dev or test environments/accounts.  If 
 you're unsure, reach out to IT/Devops in your company. You can also [standup your own bus instance](../../rstreams-bus/getting-started) but be warned this
-creates some AWS resources: Kinesis, S3, a few DynamoDB tables, a secret in Secrets Manager.  It's not much money to just
-stand them up and have them turned on but if you push lots of data through your bus, it will become real money.  Be sure
-to contact your IT/Devops/Engineering management on their policies around this.
+creates some AWS resources: Kinesis, S3, a few DynamoDB tables, a secret in Secrets Manager.  It's not much money, around 50
+to 100 bucks a month, to just stand one up and use it lightly for testing but if you push lots of data through your bus, 
+it will become real money.  Be sure to contact your IT/Devops/Engineering management on their policies around this.
 
 # AWS Access
 You are going to need to access from your laptop to the resources listed in the AWS Secrets Manager secret named for the RStreams
@@ -106,14 +103,12 @@ serverless create --template-url https://github.com/LeoPlatform/rstreams-flow-ex
    serverless init-template
    ```
 1. You will be prompted for both the region your RStreams Bus is installed within and the
-[RStreams Config secret name](#get-rstreams-bus-config-secret) of your bus, provide them - here's what the output looked like
+[rstreams bus](#get-bus-stack-name) stack name, provide them - here's what the output looked like
 ![serverless init-template output](../images/serverless-init-template-output.png)
-1. Open up `.env.dev` and verify that the input you provided correctly went into the `AWS_REGION` and `RSTREAMS_CONFIG_SECRET` properties
-1. If they didn't, add them there manually (shouldn't be necessary, but we've had reports)
 
 ## Step 3 - Compile and Run
 1. Run `tsc` from the command line to compile TS to JS (execute npm run watch to have a watcher compile TS to JS when files change)
-1. Run the weather-loader bot locally
+1. Run the weather-loader bot locally hitting an actual RStreams queue
 ```bash
 npm test weather-loader
 ```

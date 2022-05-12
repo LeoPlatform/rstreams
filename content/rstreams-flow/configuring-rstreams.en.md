@@ -48,14 +48,15 @@ environments also, including when running locally.
 ### RStreams Flow Projects
 If your project is an RStreams Flow project, everything is just handled for you when you deploy to an actual environment.  In your
 serverless.yml you will see a stack param that is called `RStreamsBus`.  The AWS Secretes Manager secret name by convention is named
-`rstreams-{busName}`, so all the deployment process needs to know is your environment and the bus name for that environment.
+`rstreams-{busStackName}` where busStackName is the name of the actual [RStreams bus stack](../getting-started/#get-bus-stack-name). 
+So, all the deployment process needs to know is your environment and the bus stack name for that environment.
 
 There is a way to explicitly set the name of the secret also which is convenient when running locally.  Create a `.env.{stage}` file 
 (stage is your environment name) as we are using the [dotenv library](https://www.npmjs.com/package/dotenv) and put these in it
 
 ```json
 AWS_REGION="{my-aws-region}"
-RSTREAMS_CONFIG_SECRET="rstreams-{busName}"
+RSTREAMS_CONFIG_SECRET="rstreams-{busStackName}"
 ```
 The default RStreams Flow project template comes pre-installed with a file named `.env.dev` with `AWS_REGION` and `RSTREAMS_CONFIG_SECRET`
 in it so a developer can just change those values and run locally with the assumption that the `dev` environment means running

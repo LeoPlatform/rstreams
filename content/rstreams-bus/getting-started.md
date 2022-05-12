@@ -75,8 +75,14 @@ go to see the proress.
 
 # How do you access the new RStreams Bus instance?
 If you are on a new version of the RStreams Bus, then creating the RStreams Stack will have published a new Secrets Manager secret that contains all the 
-resources necessary for the RStreams Node SDK to connect to and use the new bus.  It will be named like this: `rstreams-{busName}` where `{busName}` is
-the name you gave your RStreams bus instance when you created it.
+resources necessary for the RStreams Node SDK to connect to and use the new bus.  It will be named like this: `rstreams-{busStackName}` where `{busStackName}` is
+the name you gave your RStreams bus instance plus  `-Bus-<random stuff>`.  Here's how you can find the name of the bus stack.
+
+If I have a bus installation named `PlaygroundBus` then there will be a stack named
+`PlaygroundBus-Bus-<random-characters-AWS-puts-on>`.  Go to AWS CloudFormation and click on Stacks and
+then in the search field search on the name of your bus.  In my case, I searched on the word `playground` and the five stacks
+showed up, the main stack and the five child stacks.  I found the exact name of the bus stack which was 
+`PlaygroundBus-Bus-1JX7JSIIUQRAO`.
 
 ## Check SecretsManager for the new Secret
 1. Go to AWS Secrets Manager
