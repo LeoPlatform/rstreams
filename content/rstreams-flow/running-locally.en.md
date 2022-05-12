@@ -116,21 +116,21 @@ then you don't have to do anything else and your breakpoints will work.
 * Run just one bot locally and pull in data from a real RStreams Bus queue
 {{< collapse-light "Run one bot local hitting real queue" true >}}
 ```bash
-npm invoke-bot --stage {environment} --function {bot ID}
+serverless invoke-bot --stage {environment} --function {bot ID}
 ```
 {{</ collapse-light >}}
 
 * Run just one bot locally and pull in data from a [mock RStreams Bus queue](#mock) using a file
 {{< collapse-light "Run one bot local hitting mock queue" true >}}
 ```bash
-npm invoke-bot --stage {environment} --function {bot ID} -m
+serverless invoke-bot --stage {environment} --function {bot ID} -m
 ```
 {{</ collapse-light >}}
 
 * Run a [chain of bots locally](#workflow) where all data is [mocked](#mock) using files instead of queues
 {{< collapse-light "Run one bot local hitting mock queues with workflow" true >}}
 ```bash
-npm invoke-bot --stage {environment} --function {bot ID} -m -w
+serverless invoke-bot --stage {environment} --function {bot ID} -m -w
 ```
 {{</ collapse-light >}}
 
@@ -138,6 +138,6 @@ npm invoke-bot --stage {environment} --function {bot ID} -m -w
 queue an then all data is [mocked](#mock) using files instead of queues from that point.
 {{< collapse-light "Run one bot seeded by a queue but mock queues with workflow" true >}}
 ```bash
-npm invoke-bot --stage {environment} --function {bot ID} -m -w -actualSource
+serverless invoke-bot --stage {environment} --function {bot ID} -m -w -actualSource
 ```
 {{</ collapse-light >}}
