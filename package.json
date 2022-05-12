@@ -4,9 +4,9 @@
   "description": "rstreams hugo documentation website",
   "main": "index.js",
   "scripts": {
-    "build": "hugo",
+    "build": "hugo --minify --cleanDestinationDir --forceSyncStatic",
     "create": "hugo new",
-    "serve": "hugo server --cleanDestinationDir "
+    "serve": "hugo server --minify --cleanDestinationDir --forceSyncStatic"
   },
   "repository": {
     "type": "git",

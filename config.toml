@@ -205,3 +205,5 @@ name = "Github"
 url = "https://github.com/LeoPlatform/rstreams"
 weight = 3
 
+[minify]
+  disableCSS = true
