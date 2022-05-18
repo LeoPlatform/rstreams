@@ -207,3 +207,25 @@ weight = 2
 
 [minify]
   disableCSS = true
+
+############################
+## Comments
+############################
+[params.comments]
+  # Comment provider:
+  provider = "giscus"
+
+  # NOT USED Which page types are commentable?
+  #commentable = {page = true, post = true, docs = true, project = true, publication = true, talk = false}
+
+  # Configuration of giscus
+  [params.comments.giscus]
+    repo = "LeoPlatform/rstreams" # Repo where the comments will live
+    repo_id = "R_kgDOHI9NTw" # Repo where the comments will live
+    category = "Website" # Repo where the comments will live
+    category_id = "DIC_kwDOHI9NT84CPJ9s" # Repo where the comments will live
+    mapping = "pathname" # How Utterances will match comment to page
+    label = "comment" # Label applied to issue by utteranc.es bot
+    reactions_enabled = 0
+	inputposition="top"
+

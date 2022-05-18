@@ -922,3 +922,29 @@ h6 .heading-anchor {
   margin-top: 0px; }
 
 /* end */
+/** Comments section **/
+#comments {
+  margin-top: 80px; }
+
+#comments hr {
+  display: none; }
+
+.comment-icon-btn {
+  margin-right: 10px;
+  color: #3c7ab1;
+  cursor: pointer; }
+
+.comment-icon-btn:hover {
+  color: #4593d7; }
+
+.comment-icon-btn:active {
+  color: #346da0; }
+
+.comment-icon-btn .num-comments {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold; }
+
+#commentPlusHeader {
+  font-size: 14px; }

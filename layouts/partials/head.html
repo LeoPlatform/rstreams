@@ -34,4 +34,7 @@
 
 {{ $js := resources.Get "js/main.js" }}
 
+<!-- Giscuss to get comments -->
+<script type="module" src="https://unpkg.com/giscus?module"></script>
+
 <script src="{{ $js.RelPermalink }}" type="text/javascript"></script>

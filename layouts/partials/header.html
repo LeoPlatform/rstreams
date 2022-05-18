@@ -70,6 +70,16 @@
       </div>
 
       {{if not .IsHome }}
+	  <a class="fa-stack comment-icon-btn" href="#comments">
+		<!-- The icon that will wrap the number -->
+		<i class="far fa-comment fa-stack-2x"></i>
+		<i id="commentPlusHeader" class="fas fa-plus fa-stack-1x"></i>
+		<!-- a strong element with the custom content, in this case a number -->
+		<span id="totalCommentCountHeader" class="fa-stack-1x num-comments" style="display: none">
+			0
+		</span>
+	  </a>
+
       <form class="form-inline search-wrapper my-3" name="search-form" class="search-wrapper" action="{{`search` | relLangURL}}" onsubmit="return validateForm()">
         <input id="search-by" name="s" type="search" class="form-control" placeholder="{{ i18n `search_placeholder`}}">
         <button class="border-0 bg-white" type="submit"><i class="fas fa-search"></i></button>

@@ -1,0 +1,44 @@
+
+  <section id="comments">
+	<hr />
+    <script src="https://giscus.app/client.js"
+        data-repo="{{site.Params.comments.giscus.repo}}"
+        data-repo-id="{{site.Params.comments.giscus.repo_id}}"
+        data-category="{{site.Params.comments.giscus.category}}"
+        data-category-id="{{site.Params.comments.giscus.category_id}}"
+        data-mapping="{{site.Params.comments.giscus.mapping}}"
+		data-theme="{{.Site.BaseURL}}css/giscus-light-custom.css"
+        data-reactions-enabled="{{site.Params.comments.giscus.reactions_enabled}}"
+		data-emit-metadata="1"
+        crossorigin="anonymous"
+        async>
+</script>
+<noscript>Please enable JavaScript to view the comments powered by giscus.</noscript>
+ </section>
+
+<script type="text/javascript">
+function handleMessage(event) {
+  if (event.origin !== 'https://giscus.app') return;
+  if (!(typeof event.data === 'object' && event.data.giscus)) return;
+
+  const giscusData = event.data.giscus;
+  let count = 0;
+  if ('discussion' in giscusData) {
+	if (giscusData.discussion.totalCommentCount) {
+		count = giscusData.discussion.totalCommentCount;
+	}
+  }
+
+  let countEl = document.getElementById("totalCommentCountHeader");
+  let plusEl = document.getElementById("commentPlusHeader");
+
+  if (countEl && plusEl) {
+	  countEl.style.display = count > 0 ? 'inherit' : 'none';
+	  plusEl.style.display = count > 0 ? 'none' : 'inherit';
+  }
+
+  countEl.innerHTML = count + '';
+}
+
+window.addEventListener('message', handleMessage);
+ </script>

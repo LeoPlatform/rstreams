@@ -53,6 +53,7 @@
           <h1 class="title">{{ .Title }}</h1>
           {{ if .Content }}
           <div class="content">{{.Content}}</div>
+		  {{  partial "comments.html" . }}
           {{ else }}
           <div class="page-list">
             {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode }}
