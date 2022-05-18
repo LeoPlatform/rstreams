@@ -1,10 +1,11 @@
 ---
 title: "RStreams Guides"
-date: 2022-04-04T11:02:05+06:00
-icon: "fas fa-file-alt" # fontawesome icon : https://fontawesome.com/icons
+date: "2022-05-18T18:19:42.651Z"
+icon: "fas fa-file-alt"
 description: "In-depth guides and how-to's."
-type : "docs"
+type: "docs"
 weight: 3
+version: "1.0"
 ---
 
 This section includes guides that cover RStreams core concepts and common use cases.

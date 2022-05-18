@@ -6,7 +6,8 @@
   "scripts": {
     "build": "hugo --minify --cleanDestinationDir --forceSyncStatic",
     "create": "hugo new",
-    "serve": "hugo server --minify --cleanDestinationDir --forceSyncStatic"
+    "serve": "hugo server --minify --cleanDestinationDir --forceSyncStatic",
+    "lint": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,18 @@
   },
   "homepage": "https://github.com/LeoPlatform/rstreams#readme",
   "devDependencies": {
-    "hugo-bin": "^0.84.0"
+    "@tsconfig/node16": "^1.0.2",
+    "@types/node": "^17.0.34",
+    "@types/recursive-readdir": "^2.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "eslint": "^8.15.0",
+    "gray-matter": "^4.0.3",
+    "hugo-bin": "^0.87.1",
+    "json-to-pretty-yaml": "^1.2.2",
+    "recursive-readdir": "^2.2.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   },
   "hugo-bin": {
     "buildTags": "extended"

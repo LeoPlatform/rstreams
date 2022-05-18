@@ -1,8 +1,9 @@
 ---
 title: "Streams Primer"
-date: 2018-12-29T11:02:05+06:00
+date: "2022-05-18T18:19:42.651Z"
 weight: 2
 draft: false
+version: "1.0"
 ---
 
 {{< collapse-light "ToC" >}}

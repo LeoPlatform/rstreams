@@ -1,10 +1,11 @@
 ---
 title: "What is RStreams?"
-date: 2022-04-04T11:02:05+06:00
-icon: "fas fa-question" # fontawesome icon : https://fontawesome.com/icons
+date: "2022-05-18T18:19:42.651Z"
+icon: "fas fa-question"
 description: "What is RStreams and why should I use it?"
-type : "docs"
+type: "docs"
 weight: 1
+version: "1.0"
 ---
 {{< collapse-light "ToC" >}}
 {{< toc  >}}

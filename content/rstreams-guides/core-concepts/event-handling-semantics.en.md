@@ -1,9 +1,10 @@
 ---
 title: "Event Handling Semantics"
-date: 2022-04-04T11:02:05+06:00
+date: "2022-05-18T18:19:42.651Z"
 description: "How event handling works in RStreams"
 draft: false
 weight: 3
+version: "1.0"
 ---
 
 {{< collapse-light "ToC" >}}

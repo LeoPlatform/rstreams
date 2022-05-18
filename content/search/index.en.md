@@ -3,4 +3,6 @@ title: "Search Result"
 description: "this is meta description"
 layout: "search"
 draft: false
+version: "1.0"
+date: "2022-05-18T18:19:42.651Z"
 ---

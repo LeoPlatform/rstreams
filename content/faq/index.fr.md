@@ -3,8 +3,10 @@ title: "Mostly Asked Questions"
 description: "this is meta description"
 draft: false
 _build:
-  render: never
-  list: never
+  render: "never"
+  list: "never"
+version: "1.0"
+date: "2022-05-18T18:19:42.651Z"
 ---
 
 {{< faq "Will updates also be free?" >}}
