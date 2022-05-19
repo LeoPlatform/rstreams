@@ -103,7 +103,8 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
 
     if (localVersion.current === oldVerNum) {
         // Normal case, just increment the local version.
-        newVerNum = (parseFloat(oldVerNum) + .1) + '';
+        newVerNum = incrementMinorVer(oldVerNum);
+        
         localVersion.current = newVerNum;
         localVersion.version = newVerNum;
         localVersion.all.push({version: newVerNum, date: now})
@@ -151,6 +152,18 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
 
         saveDoc(newDiffVersionDocPath, newVersionFile);
     }
+}
+
+/**
+ * Expects version to be two numbers like this: 1.0 or 2.1
+ * @param verStr 
+ */
+function incrementMinorVer(verStr: string): string {
+    const arr = verStr.split('.');
+    const major = arr[0];
+    const minor = arr.length > 1 ? parseInt(arr[1]) : 0;
+
+    return major + '.' + (minor + 1);
 }
 
 /*

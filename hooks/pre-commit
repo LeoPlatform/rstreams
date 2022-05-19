@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+echo "Pre-commit version generation underway!"
+echo $PWD
+ts-node version.ts
+
+if [ -e build/files-changed-by-version-script.txt ]
+then
+    while IFS="" read -r p || [ -n "$p" ]
+    do
+      printf 'Adding to previous commit: %s\n' "$p"
+      git add $p
+    done < build/files-changed-by-version-script.txt
+fi

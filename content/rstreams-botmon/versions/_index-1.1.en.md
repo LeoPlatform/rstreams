@@ -1,12 +1,12 @@
 ---
 title: "RStreams Monitoring"
-date: "2022-05-19T22:11:08.560Z"
+date: "2022-05-19T21:38:39.798Z"
 icon: "fas fa-bug"
 description: "Monitor, trace and debug events in the bus in real-time."
 type: "docs"
 weight: 6
 version:
-  version: "1.2"
+  version: "1.1"
   current: "1.2"
   all:
     - version: "1.0"
@@ -18,8 +18,11 @@ version:
   render:
     fileName: "_index"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 RStreams includes a web site called Botmon that provides real time monitoring, data visualization, tracing and debugging. Botmon
-is critical for the operability and usability of RStreams as a whole. Botmon provides a visual representation of each
-bot or queue in the directed graph of streams that is the RStreams Bus instance it is pointing at.
+is critical for the operability and usability of RStreams as a whole.<ins class="tooltip"> Botmon provides a visual representation of each
+bot or queue in the directed graph of streams that is the RStreams Bus instance it is pointing at.<span class="top">Added</span></ins>

@@ -1,3 +1,6 @@
+-- YOU MUST DO THIS OR VERSION CONTROL WILL NOT WORK!!!!!
+   git config core.hooksPath hooks/
+
 TODO: inject data from file
 https://input.sh/hugo-data-into-content-with-a-shortcode/
 
