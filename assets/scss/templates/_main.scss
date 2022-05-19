@@ -986,3 +986,83 @@ h6 .heading-anchor {
 #commentPlusHeader {
 	font-size: 14px;
 }
+
+/* Version History */
+ins {
+    color: green;
+}
+
+del {
+    color: red;
+    text-decoration: line-through !important;
+}
+
+/* Tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    opacity: 1;
+    text-decoration: inherit;
+}
+  
+.tooltip {
+    display:inline-block;
+    position:relative;
+    text-align:left;
+    font-size: inherit;
+}
+
+.tooltip .top {
+    min-width:50px; 
+    max-width:200px;
+    //top:-20px;
+    left:50%;
+    transform:translate(-50%, -100%);
+    padding:5px 12px;
+    background-color:#eeeded;
+    font-weight:normal;
+    font-size:13px;
+    border-radius:8px;
+    position:absolute;
+    z-index:99999999;
+    box-sizing:border-box;
+    border:1px solid #e7e5e5;box-shadow:0 1px 8px rgba(0,0,0,0.5);
+    visibility:hidden; opacity:0; transition:opacity 0.8s;
+}
+
+ins.tooltip {
+    border-bottom:1px dotted #666;
+}
+
+ins.tooltip .top {
+    color: green;
+}
+
+del.tooltip .top {
+    color: red;
+}
+
+.tooltip:hover .top {
+    visibility:visible; opacity:1;
+}
+
+.tooltip .top i {
+    position:absolute;
+    top:100%;
+    left:50%;
+    margin-left:-12px;
+    width:24px;
+    height:12px;
+    overflow:hidden;
+}
+
+.tooltip .top i::after {
+    content:'';
+    position:absolute;
+    width:12px;
+    height:12px;
+    left:50%;
+    transform:translate(-50%,-50%) rotate(45deg);
+    background-color:#eeeded;
+    border:1px solid #e7e5e5;box-shadow:0 1px 8px rgba(0,0,0,0.5);
+}

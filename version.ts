@@ -14,6 +14,9 @@ const REMOTE_GIT_REPO_URL = 'https://github.com/LeoPlatform/rstreams.git';
 const REMOTE_GIT_DIR = path.join(BUILD_DIR, 'rstreams-cloned-from-master');
 const REMOTE_CONTENT_ROOT = path.join(REMOTE_GIT_DIR, 'content');
 const VERSIONS_DIR = 'versions';
+const CHANGED_FILES_PATH = path.join(BUILD_DIR, 'files-changed-by-version-script.txt');
+
+const filesChanged: string[] = [];
 
 /**
   * Other types are at bottom of the file.
@@ -30,7 +33,20 @@ interface VersionFile {
 async function main() {
     const now = (new Date()).toISOString();
     await initDocs(now);
-    //await generateVersions(now);
+    await generateVersions(now);
+    await writeFilesChanged();
+}
+
+async function writeFilesChanged() {
+    if (filesChanged.length === 0) {return;}
+
+    // Be sure the last line has a newline after it
+    let fileContent = '';
+    for (const file of filesChanged) {
+        fileContent += file + '\n';
+    }
+
+    fs.writeFileSync(CHANGED_FILES_PATH, fileContent);
 }
 
 async function generateVersions(now: IsoDateString) {
@@ -94,8 +110,11 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
         versionFile.localMatter.data.date = now;
         genVer = true;
     } else if (localVersion.current > oldVerNum) {
-        // The local version is newer.  This should never happen.  Throw an exception.
-        throw new Error(`Local version ${localVersion.current} is greater than remote version ${oldVerNum} for ${versionFile.localFilePath}`);
+        // Assume we should simply re-generate the file and change dates and that everything else is as it should be.
+        // This case will be hit if this is run multiple times before committing.
+        versionFile.localMatter.data.date = now;
+        localVersion.all[localVersion.all.length - 1].date = now;
+        genVer = true;
     } else {
         // The remote version is newer.  This should never happen.  Throw an exception.
         throw new Error(`Remote version ${oldVerNum} is greater than local version ${localVersion.current} for ${versionFile.localFilePath}`);
@@ -115,7 +134,7 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
         } else {/* Directory already exists */}
 
         // Generate the new diff markdown file for the current version
-        const newDiffVersionDocContent =  markdownDiff(versionFile.remoteMatter.content, versionFile.localMatter.content);
+        const newDiffVersionDocContent =  getMarkdownDiffContent(versionFile.remoteMatter.content, versionFile.localMatter.content);
         const prevVersionObj: VersionObj = getPreviousVersion(localVersion, versionFile.localFilePath);
         const newDiffVersionDocFileName = getLatestDiffVersionDocFileName(localVersion, prevVersionObj);
         const newDiffVersionDocPath = path.join(versionsPath, newDiffVersionDocFileName);
@@ -132,6 +151,24 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
 
         saveDoc(newDiffVersionDocPath, newVersionFile);
     }
+}
+
+/*
+<ins class="tooltip"> Botmon
+is critical for the operability and usability of RStreams as a whole.<span class="top">Added</span></ins>
+*/
+
+function getMarkdownDiffContent(oldContent: string, newContent: string): string {
+    let result = markdownDiff(oldContent, newContent);
+
+    // Replace any <ins>new content</ins> with this so tooltip will work
+    let regex = /<ins>(.+?)<\/ins>/gms;
+    result = result.replace(regex, '<ins class="tooltip">$1<span class="top">Added</span></ins>')
+
+    regex = /<del>(.+?)<\/del>/gms;
+    result = result.replace(regex, '<del class="tooltip">$1<span class="top">Removed</span></del>')
+
+    return result;
 }
 
 /**
@@ -153,7 +190,7 @@ function getPreviousVersion(version: Version, filePath: string): VersionObj {
 
 function getLatestDiffVersionDocFileName(version: Version, versionObj: VersionObj): string {
     // If we have versions 1.0 followed by 1.1 in the all array, we want to use the older one (the second to last entry in the array) as the name
-    return version.render.fileName + `-v-${versionObj.version}` + (version.render.language ? version.render.language : '') + '.md';
+    return version.render.fileName + `-${versionObj.version}` + (version.render.language ? ('.' + version.render.language) : '') + '.md';
 }
 
 /**
@@ -216,16 +253,16 @@ async function initDocs(now: IsoDateString) {
         const fileMatter = matter(fs.readFileSync(doc, 'utf8')) as FrontMatterFile<string>;
 
         // If there's no version number, set the version number and reset the date
-        //if (!fileMatter.data.version) {
-        fileMatter.data.version = {
-            version: '1.0',
-            current: '1.0',
-            all: [{version: '1.0', date: now}],
-            render: generateVersionRenderData(doc, fileMatter.data)
+        if (!fileMatter.data.version) {
+            fileMatter.data.version = {
+                version: '1.0',
+                current: '1.0',
+                all: [{version: '1.0', date: now}],
+                render: generateVersionRenderData(doc, fileMatter.data)
+            }
+            fileMatter.data.date = now;
+            changed = true;
         }
-        fileMatter.data.date = now;
-        changed = true;
-        //}
 
         if (changed) {
             saveDoc(doc, fileMatter);
@@ -236,6 +273,7 @@ async function initDocs(now: IsoDateString) {
 function saveDoc(path: string, fileMatter: FrontMatterFile<string>) {
     const fileContent = stringifyFrontMatter(fileMatter);
     fs.writeFileSync(path, fileContent);
+    filesChanged.push(path);
 }
 
 function generateVersionRenderData(localFilePath: string, frontMatter: FrontMatter, force?: boolean): VersionRender | undefined {
