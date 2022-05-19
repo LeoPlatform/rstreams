@@ -31,6 +31,7 @@
     "html-differ": "^1.4.0",
     "hugo-bin": "^0.87.1",
     "json-to-pretty-yaml": "^1.2.2",
+    "markdown-diff": "^1.0.3",
     "marked": "^4.0.16",
     "recursive-readdir": "^2.2.2",
     "simple-git": "^3.7.1",

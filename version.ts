@@ -6,6 +6,7 @@ import * as yaml from "json-to-pretty-yaml";
 import simpleGit, { SimpleGit } from 'simple-git';
 import { marked } from 'marked';
 import {HtmlDiffer} from 'html-differ';
+import { markdownDiff } from 'markdown-diff';
 
 const CONTENT_ROOT = path.join(__dirname, 'content');
 const BUILD_DIR = path.join(__dirname, 'build');
@@ -34,14 +35,13 @@ async function main() {
 
 async function generateVersions(now: IsoDateString) {
     await initBuild();
-    await getVersions(now);
+    await detectAndHandleNewDocVersions(now);
 }
 
-async function getVersions(now: IsoDateString): Promise<VersionFile[]> {
+async function detectAndHandleNewDocVersions(now: IsoDateString) {
     const LOCAL_FILES = await getDocs(CONTENT_ROOT);
     const REMOTE_FILES = await getDocs(REMOTE_CONTENT_ROOT);
     const versions: {[key : string]: VersionFile} = {};
-    const result: VersionFile[] = [];
 
     for (const file of LOCAL_FILES) {
         const relativePath = getRelativeFilePath(file, true);
@@ -61,71 +61,109 @@ async function getVersions(now: IsoDateString): Promise<VersionFile[]> {
             versionFile.remoteFilePath = file;
         }
 
-        /**
-         * interface Version {
-    // The current version number.  Versions start at 1.0 and only have two numbers.
-    current: string;
-
-    // Newest version is at the last element of the array, older versions are before it
-    all: VersionObj[];
-
-    // Used to generate version diff markdown files
-    _render: {
-        fileName: string;
-        language: string;
-    }
-}
-         */
-
         // If we've got both a local and remote file, we will need to compare versions
         if (versionFile.localFilePath && versionFile.remoteFilePath) {
             versionFile.localMatter = matter(fs.readFileSync(versionFile.localFilePath, 'utf8'));
             versionFile.remoteMatter = matter(fs.readFileSync(versionFile.remoteFilePath, 'utf8'));
-            if (!compareFiles(versionFile)) {
+            if (!htmlGeneratedFromMarkdownIsSameBetweenLocalAndRemote(versionFile)) {
                 // They are different.  Create a new version.
-                const localVersion: Version = versionFile.localMatter.data.version;
-                const remoteVersion: Version = versionFile.remoteMatter.data.version;
-
-                const oldVerNum = remoteVersion.current || '1.0';
-                let newVerNum: string;
-                let genVer = false;
-
-                if (localVersion.current === oldVerNum) {
-                    // Normal case, just increment the local version.
-                    newVerNum = (parseFloat(oldVerNum) + .1) + '';
-                    localVersion.current = newVerNum;
-                    localVersion.all.push({version: newVerNum, date: now})
-                    genVer = true;
-                } else if (localVersion.current > oldVerNum) {
-                    // The local version is already newer than the previous change, just use it
-                    // And overwrite the diff markdown file if there is one.
-                    newVerNum = localVersion.current;
-                    genVer = true;
-                } else {
-                    // The remote version is newer.  Act like this change didn't happen
-                    // and just update the local version to the current remote version but don't create
-                    // a new version doc for it.
-                    localVersion.current = remoteVersion.current;
-                }
-
-                // Save the local version since one way or another, we changed the front matter
-                //xxx
-
-                if (genVer) {
-                    // Make sure the versions subdirectory exists
-                    const versionsPath = path.join(path.dirname(versionFile.localFilePath), VERSIONS_DIR);
-                    if (!fs.existsSync(versionsPath)) {
-                        fs.mkdirSync(versionsPath);
-                    } else {/* Directory already exists */}
-                }
+                adjustVersion(versionFile, now);
             }
         } else { /* It's either a deleted or newly inserted file, nothing to do. */}
     }
-
-    return result;
 }
 
-function compareFiles(file: VersionFile): boolean {
+/**
+ * The local and remote files when converted from markdown to HTML were different.
+ * Let's adjust the version and generate the diff file for the version.
+ */
+function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
+    const localVersion: Version = versionFile.localMatter.data.version;
+    const remoteVersion: Version = versionFile.remoteMatter.data.version;
+
+    const oldVerNum = remoteVersion.current || '1.0';
+    let newVerNum: string;
+    let genVer = false;
+
+    if (localVersion.current === oldVerNum) {
+        // Normal case, just increment the local version.
+        newVerNum = (parseFloat(oldVerNum) + .1) + '';
+        localVersion.current = newVerNum;
+        localVersion.version = newVerNum;
+        localVersion.all.push({version: newVerNum, date: now})
+        versionFile.localMatter.data.date = now;
+        genVer = true;
+    } else if (localVersion.current > oldVerNum) {
+        // The local version is newer.  This should never happen.  Throw an exception.
+        throw new Error(`Local version ${localVersion.current} is greater than remote version ${oldVerNum} for ${versionFile.localFilePath}`);
+    } else {
+        // The remote version is newer.  This should never happen.  Throw an exception.
+        throw new Error(`Remote version ${oldVerNum} is greater than local version ${localVersion.current} for ${versionFile.localFilePath}`);
+    }
+
+    // Save the local version since one way or another, we changed the front matter
+    saveDoc(versionFile.localFilePath, versionFile.localMatter);
+
+    console.log('Adjusting version front matter: ' + versionFile.localFilePath);
+
+    // If we're supposed to generate version diff markdown file, do so
+    if (genVer) {
+        // Make sure the versions subdirectory exists
+        const versionsPath = path.join(path.dirname(versionFile.localFilePath), VERSIONS_DIR);
+        if (!fs.existsSync(versionsPath)) {
+            fs.mkdirSync(versionsPath);
+        } else {/* Directory already exists */}
+
+        // Generate the new diff markdown file for the current version
+        const newDiffVersionDocContent =  markdownDiff(versionFile.remoteMatter.content, versionFile.localMatter.content);
+        const prevVersionObj: VersionObj = getPreviousVersion(localVersion, versionFile.localFilePath);
+        const newDiffVersionDocFileName = getLatestDiffVersionDocFileName(localVersion, prevVersionObj);
+        const newDiffVersionDocPath = path.join(versionsPath, newDiffVersionDocFileName);
+        const newVersionFile = Object.assign({}, versionFile.localMatter) as FrontMatterFile<string>;
+
+        // We want the markdown rendered to HTML, but we don't want it to show up in navigation
+        newVersionFile.data._build = {render: 'always', list: 'never'};
+        newVersionFile.data.version.version = prevVersionObj.version;
+        newVersionFile.data.date = prevVersionObj.date;
+        newVersionFile.content = newDiffVersionDocContent;
+
+        console.log(`Creating new diff version doc ${newDiffVersionDocPath} for ${versionFile.localFilePath}`);
+        //console.log(newDiffVersionDocContent);
+
+        saveDoc(newDiffVersionDocPath, newVersionFile);
+    }
+}
+
+/**
+ * Don't call this unless there are at least two versions or you'll get an exception.
+ * 
+ * @param version 
+ */
+function getPreviousVersion(version: Version, filePath: string): VersionObj {
+    if (version.all.length < 2) {
+        throw new Error(`Expected at least two versions at this point: filePath: ${filePath}, version: ` + JSON.stringify(version));
+    }
+
+    if (!version.render || !version.render.fileName) {
+        throw new Error(`Expected render.fileName: filePath: ${filePath}, version: ` + JSON.stringify(version));
+    }
+
+    return version.all[version.all.length-2];
+}
+
+function getLatestDiffVersionDocFileName(version: Version, versionObj: VersionObj): string {
+    // If we have versions 1.0 followed by 1.1 in the all array, we want to use the older one (the second to last entry in the array) as the name
+    return version.render.fileName + `-v-${versionObj.version}` + (version.render.language ? version.render.language : '') + '.md';
+}
+
+/**
+ * Return true if when we convert the local and remote markdown files to HTML
+ * they are the same, ignoring whitespace in the HTML.
+ * 
+ * @param file 
+ * @returns 
+ */
+function htmlGeneratedFromMarkdownIsSameBetweenLocalAndRemote(file: VersionFile): boolean {
     const local = marked.parser(marked.lexer(file.localMatter.content));
     const remote = marked.parser(marked.lexer(file.remoteMatter.content));
     const htmlDiffer = new HtmlDiffer();
@@ -178,25 +216,30 @@ async function initDocs(now: IsoDateString) {
         const fileMatter = matter(fs.readFileSync(doc, 'utf8')) as FrontMatterFile<string>;
 
         // If there's no version number, set the version number and reset the date
-        if (!fileMatter.data.version) {
-            fileMatter.data.version = {
-                current: '1.0',
-                all: [{version: '1.0', date: now}],
-                _render: generateVersionRenderData(doc, fileMatter.data)
-            }
-            fileMatter.data.date = now;
-            changed = true;
+        //if (!fileMatter.data.version) {
+        fileMatter.data.version = {
+            version: '1.0',
+            current: '1.0',
+            all: [{version: '1.0', date: now}],
+            render: generateVersionRenderData(doc, fileMatter.data)
         }
+        fileMatter.data.date = now;
+        changed = true;
+        //}
 
         if (changed) {
-            const fileContent = stringifyFrontMatter(fileMatter);
-            fs.writeFileSync(doc, fileContent);
+            saveDoc(doc, fileMatter);
         }
     }
 }
 
+function saveDoc(path: string, fileMatter: FrontMatterFile<string>) {
+    const fileContent = stringifyFrontMatter(fileMatter);
+    fs.writeFileSync(path, fileContent);
+}
+
 function generateVersionRenderData(localFilePath: string, frontMatter: FrontMatter, force?: boolean): VersionRender | undefined {
-    let result = frontMatter.version && frontMatter.version._render ? frontMatter.version._render : undefined;
+    let result = frontMatter.version && frontMatter.version.render ? frontMatter.version.render : undefined;
     // The file name to use, if in the front matter, get it, and if not set it.
     let fileName = result && result.fileName;
     
@@ -245,7 +288,7 @@ async function getDocs(path: string) {
  * @returns 
  */
 function ignoreFiles(file: string, stats: fs.Stats) {
-    return stats.isFile() && !file.endsWith('md');
+    return stats.isFile() && !file.endsWith('md') || (stats.isDirectory() && file === VERSIONS_DIR);
 }
 
 (async () => {
@@ -262,6 +305,9 @@ type ListSetting = 'always' // The page will be included in all page collections
                  | 'local'; // The page will be included in any local page collection, e.g. $page.RegularPages, $page.Pages. One use case for this would be to create fully navigable, but headless content sections.
 
 interface Version {
+    // This doc's version
+    version: string;
+
     // The current version number.  Versions start at 1.0 and only have two numbers.
     current: string;
 
@@ -269,7 +315,7 @@ interface Version {
     all: VersionObj[];
 
     // Used to generate version diff markdown files
-    _render: VersionRender;
+    render: VersionRender;
 }
 
 interface VersionRender {

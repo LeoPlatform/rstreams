@@ -4,14 +4,15 @@ description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
 layout: "changelog"
 draft: false
 version:
+  version: "1.0"
   current: "1.0"
   all:
     - version: "1.0"
-      date: "2022-05-19T16:20:15.764Z"
-  _render:
+      date: "2022-05-19T17:55:12.078Z"
+  render:
     fileName: "index"
     language: "en"
-date: "2022-05-19T16:20:15.764Z"
+date: "2022-05-19T17:55:12.078Z"
 ---
 
 ### February Updates

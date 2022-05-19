@@ -1,15 +1,16 @@
 ---
 title: "Fundamentals"
-date: "2022-05-19T16:20:15.764Z"
+date: "2022-05-19T17:55:12.078Z"
 description: "Fundamental concepts."
 draft: false
 weight: 2
 version:
+  version: "1.0"
   current: "1.0"
   all:
     - version: "1.0"
-      date: "2022-05-19T16:20:15.764Z"
-  _render:
+      date: "2022-05-19T17:55:12.078Z"
+  render:
     fileName: "fundamentals"
     language: "en"
 ---

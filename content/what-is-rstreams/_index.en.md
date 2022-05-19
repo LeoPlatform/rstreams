@@ -1,16 +1,17 @@
 ---
 title: "What is RStreams?"
-date: "2022-05-19T16:20:15.764Z"
+date: "2022-05-19T17:55:12.078Z"
 icon: "fas fa-question"
 description: "What is RStreams and why should I use it?"
 type: "docs"
 weight: 1
 version:
+  version: "1.0"
   current: "1.0"
   all:
     - version: "1.0"
-      date: "2022-05-19T16:20:15.764Z"
-  _render:
+      date: "2022-05-19T17:55:12.078Z"
+  render:
     fileName: "_index"
     language: "en"
 ---
