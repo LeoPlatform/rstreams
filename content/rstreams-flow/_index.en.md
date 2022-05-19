@@ -1,11 +1,18 @@
 ---
 title: "RStreams Flow"
-date: "2022-05-18T18:19:42.651Z"
+date: "2022-05-19T16:20:15.764Z"
 icon: "fas fa-stream"
 description: "Be up and running in 10 minutes."
 type: "docs"
 weight: 2
-version: "1.0"
+version:
+  current: "1.0"
+  all:
+    - version: "1.0"
+      date: "2022-05-19T16:20:15.764Z"
+  _render:
+    fileName: "_index"
+    language: "en"
 ---
 
 RStreams Flow is a project template that creates a new empty project to act as a new microservice for you that has everything

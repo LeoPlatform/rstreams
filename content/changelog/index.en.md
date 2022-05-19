@@ -3,8 +3,15 @@ title: "Changelog posts"
 description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt dolore magna aliquyam erat, sed diam voluptua. At vero eos et ustoLorem ipsum dolor sit amet, consetetur."
 layout: "changelog"
 draft: false
-version: "1.0"
-date: "2022-05-18T18:19:42.651Z"
+version:
+  current: "1.0"
+  all:
+    - version: "1.0"
+      date: "2022-05-19T16:20:15.764Z"
+  _render:
+    fileName: "index"
+    language: "en"
+date: "2022-05-19T16:20:15.764Z"
 ---
 
 ### February Updates

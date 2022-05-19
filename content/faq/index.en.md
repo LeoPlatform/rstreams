@@ -5,8 +5,15 @@ draft: false
 _build:
   render: "never"
   list: "never"
-version: "1.0"
-date: "2022-05-18T18:19:42.651Z"
+version:
+  current: "1.0"
+  all:
+    - version: "1.0"
+      date: "2022-05-19T16:20:15.764Z"
+  _render:
+    fileName: "index"
+    language: "en"
+date: "2022-05-19T16:20:15.764Z"
 ---
 
 <!-- { { < faq "Will updates also be free?" > } }

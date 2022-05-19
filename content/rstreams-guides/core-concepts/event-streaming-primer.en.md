@@ -1,10 +1,17 @@
 ---
 title: "Event Streaming Primer"
-date: "2022-05-18T18:19:42.651Z"
+date: "2022-05-19T16:20:15.764Z"
 description: "In-depth guides and how-to's."
 draft: false
 weight: 1
-version: "1.0"
+version:
+  current: "1.0"
+  all:
+    - version: "1.0"
+      date: "2022-05-19T16:20:15.764Z"
+  _render:
+    fileName: "event-streaming-primer"
+    language: "en"
 ---
 {{< collapse-light "ToC" >}}
 {{< toc  >}}

@@ -1,9 +1,16 @@
 ---
 title: "Configuring RStreams"
-date: "2022-05-18T18:19:42.651Z"
+date: "2022-05-19T16:20:15.764Z"
 weight: 4
 draft: false
-version: "1.0"
+version:
+  current: "1.0"
+  all:
+    - version: "1.0"
+      date: "2022-05-19T16:20:15.764Z"
+  _render:
+    fileName: "configuring-rstreams"
+    language: "en"
 ---
 {{< collapse-light "ToC" >}}
 {{< toc  >}}

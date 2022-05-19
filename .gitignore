@@ -33,3 +33,4 @@ die/
 .hugo_build.lock
 public/
 version.js
+build
