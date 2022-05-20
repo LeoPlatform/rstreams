@@ -1,10 +1,10 @@
 ---
 title: "Bot States"
-date: "2022-05-20T07:18:18.878Z"
+date: "2022-05-19T17:55:12.078Z"
 weight: 3
 draft: false
 version:
-  version: "1.1"
+  version: "1.0"
   current: "1.1"
   all:
     - version: "1.0"
@@ -14,6 +14,9 @@ version:
   render:
     fileName: "bot-states"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -43,6 +46,6 @@ The bot has gone “rogue” and been stopped by RStreams because ten successive
 ![Bot State Rogue](../images/bot-state-rogue.png "60px|left")
 
 {{< notice info >}}
-Note the pause icon on the Error State image above which indicates that the bot was manually paused and is no longer executing.
+Note the pause icon on the Error State image above<del class="tooltip">.<span class="top">Removed</span></del> <del class="tooltip"> T<span class="top">Removed</span></del><ins class="tooltip">w<span class="top">Added</span></ins>h<del class="tooltip">at<span class="top">Removed</span></del><ins class="tooltip">ich<span class="top">Added</span></ins> indicates that the bot was manually paused and is no longer executing.
 Bots may be paused in whatever state they currently occupy.  Rogue bots are by definition paused.
 {{</ notice >}}

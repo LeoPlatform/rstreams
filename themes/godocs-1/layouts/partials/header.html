@@ -69,7 +69,7 @@
       </div>
 
       {{if not .IsHome }}
-      <form class="form-inline search-wrapper my-3" name="search-form" class="search-wrapper" action="{{`search` | relLangURL}}" onsubmit="return validateForm()">
+      <form class="form-inline search-wrapper w-250 my-3" name="search-form"  action="{{`search` | relLangURL}}" onsubmit="return validateForm()">
         <input id="search-by" name="s" type="search" class="form-control" placeholder="{{ i18n `search_placeholder`}}">
         <button class="border-0 bg-white" type="submit"><i class="fas fa-search"></i></button>
       </form>

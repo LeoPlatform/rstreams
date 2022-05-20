@@ -253,6 +253,9 @@ a:hover {
 .mb-100 {
   margin-bottom: 100px !important; }
 
+.w-250 {
+  width: 250px !important; }
+
 .zindex-1 {
   z-index: 1; }
 
@@ -885,6 +888,33 @@ img[src$='#right'] {
   transform: rotate(90deg); }
 
 /* end */
+/* Change Date */
+.lastChangeDate {
+  position: relative;
+  float: right;
+  margin-top: -56px; }
+
+.lastChangeDate span.old {
+  color: #b00202; }
+
+.lastChangeDate span.old:hover {
+  color: red; }
+
+.lastChangeDate span.current {
+  color: green; }
+
+.lastChangeDate span.current:hover {
+  color: #00bf00; }
+
+@media screen and (max-width: 790px) {
+  .lastChangeDate {
+    margin-top: -38px; } }
+
+@media screen and (max-width: 640px) {
+  .lastChangeDate {
+    margin-top: -30px; } }
+
+/* end */
 .heading-anchor {
   visibility: hidden;
   color: silver !important;
@@ -929,18 +959,17 @@ h6 .heading-anchor {
 #comments hr {
   display: none; }
 
-.comment-icon-btn {
-  margin-right: 10px;
+.nav-icon-btn {
   color: #3c7ab1;
   cursor: pointer; }
 
-.comment-icon-btn:hover {
+.nav-icon-btn:hover {
   color: #4593d7; }
 
-.comment-icon-btn:active {
+.nav-icon-btn:active {
   color: #346da0; }
 
-.comment-icon-btn .num-comments {
+.nav-icon-btn .num-comments {
   margin-top: 6px;
   text-align: center;
   font-size: 14px;
@@ -957,12 +986,31 @@ del {
   color: red;
   text-decoration: line-through !important; }
 
+#historyList li {
+  padding: 10px;
+  border: 1px solid #cbcaca;
+  margin-bottom: 5px;
+  border-radius: 5px; }
+
+#historyList li.selected {
+  background-color: #e6e6e6;
+  color: #0c9107; }
+
+#historyList li span.current {
+  float: right; }
+
+#historyList li:not(.selected):hover {
+  background-color: #0086ff;
+  color: white;
+  cursor: pointer; }
+
 /* Tooltip */
 .tooltip {
   position: relative;
   display: inline-block;
   opacity: 1;
-  text-decoration: inherit; }
+  text-decoration: inherit;
+  z-index: inherit; }
 
 .tooltip {
   display: inline-block;

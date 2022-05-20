@@ -137,7 +137,7 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
         // Generate the new diff markdown file for the current version
         const newDiffVersionDocContent =  getMarkdownDiffContent(versionFile.remoteMatter.content, versionFile.localMatter.content);
         const prevVersionObj: VersionObj = getPreviousVersion(localVersion, versionFile.localFilePath);
-        const newDiffVersionDocFileName = getLatestDiffVersionDocFileName(localVersion, prevVersionObj);
+        const newDiffVersionDocFileName = getDiffVersionDocFileName(localVersion, prevVersionObj);
         const newDiffVersionDocPath = path.join(versionsPath, newDiffVersionDocFileName);
         const newVersionFile = Object.assign({}, versionFile.localMatter) as FrontMatterFile<string>;
 
@@ -151,6 +151,30 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
         //console.log(newDiffVersionDocContent);
 
         saveDoc(newDiffVersionDocPath, newVersionFile);
+        updateVersionDataInOldVersions(versionFile.localFilePath, localVersion, localVersion.all.length - 3);
+    } else {
+        updateVersionDataInOldVersions(versionFile.localFilePath, localVersion, localVersion.all.length - 2);
+    }
+}
+
+function updateVersionDataInOldVersions(localFilePath: string, version: Version, upToThisVersionIdx?: number) {
+    upToThisVersionIdx = upToThisVersionIdx ? upToThisVersionIdx : version.all.length - 1;
+    if (upToThisVersionIdx < 0) {
+        // No files to process, bust out.
+        return;
+    }
+
+    // Make a copy to save in the files so all old files get all new versions
+    const versionsPath = path.join(path.dirname(localFilePath), VERSIONS_DIR);
+    for (let i = 0; i <= upToThisVersionIdx; i++) {
+        const versionObj = version.all[i];
+        let filePath = getDiffVersionDocFileName(version, versionObj);
+        filePath = path.join(versionsPath, filePath);
+
+        const file = matter(fs.readFileSync(filePath, 'utf8')) as FrontMatterFile<string>;
+        file.data.version.all = version.all;
+        file.data.version.current = version.current;
+        saveDoc(filePath, file);
     }
 }
 
@@ -201,8 +225,7 @@ function getPreviousVersion(version: Version, filePath: string): VersionObj {
     return version.all[version.all.length-2];
 }
 
-function getLatestDiffVersionDocFileName(version: Version, versionObj: VersionObj): string {
-    // If we have versions 1.0 followed by 1.1 in the all array, we want to use the older one (the second to last entry in the array) as the name
+function getDiffVersionDocFileName(version: Version, versionObj: VersionObj): string {
     return version.render.fileName + `-${versionObj.version}` + (version.render.language ? ('.' + version.render.language) : '') + '.md';
 }
 

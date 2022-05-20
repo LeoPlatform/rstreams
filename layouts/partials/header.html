@@ -2,7 +2,7 @@
 <header class="navigation {{if .IsHome}}top-0{{end}}">
   <div class="container">
     <!-- navbar -->
-    <nav class="navbar px-0 navbar-expand-md navbar-light bg-transparent">
+    <nav class="navbar flex-row d-flex px-0 navbar-expand-md navbar-light bg-transparent" >
       <!-- CHANGE removed / at the end so it would work, it was putting // in as the URL before. -->
       <a class="navbar-brand" href="{{ .Site.BaseURL | relLangURL }}">
         {{ if .Site.Params.logo }}
@@ -10,80 +10,33 @@
         {{ else }}
         {{ .Site.Title }}
         {{ end }}</a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="fas fa-bars h4 text-dark"></i>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <ul class="navbar-nav mx-auto align-items-center">
-          {{ range .Site.Menus.main }}
-          {{ if .HasChildren }}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-              {{ .Name }}
-            </a>
-            <div class="dropdown-menu">
-              {{ range .Children }}
-              <a class="dropdown-item" href="{{ .URL | absURL }}">{{ .Name }}</a>
-              {{ end }}
-            </div>
-          </li>
-          {{ else }}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ .URL | absURL }}">{{ .Name }}</a>
-          </li>
-          {{ end }}
-          {{ end }}
-          <li class="nav-link">
-            <!-- Language List -->
-            {{ if .IsTranslated }}
-            <select class="nav-item" id="select-language" onchange="location = this.value;">
-              {{ $siteLanguages := .Site.Languages}}
-              {{ $pageLang := .Page.Lang}}
-              {{ range .Page.AllTranslations }}
-              {{ $translation := .}}
-              {{ range $siteLanguages }}
-              {{ if eq $translation.Lang .Lang }}
-              {{ $selected := false }}
-              {{ if eq $pageLang .Lang}}
-              <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}" selected>{{ .LanguageName }}
-              </option>
-              {{ else }}
-              <option id="{{ $translation.Language }}" value="{{ $translation.Permalink }}">{{ .LanguageName }}</option>
-              {{ end }}
-              {{ end }}
-              {{ end }}
-              {{ end }}
-            </select>
-            {{ end }}
-          </li>
-        </ul>
-
-        <!-- for mobile -->
-        <div class="d-lg-none d-block">
-          {{ range site.Params.nav_button }}
-          <a href="{{ .link | absLangURL }}"
-            class="btn btn-sm {{if eq .style `outline`}}btn-outline-primary{{else}}btn-primary{{end}} ml-lg-4">{{ .label }}</a>
-          {{ end }}
-        </div>
-        <!-- /for mobile -->
-      </div>
 
       {{if not .IsHome }}
-	  <a class="fa-stack comment-icon-btn" href="#comments">
-		<!-- The icon that will wrap the number -->
-		<i class="far fa-comment fa-stack-2x"></i>
-		<i id="commentPlusHeader" class="fas fa-plus fa-stack-1x"></i>
-		<!-- a strong element with the custom content, in this case a number -->
-		<span id="totalCommentCountHeader" class="fa-stack-1x num-comments" style="display: none">
-			0
-		</span>
-	  </a>
+      <div class="d-flex flex-fill align-items-center flex-row-reverse" style="height: 68px;">
 
-      <form class="form-inline search-wrapper my-3" name="search-form" class="search-wrapper" action="{{`search` | relLangURL}}" onsubmit="return validateForm()">
-        <input id="search-by" name="s" type="search" class="form-control" placeholder="{{ i18n `search_placeholder`}}">
-        <button class="border-0 bg-white" type="submit"><i class="fas fa-search"></i></button>
-      </form>
+          <button class="navbar-toggler border-0" style="margin-left: 8px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#navigation" role="button">
+            <i class="fas fa-bars h4 text-dark mb-0"></i>
+          </button>
+
+          <form class="form-inline search-wrapper my-3" name="search-form" class="search-wrapper" action="{{`search` | relLangURL}}" onsubmit="return validateForm()">
+            <input id="search-by" name="s" type="search" class="form-control" placeholder="{{ i18n `search_placeholder`}}">
+            <button class="border-0 bg-white" type="submit"><i class="fas fa-search"></i></button>
+          </form>
+          
+    	  <a class="fa-stack nav-icon-btn" href="#comments" style="margin-right: 8px;">
+    		<!-- The icon that will wrap the number -->
+    		<i class="far fa-comment fa-stack-2x"></i>
+    		<i id="commentPlusHeader" class="fas fa-plus fa-stack-1x"></i>
+    		<!-- a strong element with the custom content, in this case a number -->
+    		<span id="totalCommentCountHeader" class="fa-stack-1x num-comments" style="display: none">
+    			0
+    		</span>
+    	  </a>
+
+          <a class="nav-icon-btn" style="margin-top: 3px;" data-bs-toggle="offcanvas" data-bs-target="#history" role="button">
+    		<i class="fas fa-history" style="height: 1.8em; width: 2.5em"></i>
+    	  </a>
+        </div>
       {{ end }}
 
       <script>
@@ -108,3 +61,92 @@
   </div>
 </header>
 {{ "<!-- /navigation -->" | safeHTML }}
+<!-- navbar-collapse -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="navigation">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Navigation</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <ul class="sidenav offcanvas-body">
+        {{ $currentNode := . }}
+        {{range .Site.Home.Sections.ByWeight}}
+        <!-- not render any single page, like contact page. -->
+        {{ $numberOfMainPages := len .Pages }}
+        {{ if eq $numberOfMainPages 0 }}
+        {{ else }}
+        <!-- /not render any single page, like contact page. -->
+        {{ template "section-tree-nav" dict "sect" . "currentnode" $currentNode}}
+        {{ end }}
+        {{ end }}
+    </ul>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="history">
+<div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">History</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+
+<ul id="historyList" class="offcanvas-body">
+</ul>
+
+</div>
+
+<script type="text/javascript">
+window.addEventListener('load', setupHistory);
+function setupHistory(evt) {
+    //let version = {version: {{ .Params.version.all }}};
+    const version = JSON.parse({{ .Params.version | jsonify }});
+    const lcd = document.getElementById('lastChangeDate');
+    const d = getPrettyConvertedDate('{{ .Params.date }}');
+    lcd.innerHTML = version.version !== version.current ? `<span class="old">Old Version: ${d}</span>` : `<span class="current">Current Version: ${d}</span>`;
+    
+    console.log(JSON.stringify(version, null, 4));
+    const ul = document.getElementById('historyList');
+    const pageIsCurrentVersion = version.current === version.version;
+
+    for (let i = version.all.length - 1; i >= 0; i--) {
+        const v = version.all[i];
+        const d = getPrettyConvertedDate(v.date);
+        
+        const li = document.createElement('li');
+        const current = v.version === version.current;
+        const selected = v.version === version.version;
+
+        if (current) {
+            li.classList.add('current');
+        }
+        if (selected) {
+            li.classList.add('selected');
+        } else {
+            li.addEventListener('click', function(evt) {
+                //TODO: version.render.fileName got turned into version.render.filename somehow
+                const isIndex = version.render.filename.startsWith('_index');
+
+                if (current) {
+                    // This means I clicked to go to the current version and that
+                    // we're right now not in the current which means we're buried
+                    // inside versions.
+                    window.location.href = isIndex ? '../../' : '../../' + version.render.filename;
+                } else {
+                    window.location.href = (pageIsCurrentVersion ? (isIndex ? '' : '../') : '../../') + 'versions/' + version.render.filename + '-' + v.version; 
+                }
+            });
+        }
+
+        li.innerHTML = `<span class="date">${getPrettyConvertedDate(v.date, true)}</span>` + 
+                       `<span class="current">${v.version}</span>`;
+        ul.appendChild(li);
+    }
+}
+
+function getPrettyConvertedDate(d, includeTime) {
+    let obj = {year:"numeric", month:"short", day:"numeric"};
+    if (includeTime) {
+        obj.hour = "numeric",
+        obj.minute = "numeric"
+    }
+    return (new Date(d)).toLocaleDateString('en-us', obj);
+}
+</script>
