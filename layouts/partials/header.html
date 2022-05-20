@@ -99,7 +99,9 @@ function setupHistory(evt) {
     //let version = {version: {{ .Params.version.all }}};
     const version = JSON.parse({{ .Params.version | jsonify }});
     const lcd = document.getElementById('lastChangeDate');
-    const d = getPrettyConvertedDate('{{ .Params.date }}');
+    const versionObj = getVersionObj(version.version, version.all);
+    console.log(versionObj);
+    const d = getPrettyConvertedDate(versionObj.date);
     lcd.innerHTML = version.version !== version.current ? `<span class="old">Old Version: ${d}</span>` : `<span class="current">Current Version: ${d}</span>`;
     
     console.log(JSON.stringify(version, null, 4));
@@ -141,11 +143,22 @@ function setupHistory(evt) {
     }
 }
 
+function getVersionObj(versionNum, allVersions) {
+    let result = null;
+    for (let versionObj of allVersions) {
+        if (versionObj.version === versionNum) {
+            result = versionObj;
+            break;
+        }
+    }
+    return result;
+}
+
 function getPrettyConvertedDate(d, includeTime) {
     let obj = {year:"numeric", month:"short", day:"numeric"};
     if (includeTime) {
-        obj.hour = "numeric",
-        obj.minute = "numeric"
+        obj.hour = "numeric";
+        obj.minute = "numeric";
     }
     return (new Date(d)).toLocaleDateString('en-us', obj);
 }
