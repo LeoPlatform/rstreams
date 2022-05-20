@@ -4,6 +4,14 @@ set -e
 
 echo "Pre-commit version generation underway!"
 echo $PWD
+
+commit=$(git log -1 --pretty="%H%n%ci")
+echo $commit
+commit_hash=$(echo "$commit" | head -1)
+echo $commit_hash
+commit_date=$(echo "$commit" | head -2 | tail -1)
+echo $commit_date
+
 ts-node version.ts
 
 if [ -e build/files-changed-by-version-script.txt ]
