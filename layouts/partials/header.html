@@ -138,7 +138,7 @@ function setupHistory(evt) {
         }
 
         li.innerHTML = `<span class="date">${getPrettyConvertedDate(v.date, true)}</span>` + 
-                       `<span class="current">${v.version}</span>`;
+                       `<span class="current">v${v.version}</span>`;
         ul.appendChild(li);
     }
 }
