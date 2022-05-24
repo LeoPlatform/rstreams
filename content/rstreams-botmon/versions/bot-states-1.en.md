@@ -4,12 +4,12 @@ date: "2022-05-19T17:55:12.078Z"
 weight: 3
 draft: false
 version:
-  version: "1.0"
-  current: "1.1"
+  version: 1
+  current: 2
   all:
-    - version: "1.0"
+    - version: 1
       date: "2022-05-19T17:55:12.078Z"
-    - version: "1.1"
+    - version: 2
       date: "2022-05-20T07:18:18.878Z"
   render:
     fileName: "bot-states"

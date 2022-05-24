@@ -6,10 +6,10 @@ description: "In-depth guides and how-to's."
 type: "docs"
 weight: 3
 version:
-  version: "1.0"
-  current: "1.0"
+  version: 1
+  current: 1
   all:
-    - version: "1.0"
+    - version: 1
       date: "2022-05-19T17:55:12.078Z"
   render:
     fileName: "_index"

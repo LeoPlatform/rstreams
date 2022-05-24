@@ -6,16 +6,16 @@ description: "Monitor, trace and debug events in the bus in real-time."
 type: "docs"
 weight: 6
 version:
-  version: "1.3"
-  current: "1.3"
+  version: 4
+  current: 4
   all:
-    - version: "1.0"
+    - version: 1
       date: "2022-05-19T17:55:12.078Z"
-    - version: "1.1"
+    - version: 2
       date: "2022-05-19T21:38:39.798Z"
-    - version: "1.2"
+    - version: 3
       date: "2022-05-19T22:11:08.560Z"
-    - version: "1.3"
+    - version: 4
       date: "2022-05-20T07:18:18.878Z"
   render:
     fileName: "_index"

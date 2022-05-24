@@ -10,6 +10,6 @@ module.exports = {
     },
     rules: {
         indent: ["error", 4],
-        noEmpty: 0
+        "no-empty": false
     }
 };

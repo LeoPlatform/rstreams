@@ -6,10 +6,10 @@ description: "What is RStreams and why should I use it?"
 type: "docs"
 weight: 1
 version:
-  version: "1.0"
-  current: "1.0"
+  version: 1
+  current: 1
   all:
-    - version: "1.0"
+    - version: 1
       date: "2022-05-19T17:55:12.078Z"
   render:
     fileName: "_index"

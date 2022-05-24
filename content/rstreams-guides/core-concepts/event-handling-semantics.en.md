@@ -5,10 +5,10 @@ description: "How event handling works in RStreams"
 draft: false
 weight: 3
 version:
-  version: "1.0"
-  current: "1.0"
+  version: 1
+  current: 1
   all:
-    - version: "1.0"
+    - version: 1
       date: "2022-05-19T17:55:12.078Z"
   render:
     fileName: "event-handling-semantics"
