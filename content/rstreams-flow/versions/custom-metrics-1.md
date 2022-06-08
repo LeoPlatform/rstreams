@@ -5,7 +5,7 @@ weight: 4
 draft: false
 newUntil: "2022-08-07T07:18:18.878Z"
 version:
-  version: 2
+  version: 1
   current: 2
   all:
     - version: 1
@@ -14,6 +14,9 @@ version:
       date: "2022-06-08T18:46:02.175Z"
   render:
     fileName: "custom-metrics"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -148,7 +151,7 @@ goes looking for values to the following tags not already specified and if it fi
 | workflow | Optional. Some bots/queues work with specific types of data.  This allows for tagging metrics based on the type of data or operation that the metric applies to. ``DynamicMetricReporter`` will sometimes be able to discover workflow.|
 | component | Optional.  This allows for sub-component delineation within a microservice.  It must be provided by the developer. |
 
-## Tags for Lambdas and Bots
+##<ins class="tooltip"></ins> <ins>Tags for Lambdas and Bots
 The ``DynamicMetricReporter`` will discover the ``app`` and ``environment`` tags that should be added to the custom metrics developers ``log`` in most cases.
 However, AWS provides many useful metrics on the underlying lambda that one might want to associate with the bot in a telemetry tool. RStreams Flow serverless
 projects should include the following in the project's root serverless.yml file in the provider section.  All the ``stackTags`` entry in serverless.yml does is
@@ -158,23 +161,17 @@ provided by AWS lambda with metrics reported by a developer's own code on a sing
 {{< notice info >}}Note that it is important that the service name (see ``service:``in your serverless.yml) is used as the app tag for serverless projects to ensure metrics are correctly correlated and
 discoverable in your external telemtry system.{{</ notice >}}
 
-{{< collapse-light "Stack Tags Example" true >}}
+{{< collapse-light "Stack Tags <span class="top">Added</span></ins>Example<ins class="tooltip">" true >}}
 ```yml
-service: rstreams-example
-provider:
-    stage: ${opt:stage, 'dev'}
+<span class="top">Added</span></ins>s<ins class="tooltip">ervice: rstreams-example<span class="top">Added</span></ins>
+<ins class="tooltip">provider:<span class="top">Added</span></ins>
+<ins class="tooltip">    stage: $<span class="top">Added</span></ins>{<ins class="tooltip">opt:stage, 'dev'}
     stackTags:
-        app: ${self:service}
+        app: $<span class="top">Added</span></ins>{<ins class="tooltip">self:service}
         environment: ${self:provider.stage}
 ```
-{{</ collapse-light >}}
-
-This grabs the service name as the app name and sets the environment at deploy time based on the environment you are deploying to. Thus any AWS lambda
-metrics pushed into your external telemetry system will include these tags automatically.
-
-# Examples
-
-{{< collapse-light "App Example" true >}}
+{{<span class="top">Added</span></ins><<ins class="tooltip">/<span class="top">Added</span></ins> collapse-light 
+# <ins class="tooltip">Examples<span class="top">Added</span></ins>"App Example" true >}}
 ```typescript
 import AWS from "aws-sdk";
 import { DynamicMetricReporter, Metric } from "rstreams-metrics";

@@ -63,7 +63,7 @@ function adjustVersion(versionFile: VersionFile, now: IsoDateString) {
     const localVersion: Version = versionFile.localMatter.data.version;
     const remoteVersion: Version = versionFile.remoteMatter.data.version;
 
-    const oldVerNum = remoteVersion.current || 1;
+    const oldVerNum = remoteVersion && remoteVersion.current ? remoteVersion.current : 1;
     let newVerNum: number;
     let genVer = false;
 
@@ -211,8 +211,8 @@ async function initDocs(now: IsoDateString) {
 }
 
 function generateVersionRenderData(localFilePath: string, frontMatter: FrontMatter, force?: boolean): VersionRender {
-    const hasFileName = frontMatter.version.render && frontMatter.version.render.fileName;
-    const hasLanguage = frontMatter.version.render && frontMatter.version.render.language;
+    const hasFileName = frontMatter.version && frontMatter.version.render && frontMatter.version.render.fileName;
+    const hasLanguage = frontMatter.version && frontMatter.version.render && frontMatter.version.render.language;
     let result: VersionRender = {fileName: hasFileName ? frontMatter.version.render.fileName : '', 
         language: hasLanguage ? frontMatter.version.render.language : undefined};
 
