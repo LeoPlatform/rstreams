@@ -104,7 +104,7 @@ developers don't have to go get it.  It will also take care to call the ``start`
 
 This is the definition of ``Metric`` that can be sent using the ``log`` method.
 
-{{< collapse-light "Metric Interace" true >}}
+{{< collapse-light "Metric Interface" true >}}
 ```typescript
 export interface Metric {
 	id: string,
