@@ -115,7 +115,7 @@
 {{ with $currentNode.File }}{{ $currentNodeFileUniqueID = .UniqueID }}{{ end }}
 <li data-nav-id="{{.Permalink}}" title="{{.Title}}"
   class="sidelist {{if .IsAncestor $currentNode }}parent{{end}} {{if eq $fileUniqueID $currentNodeFileUniqueID}}active{{end}}">
-  <a href="{{.Permalink}}">{{.Title }} {{ if .Params.newUntil}} <span class="newNavElement hide" data-new-until="{{.Params.newUntil}}">NEW</span>{{end}}</a>
+  <a href="{{.Permalink}}">{{.Title }}</a>
   {{ $numberOfPages := (add (len .Pages) (len .Sections)) }}
   {{ if ne $numberOfPages 0 }}
   <ul>
@@ -134,16 +134,3 @@
 {{ end }}
 {{ end }}
 
-<script type="text/javascript">
-    const els = document.querySelectorAll('[data-new-until]');
-    for (let el of els) {
-        const dateStr = el.getAttribute('data-new-until');
-        try {
-            if ((new Date(dateStr)).getTime() > (new Date()).getTime()) {
-                el.classList.remove('hide');
-            }
-        } catch (ex) {
-            // Do nothing
-        } 
-    }
-</script>

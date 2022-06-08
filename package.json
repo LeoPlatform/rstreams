@@ -6,7 +6,7 @@
   "scripts": {
     "build": "hugo --minify --cleanDestinationDir --forceSyncStatic",
     "create": "hugo new",
-    "serve": "hugo server --minify --cleanDestinationDir --forceSyncStatic",
+    "serve": "hugo server --minify --cleanDestinationDir --forceSyncStatic --disableFastRender",
     "lint": "eslint . --fix"
   },
   "repository": {
