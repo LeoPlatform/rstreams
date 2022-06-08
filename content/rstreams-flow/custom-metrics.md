@@ -16,7 +16,7 @@ particular SDK version and can be used independently.{{</ notice >}}
 # Summary
 Developers will want to send custom metrics from their code to external systems.  This is accomplished with
 a new module named ``rstreams-metrics``.  The goal is to create a library, provided by ``rstreams-metrics``,
-that abstracts away an external telemtry system from one's code.  There are many different telemetry
+that abstracts away an external telemetry system from one's code.  There are many different telemetry
 providers including DataDog, New Relic, AWS Cloudwatch, etc.  Since these are prone to change over time, 
 it's important to not wed one's code to a particular provider.
 
@@ -24,7 +24,7 @@ Today, the library supports DataDog and new factories can easily be created.
 
 # Installation
 
-Simnjply add the NPM dependency to your project.
+Simply add the NPM dependency to your project.
 
 ```json
 npm install rstreams-metrics
