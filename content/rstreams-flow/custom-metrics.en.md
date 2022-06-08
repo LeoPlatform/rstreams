@@ -1,19 +1,18 @@
 ---
 title: "Custom Metrics"
-date: "2022-06-08T19:03:48.740Z"
+date: "2022-06-08T19:52:46.175Z"
 weight: 4
 draft: false
 newUntil: "2022-08-07T07:18:18.878Z"
 version:
-  version: 2
-  current: 2
+  version: 1
+  current: 1
   all:
     - version: 1
-      date: "2022-06-08T18:46:02.175Z"
-    - version: 2
-      date: "2022-06-08T19:03:48.740Z"
+      date: "2022-06-08T19:52:46.175Z"
   render:
     fileName: "custom-metrics"
+    language: "en"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -62,6 +61,68 @@ that connects to DataDog.
 }
 ```
 {{</ collapse-light >}}
+
+## Permissions
+
+You will need to have permissions to access the ``GlobalRSFMetricConfig`` secret.  Add a policy to the list
+of policies for bots by adding the policy ``MetricsSecretAccess`` seen below to the 
+``Resources->BotRole->Properties->Policies`` section of ``<project-root>/cloudformation/roles.yml``.
+
+{{< collapse-light "Roles yml File" true >}}
+```yml
+Resources:
+  BotRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\
+      Policies:
+        - PolicyName: MetricsSecretAccess
+          PolicyDocument: 
+            Version: '2012-10-17'
+            Statement:
+            - Action: secretsmanager:GetSecretValue
+              Effect: Allow
+              Resource: 
+                Fn::Sub: arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:GlobalRSFMetricConfigs-*
+
+```
+{{</ collapse-light >}}
+
+Which will then generate the following in your cloud formation template when deploying:
+
+{{< collapse-light "Generated Policy in Cloud Formation" false >}}
+```json
+{
+  "PolicyName":"MetricsSecretAccess",
+  "PolicyDocument":{
+    "Version":"2012-10-17",
+    "Statement":[
+      {
+        "Action":"secretsmanager:GetSecretValue",
+        "Effect":"Allow",
+        "Resource":{
+          "Fn::Sub":"arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:GlobalRSFMetricConfigs-*"
+        }
+      }
+    ]
+  }
+}
+```
+{{</ collapse-light >}}
+
+## Example
 
 Here's some sample code that will retrieve the ``GlobalRSFMetricConfig`` from Secrets Manager.
 
