@@ -113,9 +113,11 @@
 {{ with .File }}{{ $fileUniqueID = .UniqueID }}{{ end }}
 {{ $currentNodeFileUniqueID := "" }}
 {{ with $currentNode.File }}{{ $currentNodeFileUniqueID = .UniqueID }}{{ end }}
+
+
 <li data-nav-id="{{.Permalink}}" title="{{.Title}}"
-  class="sidelist {{if .IsAncestor $currentNode }}parent{{end}} {{if eq $fileUniqueID $currentNodeFileUniqueID}}active{{end}}">
-  <a href="{{.Permalink}}">a: {{.IsAncestor $currentNode}}  - {{.Title }} {{ if .Params.newUntil}} <span class="newNavElement hide" data-new-until="{{.Params.newUntil}}">NEW</span>{{end}}</a>
+  class="sidelist {{if .IsAncestor $currentNode}}parent{{end}} {{if eq $fileUniqueID $currentNodeFileUniqueID}}active{{end}}" data-file-path="{{ with .File }}{{ .Path }}{{ end }}">
+  <a href="{{.Permalink}}">{{.Title }} {{ if .Params.newUntil}} <span class="newNavElement hide" data-new-until="{{.Params.newUntil}}">NEW</span>{{end}}</a>
   {{ $numberOfPages := (add (len .Pages) (len .Sections)) }}
   {{ if ne $numberOfPages 0 }}
   <ul>
@@ -146,4 +148,22 @@
             // Do nothing
         } 
     }
+
+    //KLUDGE ADDING PARENT CLASS SINCE IT BROKE WITH NEW HUGO RELEASE
+    const currentPath = '{{ if $currentNode}}{{ if $currentNode.File}}{{$currentNode.File.Path}}{{end}}{{end}}';
+    const kludePaths = ['what-is-rstreams/_index.en.md',
+                        'rstreams-flow/_index.en.md',
+                        'rstreams-guides/_index.en.md',
+                        'rstreams-node-sdk/_index.en.md',
+                        'rstreams-bus/_index.en.md',
+                        'rstreams-botmon/_index.en.md'];
+    if (currentPath && kludePaths.indexOf(currentPath) > -1) {
+        const els = document.querySelectorAll(`[data-file-path="${currentPath}"]`);
+        for (let el of els) {
+            if (!el.classList.contains('parent')) {
+                el.classList.add('parent');
+            }
+        }
+    }
+
 </script>
