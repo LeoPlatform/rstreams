@@ -5,7 +5,7 @@ weight: 4
 draft: false
 newUntil: "2022-08-07T07:18:18.878Z"
 version:
-  version: 2
+  version: 1
   current: 2
   all:
     - version: 1
@@ -15,6 +15,9 @@ version:
   render:
     fileName: "custom-metrics"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -46,14 +49,14 @@ The developer needs to go get the config necessary to authenticate and communica
 provider.  This should be done in such a way that this config can change without requiring the
 developer to change her code.  There are many ways to solve this.  
 
-By convention, there should be an AWS Secret named ``GlobalRSFMetricConfigs``.  Developers do not need to 
+By convention, there should be an AWS Secret named ``GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>``.  Developers do not need to 
 know or care about what is inside this object they just need to know that it exists for them to use.
 It will contain the config necessary to work with a specific
 metric reporter.  Today, ``rstreams-metrics`` supports DataDog and this object will contain the
-config necessary to connect with a given provider(s).  Here is an example ``GlobalRSFMetricConfigs``
+config necessary to connect with a given provider(s).  Here is an example ``GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>``
 that connects to DataDog.
 
-{{< collapse-light "GlobalRSFMetricConfigs Secret" true >}}
+{{< collapse-light "GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins> Secret" true >}}
 ```json
 {
     "DataDog": {
@@ -66,7 +69,7 @@ that connects to DataDog.
 
 ## Permissions
 
-You will need to have permissions to access the ``GlobalRSFMetricConfigs`` secret.  Add a policy to the list
+You will need to have permissions to access the ``GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>`` secret.  Add a policy to the list
 of policies for bots by adding the policy ``MetricsSecretAccess`` seen below to the 
 ``Resources->BotRole->Properties->Policies`` section of ``<project-root>/cloudformation/roles.yml``.
 
@@ -126,7 +129,7 @@ Which will then generate the following in your cloud formation template when dep
 
 ## Example
 
-Here's some sample code that will retrieve the ``GlobalRSFMetricConfigs`` from Secrets Manager.
+Here's some sample code that will retrieve the ``GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>`` from Secrets Manager.
 
 {{< notice info >}}Note that it is recommended that this metric be replicated across more than one region
  to ensure high availability.  Note that RStreams Flow will be tricked out shortly to retrieve this
@@ -136,7 +139,7 @@ secret at build time using config.{{</ notice >}}
 ```typescript
 import AWS from "aws-sdk";
 const secret = await new AWS.SecretsManager({region: process.env.AWS_REGION}).
-                   getSecretValue({ SecretId: "GlobalRSFMetricConfigs" }).promise();
+                   getSecretValue({ SecretId: "GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>" }).promise();
 ```
 {{</ collapse-light >}}
 
@@ -247,7 +250,7 @@ import { DynamicMetricReporter, Metric } from "rstreams-metrics";
 const metricReporter: DynamicMetricReporter = new DynamicMetricReporter((async () => {
     // Get the secret with the config to connect to the external telemetry system
     const secret = await new AWS.SecretsManager({region: process.env.AWS_REGION}).
-                     getSecretValue({ SecretId: "GlobalRSFMetricConfigs" }).promise();
+                     getSecretValue({ SecretId: "GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>" }).promise();
 
 
     // Turn the secret string into an object
@@ -315,7 +318,7 @@ import { DynamicMetricReporter } from "rstreams-metrics";
 const metricReporter: DynamicMetricReporter = new DynamicMetricReporter((async () => {
         // Get the secret with the config to connect to the external telemetry system
     const secret = await new AWS.SecretsManager({region: process.env.AWS_REGION}).
-                     getSecretValue({ SecretId: "GlobalRSFMetricConfigs" }).promise();
+                     getSecretValue({ SecretId: "GlobalRSFMetricConfig<ins class="tooltip">s<span class="top">Added</span></ins>" }).promise();
 
 	return JSON.parse(secret.SecretString);
 })());
