@@ -93,7 +93,7 @@ environment and survives across invocations of your bot/lambda.
 
 ## DynamicMetricReporter Session
 For bots/lambdas, you should call the ``start`` method at the beginning of your handler and the ``end``
-method at the very end of your lambda.
+method at the very end of your handler function.
 
 {{< notice info >}} A future RStreams Flow release will further simplify
 custom metrics by knowing how to retrieve the configuration necessary by convention so
