@@ -6,14 +6,16 @@ import { marked } from 'marked';
 import {HtmlDiffer} from 'html-differ';
 import simpleGit, { SimpleGit } from 'simple-git';
 import recursive from "recursive-readdir";
+import * as shell from 'shelljs';
 
-export const CONTENT_ROOT = path.join(__dirname, 'content');
+export const CONTENT_DIR = 'content';
+export const CONTENT_ROOT = path.join(__dirname, CONTENT_DIR);
 export const VERSIONS_DIR = 'versions';
 const BUILD_DIR = path.join(__dirname, 'build');
 const REMOTE_GIT_DIR = path.join(BUILD_DIR, 'rstreams-cloned-from-master');
 const REMOTE_GIT_REPO_URL = 'https://github.com/LeoPlatform/rstreams.git';
-const REMOTE_CONTENT_ROOT = path.join(REMOTE_GIT_DIR, 'content');
-
+const REMOTE_CONTENT_ROOT = path.join(REMOTE_GIT_DIR, CONTENT_DIR);
+const CHANGED_FILES_PATH = path.join(BUILD_DIR, 'files-changed-by-version-script.txt');
 
 export type IsoDateString = string;
 export type RenderSetting = 'always' // The page will be rendered to disk and get a RelPermalink etc.
@@ -23,6 +25,12 @@ export type RenderSetting = 'always' // The page will be rendered to disk and ge
 export type ListSetting = 'always' // The page will be included in all page collections, e.g. site.RegularPages, $page.Pages.
                         | 'never'  // The page will not be included in any page collection.
                         | 'local'; // The page will be included in any local page collection, e.g. $page.RegularPages, $page.Pages. One use case for this would be to create fully navigable, but headless content sections.
+
+export interface GitCommit {
+    commitHash: string;
+    commitDate: Date;
+    file: FrontMatterFile<string>;
+}
 
 export interface VersionFileUnsafe {
     relativeFilePath: string;
@@ -85,6 +93,15 @@ export interface VersionObj {
 }
 
 /**
+ * We know that collapsed is there so the commit values must be there.
+ */
+export interface VersionObjCollapsed extends VersionObj {
+    collapsed: Collapsed;
+    commitHash: string;
+    commitDate: IsoDateString;
+}
+
+/**
  * If a doc version represents multiple collapsed versions then this is the start/end commit/hash date
  * for the versions that this one version represents.
  */
@@ -144,6 +161,7 @@ export interface FrontMatter {
     draft?: boolean;
     version: Version;
     date?: IsoDateString;
+    newUntil?: IsoDateString;
     _build?: {
         render?: RenderSetting
         list?: ListSetting
@@ -300,17 +318,14 @@ export function getFileNameAndLanguageFromDocFile(docFilePath: string): VersionR
  * @returns 
  */
  export function htmlGeneratedFromMarkdownIsSameBetweenLocalAndRemote(file: VersionFile): boolean {
-    const local = marked.parser(marked.lexer(file.localMatter.content));
-    const remote = marked.parser(marked.lexer(file.remoteMatter.content));
+    return htmlGeneratedFromMarkdownIsSameBetweenTwoFiles(file.localMatter.content, file.remoteMatter.content);
+}
+
+export function htmlGeneratedFromMarkdownIsSameBetweenTwoFiles(fileContent1: string, fileContent2: string): boolean {
+    const one = marked.parser(marked.lexer(fileContent1));
+    const two = marked.parser(marked.lexer(fileContent2));
     const htmlDiffer = new HtmlDiffer();
-
-    const isEqual = htmlDiffer.isEqual(local, remote);
-
-    if (!isEqual) {
-        console.log('Local vs. remote different:' + file.relativeFilePath);
-    }
-
-    return isEqual;
+    return htmlDiffer.isEqual(one, two);
 }
 
 /**
@@ -336,10 +351,25 @@ export function getFileNameAndLanguageFromDocFile(docFilePath: string): VersionR
  * @param path 
  * @param local 
  */
- export function getRelativeFilePath(path: string, local: boolean): string {
-    const BASE_PATH = local ? CONTENT_ROOT : REMOTE_CONTENT_ROOT;
-    const idx = path.indexOf(BASE_PATH) + BASE_PATH.length;
-    return path.substring(idx);
+ export function getRelativeFilePath(filePath: string, local: boolean): string {
+    let result: string | undefined;
+    if (path.isAbsolute(filePath)) {
+        const BASE_PATH = local ? CONTENT_ROOT : REMOTE_CONTENT_ROOT;
+        const idx = filePath.indexOf(BASE_PATH) + BASE_PATH.length;
+        result =  filePath.substring(idx);
+    } else {
+        // If content director is on there, remove it.  We want to get the path relative to what's inside the content dir.
+        const idx = filePath.lastIndexOf(CONTENT_DIR + '/');
+        if (idx !== -1) {
+            result =  filePath.substring(idx + 1 + CONTENT_DIR.length);
+        } else {
+            result = filePath;
+        }
+    }
+
+    if (result === undefined) {throw new Error('Unexpected state: result should have had a value');}
+
+    return result;
 }
 
 /**
@@ -378,6 +408,19 @@ export async function getAllRemoteContentFiles(): Promise<string[]> {
     return await getDocs(REMOTE_CONTENT_ROOT);
 }
 
+/**
+ * Checks out a specific commit version of a given file in the build dir, parses it and puts it in the gitCommit.file
+ * attribute of the passed in object.
+ * @param commit The version from git of the file that we want
+ * @param relativeFilePath Must be a path relative to the content directory, ex: rstreams-bus/_index.en.md
+ */
+export async function getSpecificVersionOfFileFromGit(commitHash: string, relativeFilePath: string): Promise<FrontMatterFile<string>> {
+    await initBuild();
+    const filePath = path.join(REMOTE_CONTENT_ROOT, relativeFilePath);
+    const result: shell.ShellString = shell.exec(`git checkout ${commitHash} ${filePath}`, { silent: true });
+    return getFrontMatterFile(filePath);
+}
+
 export function saveDoc(path: string, fileMatter: FrontMatterFile<string>, files: string[]) {
     const fileContent = stringifyFrontMatter(fileMatter);
     fs.writeFileSync(path, fileContent);
@@ -396,6 +439,32 @@ export async function writeFilesChanged(filesChanged: string[]) {
     fs.writeFileSync(CHANGED_FILES_PATH, fileContent);
 }
 
+export async function getCommits(filePath: string): Promise<GitCommit[]> {
+    //TODO: will we need to set baseDir: BUILD_DIR in the options you can pass in?
+    const commitHistory: shell.ShellString = shell.exec(`git log --follow --pretty="%H@%aD" ${filePath}`, { silent: true });
+    const lines = commitHistory.split('\n');
+    const result: GitCommit[] = [];
+    const relFilePath = getRelativeFilePath(filePath, true);
+    
+    for (const line of lines) {
+        // The last line might just be an empty string I saw
+        if (line.trim().length === 0) {continue}
+
+        const arr = line.split('@');
+        if (arr.length !== 2) {
+            throw new Error('Expected each non empty git log entry to have hash@date format and instead found ${line}');
+        } else {/* good to go*/}
+
+        // Go get the file for each commit
+        const file: FrontMatterFile<string> = await getSpecificVersionOfFileFromGit(arr[0], relFilePath);
+        if (file === undefined) {
+            throw new Error('Unexpected state: did not get file for git commit ${arr[0]}');
+        }
+        result.push({commitHash: arr[0], commitDate: new Date(arr[1]), file});
+    }
+
+    return result;
+}
 
 //TODO: was doing this in versions.ts as the last thing in the main method.  Don't think we need it
 // await writeFilesChanged();

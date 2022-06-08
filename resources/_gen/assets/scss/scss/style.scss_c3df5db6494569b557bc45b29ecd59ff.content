@@ -1069,3 +1069,20 @@ del.tooltip .top {
   background-color: #eeeded;
   border: 1px solid #e7e5e5;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5); }
+
+/** New Nav Element marker **/
+.newNavElement {
+  border: 1px solid gray;
+  padding-top: 2px !important;
+  padding-bottom: 1px !important;
+  padding-right: 3px !important;
+  padding-left: 3px !important;
+  border-radius: 4px !important;
+  background-color: #00a328;
+  color: white;
+  font-weight: normal !important; }
+
+.newNavElement.hide {
+  display: none; }
+
+/** END New Nav Element marker **/
