@@ -1,6 +1,6 @@
 ---
 title: "Smart Config"
-date: "2022-05-19T17:55:12.078Z"
+date: "2022-08-01T17:55:12.078Z"
 weight: 5
 draft: false
 version:
@@ -9,6 +9,8 @@ version:
   all:
     - version: 1
       date: "2022-08-01T17:55:12.078Z"
+    - version: 2
+      date: "2022-08-12T09:00:00.000Z"
   render:
     fileName: "smart-config"
     language: "en"
@@ -36,6 +38,40 @@ In most instance, you'll want to use a credential management tool such as [kerb-
 also setup your `.aws/credentials` file with static credentials to connect to AWS.
 
 # Using Smart Config
+
+## Serverless.yml
+
+To use `Smart Config`projects require additional `serverless.yml` properties.  A template below can be pasted into the `custom` section of your `serverless.yml`.
+
+{{< collapse-light "Serverles.yml">}}
+```yaml
+custom:
+  leo:
+    rsfVersion: 3,
+    rsfTemplateTokens: #These tokens are generated when you `init-template` through serverless; they are not required.
+      project-name: "weather-watcher"
+      rstreams-bus: "LeoLearn-Bus-CFSO23CHNKQL"
+      region: "us-east-1"
+
+    botIdExcludeStage: true #Determines if bots are named ${service}-$[stage}-${function} or simply ${service}-${function}
+    configurationPath: project-config-new.def.json #path for the project-config definition that smart config will generate
+    
+    rsfConfigType: environment #denotes the configuration type for values (environment or secretsmanager)
+    rsfConfigStages: #the stages involved in this service (e.g. prod, staging, test)
+      - some-stage
+      - a-second-stage
+      - possibly-production
+    rsfConfigReplicationRegions: #if using rsfConfigType: secretsmanager where to replicate secret values too
+      us-west-1:
+        - us-east-1
+```
+{{</ collapse-light >}}
+
+Legacy RStreams projects had a tendency to use a file called `leo_config.json` that includes information about the cron bus and its various tables.  Smart Config provides tools to eliminate this file by providing the `rsfConfigType` above in the project root `serverless.yml`.  The `serverless-leo` plugin looks for the corresponding stage in the `custom.stage.leoStack` setting to populate the `leo_config` information as an Environment Variable from either CloudFormation Export Values or an AWS Secrets Manager secret. 
+
+There is no need to use `Smart Config` to import `leo_config` information as a value to be used from `project-config-new.ts`.
+
+## sls edit-config
 
 {{< notice info >}}In all of the following commands, you must have `serverless-leo` listed in your `serverless.yml` and installed as
 a plugin `serverless plugin install -n serverless-leo`{{</ notice >}}
@@ -114,7 +150,10 @@ When you have added all the resources you want, simply provide `done` to the `Sm
         - `string`
         - `number`
         - `dynamic`
-        - `unknown`
+        - `unknown` 
+            - Fields with unknown types can be changed by appending `::type` to the `project-config-new.def.json`.
+            - You can specify custom types by defining interfaces in a `types.d.ts` file in the same directory
+            as `project-config-new.def.json`
       - `resolution` - When the value should be resolved.  For most instances this will be at deployment, but it is possible to override to runtime deployment `resolve=runtime`.
   The example snippet below shows some completed entries in the map.
 
