@@ -1,10 +1,10 @@
 ---
 title: "Getting Started"
-date: "2022-08-16T20:20:44.365Z"
+date: "2022-05-19T17:55:12.078Z"
 weight: 1
 draft: false
 version:
-  version: 2
+  version: 1
   current: 2
   all:
     - version: 1
@@ -14,6 +14,9 @@ version:
   render:
     fileName: "getting-started"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -38,12 +41,10 @@ Get up an running to develop with RStreams with the sample app in less than 30 m
 RStreams Flow supports whatever version of Node JS is deployable to AWS lambda. At the time of this article,
 that's Node 14.
 
-# Install TypeScripts
-```bash
-npm i -g typescript
-```
-
-# Install the Serverless Framework
+# Install <ins class="tooltip">TypeScrip<span class="top">Added</span></ins>t<ins class="tooltip">s
+```bas<span class="top">Added</span></ins>h<ins class="tooltip">
+npm i -g typ<span class="top">Added</span></ins>e
+#<ins class="tooltip"></ins> <ins>Install the <span class="top">Added</span></ins>Serverless Framework
 Install the [Serverless Framework](https://www.serverless.com/framework/docs/getting-started) as a global package on your development box.
 
 ```json 
@@ -114,8 +115,8 @@ serverless create --template-url https://github.com/LeoPlatform/rstreams-flow-ex
 ## Step 2 - Initialize everything
 1. CD to the root of your project
 1. run `npm install`
-1. install the serverless-leo plugin `serverless plugin install -n serverless-leo`
-1. run this to initialize everything using your project's name as the service name for bots/queues
+1. <ins class="tooltip">install the se<span class="top">Added</span></ins>r<ins class="tooltip">verless-leo pl<span class="top">Added</span></ins>u<ins class="tooltip">gi<span class="top">Added</span></ins>n <ins class="tooltip">`serverless plugin ins<span class="top">Added</span></ins>t<ins class="tooltip">all -n serverless-leo`
+1. run t<span class="top">Added</span></ins>his to initialize everything using your project's name as the service name for bots/queues
    ```bash
    serverless init-template
    ```

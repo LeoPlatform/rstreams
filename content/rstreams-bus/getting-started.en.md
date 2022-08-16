@@ -1,6 +1,6 @@
 ---
 title: "Getting Started"
-date: "2022-08-16T18:57:18.847Z"
+date: "2022-08-16T20:20:44.365Z"
 weight: 1
 draft: false
 version:
@@ -10,7 +10,7 @@ version:
     - version: 1
       date: "2022-05-19T17:55:12.078Z"
     - version: 2
-      date: "2022-08-16T18:57:18.847Z"
+      date: "2022-08-16T20:20:44.365Z"
   render:
     fileName: "getting-started"
     language: "en"
