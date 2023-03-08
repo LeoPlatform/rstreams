@@ -96,9 +96,16 @@ Mock data is located in the RStreams Flow project's `<project-root>/.mock-data` 
 If you want to provide a mock file to be read by the SDK when running locally instead of
 hitting an actual queue, create a file named `{queueName}.jsonl` and put each JSON event
 object on a separate line, following the [JSON Lines](https://jsonlines.org/) convention.
+
+> Be aware that files intended to represent queues need to be placed under the subdirectory `queue`, i.e. `.mock-data/queue`.
+
 So, if your code reads from a queue named `rstreams-example.weather` then you would create this
 file and run the invoke command with the mock flag: 
-`<project-root>/.mock-data/rstreams-example.weather.jsonl`.
+`<project-root>/.mock-data/queue/rstreams-example.weather.jsonl`.
+
+While mock queue files are useful as surrogate data sources, rsdk will always read *ALL* events 
+from the beginning of the `JSONL` file irrespective of the desired starting checkpoint position 
+as can be specified in the `ReadOptions` configuration object.
 
 If you are running locally with the workflow flag on, then the SDK will write to an output
 file named for the queue instead of writing to an actual RStreams Bus queue.  The output
