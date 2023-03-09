@@ -322,3 +322,4 @@ events in the queue.
   "payload": {} // your custom data
 }
 ```
+{{</ collapse-light >}}
