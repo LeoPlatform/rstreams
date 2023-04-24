@@ -1,10 +1,10 @@
 ---
 title: "Getting Started"
-date: "2023-04-24T21:08:52.576Z"
+date: "2022-05-19T17:55:12.078Z"
 weight: 1
 draft: false
 version:
-  version: 2
+  version: 1
   current: 2
   all:
     - version: 1
@@ -14,6 +14,9 @@ version:
   render:
     fileName: "getting-started"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -97,8 +100,8 @@ on creating IAM policies.  Here are the contents of `rstreams-TestBus` that migh
 ## Step 1 - Create the project from the template
 1. Drop to the command line and CD to where you will want your new project to be
 1. Think of a name for your project: lowercase and separate words with dashes, no spaces and no other punctuation.  If this is just a test 
-project for you, name it something like `test-123131`.  Be sure that this name is unique in case others at your company
-are using this guide, maybe add your initials or something.  If this will be the basis of a real project, name it for the 
+project for you, name it something like `test-123131`.  <ins class="tooltip">Be sure that this name is unique in case others at your company
+are using this guide, maybe add your initials or something.  <span class="top">Added</span></ins>If this will be the basis of a real project, name it for the 
 microservice you are creating. What matters is that the name is unique at your company.  The reason for this is that by 
 convention, this sample project will name bots and queues prepended with your project name, which is used as your service
 name.  Of course, you can change this later as you understand how things work more. 
@@ -119,7 +122,7 @@ serverless create --template-url https://github.com/LeoPlatform/rstreams-flow-ex
 ![serverless init-template output](../images/serverless-init-template-output.png)
 
 ## Step 3 - Compile and Run
-1. Run `tsc` or `npx tsc` from the command line to compile TS to JS (execute npm run watch to have a watcher compile TS to JS when files change)
+1. Run `tsc` <ins class="tooltip">or `npx tsc` <span class="top">Added</span></ins>from the command line to compile TS to JS (execute npm run watch to have a watcher compile TS to JS when files change)
 1. Run the weather-loader bot locally hitting an actual RStreams queue
 ```bash
 npm test weather-loader
