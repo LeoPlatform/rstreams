@@ -1,10 +1,10 @@
 ---
 title: "Anatomy of a Bus"
-date: "2023-04-24T21:24:04.193Z"
+date: "2022-05-19T17:55:12.078Z"
 weight: 3
 draft: false
 version:
-  version: 2
+  version: 1
   current: 2
   all:
     - version: 1
@@ -14,6 +14,9 @@ version:
   render:
     fileName: "anatomy-of-bus"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -323,5 +326,5 @@ events in the queue.
   "eid": "z/2021/02/24/16/57/1614185855405-0000000", // Unique ID for event
   "payload": {} // your custom data
 }
-```
-{{</ collapse-light >}}
+```<ins class="tooltip">
+{{</ collapse-light >}}<span class="top">Added</span></ins>
