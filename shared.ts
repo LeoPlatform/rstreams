@@ -324,8 +324,14 @@ export function getFileNameAndLanguageFromDocFile(docFilePath: string): VersionR
 export function htmlGeneratedFromMarkdownIsSameBetweenTwoFiles(fileContent1: string, fileContent2: string): boolean {
     const one = marked.parser(marked.lexer(fileContent1));
     const two = marked.parser(marked.lexer(fileContent2));
-    const htmlDiffer = new HtmlDiffer();
-    return htmlDiffer.isEqual(one, two);
+
+    let result = one === two;
+    if (!result) {
+        const htmlDiffer = new HtmlDiffer();
+        result = htmlDiffer.isEqual(one, two);
+    }
+
+    return result;
 }
 
 /**
