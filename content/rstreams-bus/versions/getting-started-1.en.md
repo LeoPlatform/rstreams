@@ -1,10 +1,10 @@
 ---
 title: "Getting Started"
-date: "2023-08-16T23:05:15.313Z"
+date: "2022-05-19T17:55:12.078Z"
 weight: 1
 draft: false
 version:
-  version: 2
+  version: 1
   current: 2
   all:
     - version: 1
@@ -14,6 +14,9 @@ version:
   render:
     fileName: "getting-started"
     language: "en"
+_build:
+  render: "always"
+  list: "never"
 ---
 
 {{< collapse-light "ToC" >}}
@@ -169,21 +172,14 @@ match the keys on the Outputs tab of the Bus stack we just landed on and the val
 my secret should be named `rstreams-PlaygroundBus`)
 1. Save it and continue on to use your bus below
 
-## Check Parameter Store for the new Parameter
-1. Go to AWS Systems Manager -> Application Management -> Parameter Store
-1. In the filter filter on the stack name you provided above when uploading the template to cloudformation.
-1. Select your bus parameter, and you should notice a value similar to the name of the nested bus stack.  
-This value is important to using (RStreamsFlow)["../../rstreams-flow/getting-started"] AND must match the name of the bus stack.  This should also
-align with the name of the Secret created above.
-
-## Make your own Parameter Store entry
-If you plan to use [RStreams Flow]("../../rstreams-flow/getting-started") and the parameter does not exist, you will need to create it.  In AWS Systems Manager -> Application Management -> Parameter Store select
-`Create Parameter`.  The name should be the name of the parent stack you provided when configuring CloudFormation.  Type should always be set to `String` with a `data type` set to `text`.  The `value` should be the name of
-your nested `Bus` stack. 
-![Create Parameter Example](../images/create-ssm-parameter-1.png "840px|center" ) 
+##<ins class="tooltip"></ins> <ins>Check Parameter Store for the new Parameter
+1. Go to A<span class="top">Added</span></ins>W<ins class="tooltip">S Systems Manager -> Application Management -> Parameter Store
+1. In t<span class="top">Added</span></ins>h<ins class="tooltip">e filter filter on the st<span class="top">Added</span></ins>a<ins class="tooltip">ck name you provided above when uploading <span class="top">Added</span></ins>t<ins class="tooltip">he<span class="top">Added</span></ins> <ins class="tooltip">template to clou<span class="top">Added</span></ins>d<ins class="tooltip">f<span class="top">Added</span></ins>o<ins class="tooltip">rmation.
+1.<span class="top">Added</span></ins> <ins class="tooltip">Select <span class="top">Added</span></ins>you<ins class="tooltip">r<span class="top">Added</span></ins> 
+## <ins class="tooltip">Make your own Parameter Store entry<span class="top">Added</span></ins>
 
 
-# What do you Have?
+# <ins class="tooltip">What do you <span class="top">Added</span></ins>Have?
 The next article explains in detail what was created but if you're ready to give it a spin, head over to the
 [RStreams Flow Getting Started Guide](../../rstreams-flow/getting-started) and [Running Locally](../../rstreams-flow/running-locally)
 articles which will demonstrate using the RStreams Bus, creating RStreams queues on the bus instance and bots that interact with them.

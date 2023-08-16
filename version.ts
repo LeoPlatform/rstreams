@@ -27,6 +27,11 @@ async function detectAndHandleNewDocVersions(now: IsoDateString) {
 
     for (const file of LOCAL_FILES) {
         const relativePath = getRelativeFilePath(file, true);
+
+        if (relativePath === '/rstreams-flow/getting-started.en.md') {
+            console.log('here');
+        }
+
         let versionFile = versions[relativePath];
         if (!versionFile) {
             versionFile = {relativeFilePath: relativePath, localFilePath: file};
@@ -36,6 +41,11 @@ async function detectAndHandleNewDocVersions(now: IsoDateString) {
 
     for (const file of REMOTE_FILES) {
         const relativePath = getRelativeFilePath(file, false);
+
+        if (relativePath === '/rstreams-flow/getting-started.en.md') {
+            console.log('here 2');
+        }
+
         let versionFile = versions[relativePath];
         if (!versionFile) {
             versionFile = {relativeFilePath: relativePath, remoteFilePath: file};
